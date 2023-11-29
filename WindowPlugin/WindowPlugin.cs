@@ -21,9 +21,9 @@ namespace WindowPlugin
             return 0;
         }
 
-        public int ExecuteCommand(int id)
+        public object ExecuteCommand(int id)
         {
-            if (Commands == null || id > Commands.Count) return -1;
+            if (Commands == null || id > Commands.Count) return null;
 
             return 0;
         }
@@ -31,12 +31,6 @@ namespace WindowPlugin
         public int Close()
         {
             return 0;
-        }
-
-        public CommandResult GetValue(int id)
-        {
-            // nothing implemented so just return null
-            return null;
         }
 
         /// <summary>

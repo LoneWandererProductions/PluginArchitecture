@@ -6,8 +6,6 @@ namespace ConsolePlugin
 {
     public class ConsolePlugin : IPlugin
     {
-        internal static Dictionary<int, CommandResult> Result { get; set; }
-
         public string Name { get; } = nameof(ConsolePlugin);
 
         public Version Version { get; } = GetVersion();
@@ -21,7 +19,7 @@ namespace ConsolePlugin
             return 0;
         }
 
-        public int ExecuteCommand(int id)
+        public object ExecuteCommand(int id)
         {
             if (Commands == null || id > Commands.Count) return -1;
 
@@ -39,11 +37,6 @@ namespace ConsolePlugin
         public int Close()
         {
             return 0;
-        }
-
-        public CommandResult GetValue(int id)
-        {
-            return !Result.ContainsKey(id) ? null : Result[id];
         }
 
         /// <summary>
@@ -71,8 +64,7 @@ namespace ConsolePlugin
                 //com.Id = 0; should be set at runtime by the master module
                 //com.OutputId = 0; should be set at runtime by the master module
                 Input = new List<int> {0},
-                Return = true,
-                TimeOut = 1000
+                Return = true
             };
 
 

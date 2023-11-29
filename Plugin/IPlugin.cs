@@ -60,19 +60,12 @@ namespace Plugin
         /// </summary>
         /// <param name="id">The identifier of the command.</param>
         /// <returns>Status Code</returns>
-        int ExecuteCommand(int id);
+        object ExecuteCommand(int id);
 
         /// <summary>
         ///     Closes this instance.
         /// </summary>
         /// <returns>Status Code</returns>
         int Close();
-
-        /// <summary>
-        ///     Gets the value of the command.
-        /// </summary>
-        /// <param name="id">The id of the command.</param>
-        /// <returns>The Result of Command with the id</returns>
-        CommandResult GetValue(int id);
     }
 }

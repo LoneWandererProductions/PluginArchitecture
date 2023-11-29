@@ -25,11 +25,9 @@ namespace Main
             var item = PlugController.ObservablePlugin[1];
 
             //TODO add check if command has return value
-            item.Command.ExecuteCommand(0);
+            var result = item.Command.ExecuteCommand(0);
 
             //TODO display Return Value
-            // check if result has correct id, if result is new and if result is from the right Command call!
-            item.Command.GetValue(0);
         }
 
         private void Button_Click_2(object sender, RoutedEventArgs e)
