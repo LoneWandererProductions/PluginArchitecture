@@ -23,14 +23,21 @@ namespace ConsolePlugin
         {
             if (Commands == null || id > Commands.Count) return -1;
 
+            var com = Commands[id];
 
             switch (id)
             {
                 case 0:
-                    PluginHelper.DoMagic();
+                    var str = PluginHelper.DoMagic(com);
                     break;
             }
 
+            return 0;
+        }
+
+        public int GetPluginType(int id)
+        {
+            // not yet in use so zero
             return 0;
         }
 

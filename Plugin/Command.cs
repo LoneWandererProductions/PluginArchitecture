@@ -2,12 +2,15 @@
 
 namespace Plugin
 {
-    public class Command
+    /// <summary>
+    ///     Describes the command, the role and possible Input values
+    /// </summary>
+    public sealed class Command
     {
-        public List<int> Input { get; set; }
+        public List<int> Input { get; init; }
 
-        public string Description { get; set; }
+        public string Description { get; init; }
 
-        public bool Return { get; set; }
+        public bool Return { get; init; }
     }
 }

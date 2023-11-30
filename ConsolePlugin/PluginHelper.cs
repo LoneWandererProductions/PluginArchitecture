@@ -1,10 +1,23 @@
-﻿namespace ConsolePlugin
+﻿using Plugin;
+
+namespace ConsolePlugin
 {
     internal static class PluginHelper
     {
-        internal static void DoMagic()
+        internal static string DoMagic(Command com)
         {
-            //var com = new CommandResult {Result = "Here we go"};
+            var str = string.Empty;
+
+            //shuffle though all
+            foreach (var data in com.Input)
+            {
+                var obj = DataRegister.Store[data];
+                str += obj.ToString();
+            }
+
+
+            var result = "Here we go: " + str;
+            return result;
         }
     }
 }

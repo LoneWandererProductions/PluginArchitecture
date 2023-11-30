@@ -28,6 +28,12 @@ namespace WindowPlugin
             return 0;
         }
 
+        public int GetPluginType(int id)
+        {
+            // not yet in use so zero
+            return 0;
+        }
+
         public int Close()
         {
             return 0;
