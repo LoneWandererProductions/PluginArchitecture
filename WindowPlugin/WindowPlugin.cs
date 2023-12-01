@@ -6,6 +6,8 @@ namespace WindowPlugin
 {
     public class WindowPlugin : IPlugin
     {
+        private Show _show;
+
         public string Name { get; } = nameof(WindowPlugin);
 
         public string Type { get; } = "Window";
@@ -16,14 +18,16 @@ namespace WindowPlugin
 
         public int Execute()
         {
-            var show = new Show();
-            show.Show();
+            _show = new Show();
+
             return 0;
         }
 
         public object ExecuteCommand(int id)
         {
-            if (Commands == null || id > Commands.Count) return null;
+            if (id != 0) return null;
+
+            _show.Show();
 
             return 0;
         }
@@ -32,6 +36,11 @@ namespace WindowPlugin
         {
             // not yet in use so zero
             return 0;
+        }
+
+        public string GetInfo()
+        {
+            return string.Concat(Type, Environment.NewLine, Version, Environment.NewLine);
         }
 
         public int Close()
@@ -57,7 +66,13 @@ namespace WindowPlugin
         /// <returns>List of Commands</returns>
         private List<Command> GetCommands()
         {
-            return null;
+            var comOne = new Command
+            {
+                Description = "Start a window",
+                Return = false
+            };
+
+            return new List<Command> {comOne};
         }
     }
 }

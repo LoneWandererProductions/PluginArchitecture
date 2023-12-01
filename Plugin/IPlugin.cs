@@ -78,6 +78,12 @@ namespace Plugin
         /// <returns>int as Id, can be used by the dev to define or get the type of Plugin this is</returns>
         int GetPluginType(int id);
 
+        /// <summary>Gets the basic information of the plugin human readable.</summary>
+        /// <returns>
+        ///     Info about the plugin
+        /// </returns>
+        string GetInfo();
+
         /// <summary>
         ///     Closes this instance.
         /// </summary>

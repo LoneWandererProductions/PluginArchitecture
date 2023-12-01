@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Windows;
 
 namespace Main
@@ -13,13 +15,18 @@ namespace Main
             InitializeComponent();
         }
 
-        private void button_Click(object sender, RoutedEventArgs e)
+        private void initiate_Click(object sender, RoutedEventArgs e)
         {
-            var dct = new Dictionary<int, object>();
+            var path = Directory.GetCurrentDirectory();
+            var obj = DateTime.Now;
+            var dct = new Dictionary<int, object> {{0, path}, {1, obj}};
+
             PlugController.SetEnvironmentVariables(dct);
+
+            foreach (var item in PlugController.ObservablePlugin) item.Command.Execute();
         }
 
-        private void Button_Click_1(object sender, RoutedEventArgs e)
+        private void console_Click(object sender, RoutedEventArgs e)
         {
             //TODO test
             var item = PlugController.ObservablePlugin[1];
@@ -27,26 +34,23 @@ namespace Main
             //TODO add check if command has return value
             var result = item.Command.ExecuteCommand(0);
 
+            var dct = new Dictionary<int, object>();
+
+            PlugController.SetEnvironmentVariables(dct);
+
             //TODO display Return Value
         }
 
-        private void Button_Click_2(object sender, RoutedEventArgs e)
+        private void updateEnvironment_Click(object sender, RoutedEventArgs e)
         {
-            PlugController.UpdateEnvironmentVariables(0, new object());
+            PlugController.UpdateEnvironmentVariables(2, "test");
         }
 
-        private void button_Click_3(object sender, RoutedEventArgs e)
+        private void window_Click(object sender, RoutedEventArgs e)
         {
             var item = PlugController.ObservablePlugin[0];
 
-            item.Command.Execute();
-        }
-
-        private void Button_Click_4(object sender, RoutedEventArgs e)
-        {
-            var item = PlugController.ObservablePlugin[1];
-
-            item.Command.Execute();
+            item.Command.ExecuteCommand(0);
         }
     }
 }

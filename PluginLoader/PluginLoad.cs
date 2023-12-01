@@ -81,7 +81,6 @@ namespace PluginLoader
             return PluginContainer.Count != 0;
         }
 
-
         /// <summary>
         ///     Loads all.
         /// </summary>
@@ -96,7 +95,7 @@ namespace PluginLoader
             if (store == null) return false;
 
             //key, here we define the access able Environment for the plugins
-            Plugin.DataRegister.Store = store;
+            DataRegister.Store = store;
 
             return true;
         }
@@ -109,10 +108,13 @@ namespace PluginLoader
         /// <returns>Success Status</returns>
         public static bool UpdateEnvironmentVariables(int id, object data)
         {
-            if (Plugin.DataRegister.Store.ContainsKey(id)) return false;
+            if (DataRegister.Store.ContainsKey(id))
+                //update specified Environment Variable
+                DataRegister.Store[id] = data;
 
-            //update specified Environment Variable
-            Plugin.DataRegister.Store[id] = data;
+            else
+                DataRegister.Store.Add(id, data);
+
             return true;
         }
 

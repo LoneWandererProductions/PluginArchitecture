@@ -24,21 +24,34 @@ namespace ConsolePlugin
             if (Commands == null || id > Commands.Count) return -1;
 
             var com = Commands[id];
+            object result;
 
             switch (id)
             {
                 case 0:
-                    var str = PluginHelper.DoMagic(com);
+                    result = PluginHelper.DoMagicOne(com);
+                    break;
+
+                case 2:
+                    result = PluginHelper.DoMagicTwo(com);
+                    break;
+                default:
+                    result = 0;
                     break;
             }
 
-            return 0;
+            return result;
         }
 
         public int GetPluginType(int id)
         {
             // not yet in use so zero
             return 0;
+        }
+
+        public string GetInfo()
+        {
+            return string.Concat(Type, Environment.NewLine, Version, Environment.NewLine);
         }
 
         public int Close()
@@ -64,19 +77,21 @@ namespace ConsolePlugin
         /// <returns>List of Commands</returns>
         private static List<Command> GetCommands()
         {
-            var lst = new List<Command>();
-            var com = new Command
+            var comOne = new Command
             {
                 Description = "Some string manipulations",
-                //com.Id = 0; should be set at runtime by the master module
-                //com.OutputId = 0; should be set at runtime by the master module
                 Input = new List<int> {0},
                 Return = true
             };
 
+            var comTwo = new Command
+            {
+                Description = "Get other input values",
+                Input = new List<int> {1, 2},
+                Return = true
+            };
 
-            lst.Add(com);
-            return lst;
+            return new List<Command> {comOne, comTwo};
         }
     }
 }
