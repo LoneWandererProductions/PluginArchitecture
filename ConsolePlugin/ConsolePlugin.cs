@@ -8,6 +8,8 @@ namespace ConsolePlugin
     {
         public string Name { get; } = nameof(ConsolePlugin);
 
+        public string Description { get; } = "Does some work in the Background.";
+
         public Version Version { get; } = GetVersion();
 
         public List<Command> Commands => GetCommands();
@@ -51,7 +53,7 @@ namespace ConsolePlugin
 
         public string GetInfo()
         {
-            return string.Concat(Type, Environment.NewLine, Version, Environment.NewLine);
+            return string.Concat(Type, Environment.NewLine, Version, Environment.NewLine, Description);
         }
 
         public int Close()

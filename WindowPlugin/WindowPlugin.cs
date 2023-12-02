@@ -12,6 +12,8 @@ namespace WindowPlugin
 
         public string Type { get; } = "Window";
 
+        public string Description { get; } = "Displays a Window";
+
         public Version Version { get; } = GetVersion();
 
         public List<Command> Commands => GetCommands();
@@ -40,7 +42,7 @@ namespace WindowPlugin
 
         public string GetInfo()
         {
-            return string.Concat(Type, Environment.NewLine, Version, Environment.NewLine);
+            return string.Concat(Type, Environment.NewLine, Version, Environment.NewLine, Description);
         }
 
         public int Close()

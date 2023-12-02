@@ -85,13 +85,13 @@ namespace Main
         /// </summary>
         private void Initiate()
         {
-            if (!Directory.Exists(PluginPath)) return;
+            var directory = Directory.GetCurrentDirectory();
+            var path = Path.Combine(directory, PluginPath);
+            if (!Directory.Exists(path)) return;
 
-            var check = PluginLoad.LoadAll(PluginPath);
+            var check = PluginLoad.LoadAll(path);
 
-            if (!check) return;
-
-            if (PluginLoad.PluginContainer == null || PluginLoad.PluginContainer.Count == 0)
+            if (!check || PluginLoad.PluginContainer == null || PluginLoad.PluginContainer.Count == 0)
             {
                 Trace.WriteLine("No Plugins found.");
                 return;

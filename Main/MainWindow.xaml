@@ -17,7 +17,7 @@
             <ColumnDefinition Width="199*" />
         </Grid.ColumnDefinitions>
         <local:PluginController x:Name="PlugController" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
-                                Grid.RowSpan="2" />
+                                Grid.RowSpan="2" PluginPath="plugins" />
         <Button Content="Console Command" Grid.Column="1" HorizontalAlignment="Left" Margin="170,21,0,0"
                 VerticalAlignment="Top" Click="console_Click" Height="20" Grid.Row="1" Width="100" />
         <Button Content="Window command" Grid.Column="1" HorizontalAlignment="Left" Margin="170,49,0,0"
