@@ -41,41 +41,36 @@ namespace PluginLoader
 
             if (pluginPaths == null) return false;
 
-            try
-            {
-                PluginContainer = new List<IPlugin>();
+            PluginContainer = new List<IPlugin>();
 
-                foreach (var pluginPath in pluginPaths)
-                    try
-                    {
-                        var pluginAssembly = LoadPlugin(pluginPath);
-                        var lst = CreateCommands(pluginAssembly).ToList();
-                        PluginContainer.AddRange(lst);
-                    }
-                    catch (Exception ex)
-                    {
-                        Trace.WriteLine(ex);
-                    }
-            }
-            catch (ArgumentException ex)
+            foreach (var pluginPath in pluginPaths)
             {
-                Trace.WriteLine(ex);
-            }
-            catch (FileLoadException ex)
-            {
-                Trace.WriteLine(ex);
-            }
-            catch (ApplicationException ex)
-            {
-                Trace.WriteLine(ex);
-            }
-            catch (BadImageFormatException ex)
-            {
-                Trace.WriteLine(ex);
-            }
-            catch (FileNotFoundException ex)
-            {
-                Trace.WriteLine(ex);
+                try
+                {
+                    var pluginAssembly = LoadPlugin(pluginPath);
+                    var lst = CreateCommands(pluginAssembly).ToList();
+                    PluginContainer.AddRange(lst);
+                }
+                catch (ArgumentException ex)
+                {
+                    Trace.WriteLine(ex);
+                }
+                catch (FileLoadException ex)
+                {
+                    Trace.WriteLine(ex);
+                }
+                catch (ApplicationException ex)
+                {
+                    Trace.WriteLine(ex);
+                }
+                catch (BadImageFormatException ex)
+                {
+                    Trace.WriteLine(ex);
+                }
+                catch (FileNotFoundException ex)
+                {
+                    Trace.WriteLine(ex);
+                }
             }
 
             return PluginContainer.Count != 0;
@@ -133,11 +128,9 @@ namespace PluginLoader
             }
 
             if (Directory.Exists(path))
-            {
                 return Directory.EnumerateFiles(path, PluginLoaderResources.FileExt,
                         SearchOption.TopDirectoryOnly)
                     .ToList();
-            }
 
             Trace.WriteLine(PluginLoaderResources.ErrorDirectory);
 
