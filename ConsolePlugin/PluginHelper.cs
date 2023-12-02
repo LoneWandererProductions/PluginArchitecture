@@ -1,4 +1,12 @@
-﻿using Plugin;
+﻿/*
+ * COPYRIGHT:   See COPYING in the top level directory
+ * PROJECT:     ConsolePlugin
+ * FILE:        ConsolePlugin/PluginHelper.cs
+ * PURPOSE:     Basic Helper
+ * PROGRAMER:   Peter Geinitz (Wayfarer)
+ */
+
+using Plugin;
 
 namespace ConsolePlugin
 {

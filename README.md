@@ -1,3 +1,8 @@
-<p>Basic Implementation for a a plugin architecture.</p>
+# PluginArchitecture
+
+A basic Implementation for a plugin architecture.<br>
 <br>
-<p>My concept for a base module that works with different plugins. It should handle Input and Return Values</p>
+My concept for a modular Framework that works with different plugins.<br>
+The base moduke can handle Input and return Values from the plugins<br>
+It can catch wrong or unsuitable files.<br>
+The whole idea is that all main funtions are handled as modules, future extensions will be loaded much like the main modules.<br>

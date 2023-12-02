@@ -13,10 +13,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Plugin", "Plugin\Plugin.csp
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConsolePlugin", "ConsolePlugin\ConsolePlugin.csproj", "{9B6C2897-F437-49E7-9C9A-5131DA4DCC88}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WindowPlugin", "WindowPlugin\WindowPlugin.csproj", "{4101DE28-C835-49C5-A9F5-A3C7BF95B920}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WindowPlugin", "WindowPlugin\WindowPlugin.csproj", "{4101DE28-C835-49C5-A9F5-A3C7BF95B920}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{F30C194A-48AE-42A3-BC21-1253D6B608EA}"
 	ProjectSection(SolutionItems) = preProject
+		License.txt = License.txt
 		README.md = README.md
 	EndProjectSection
 EndProject

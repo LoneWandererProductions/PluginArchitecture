@@ -44,7 +44,6 @@ namespace PluginLoader
             PluginContainer = new List<IPlugin>();
 
             foreach (var pluginPath in pluginPaths)
-            {
                 try
                 {
                     var pluginAssembly = LoadPlugin(pluginPath);
@@ -63,6 +62,10 @@ namespace PluginLoader
                 {
                     Trace.WriteLine(ex);
                 }
+                catch (ReflectionTypeLoadException ex)
+                {
+                    Trace.WriteLine(ex);
+                }
                 catch (BadImageFormatException ex)
                 {
                     Trace.WriteLine(ex);
@@ -71,7 +74,6 @@ namespace PluginLoader
                 {
                     Trace.WriteLine(ex);
                 }
-            }
 
             return PluginContainer.Count != 0;
         }

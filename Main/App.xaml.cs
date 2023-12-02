@@ -1,11 +1,14 @@
-﻿using System.Windows;
+﻿/*
+ * COPYRIGHT:   See COPYING in the top level directory
+ * PROJECT:     Plugin
+ * FILE:        Main/App.cs
+ * PURPOSE:     App entry
+ * PROGRAMER:   Peter Geinitz (Wayfarer)
+ */
 
 namespace Main
 {
-    /// <summary>
-    ///     Interaction logic for App.xaml
-    /// </summary>
-    internal partial class App : Application
+    internal sealed partial class App
     {
     }
 }

@@ -1,4 +1,12 @@
-﻿using System;
+﻿/*
+ * COPYRIGHT:   See COPYING in the top level directory
+ * PROJECT:     Plugin
+ * FILE:        ConsolePlugin/ConsolePlugin.cs
+ * PURPOSE:     Test Plugin
+ * PROGRAMER:   Peter Geinitz (Wayfarer)
+ */
+
+using System;
 using System.Collections.Generic;
 using Plugin;
 

@@ -1,7 +1,7 @@
 ﻿/*
  * COPYRIGHT:   See COPYING in the top level directory
- * PROJECT:     CommonControls
- * FILE:        CommonControls/PluginItem.cs
+ * PROJECT:     Main
+ * FILE:        Main/PluginItem.cs
  * PURPOSE:     Container for the collected Plugins
  * PROGRAMER:   Peter Geinitz (Wayfarer)
  */

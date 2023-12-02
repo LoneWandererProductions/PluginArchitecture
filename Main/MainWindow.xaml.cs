@@ -1,13 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Windows;
+using System.Windows; /*
+ * COPYRIGHT:   See COPYING in the top level directory
+ * PROJECT:     Plugin
+ * FILE:        Main/MainWindow.xaml.cs
+ * PURPOSE:     MainWindow
+ * PROGRAMER:   Peter Geinitz (Wayfarer)
+ */
 
 namespace Main
 {
-    /// <summary>
-    ///     Interaction logic for MainWindow.xaml
-    /// </summary>
     public partial class MainWindow
     {
         public MainWindow()
@@ -28,27 +31,22 @@ namespace Main
 
         private void console_Click(object sender, RoutedEventArgs e)
         {
-            //TODO test
-            var item = PlugController.ObservablePlugin[1];
+            var item = PlugController.ObservablePlugin[0];
 
-            //TODO add check if command has return value
             var result = item.Command.ExecuteCommand(0);
 
-            var dct = new Dictionary<int, object>();
-
-            PlugController.SetEnvironmentVariables(dct);
-
-            //TODO display Return Value
+            txtOutput.Text = string.Empty;
+            txtOutput.Text = result.ToString() ?? string.Empty;
         }
 
         private void updateEnvironment_Click(object sender, RoutedEventArgs e)
         {
-            PlugController.UpdateEnvironmentVariables(2, "test");
+            PlugController.UpdateEnvironmentVariables(0, "test");
         }
 
         private void window_Click(object sender, RoutedEventArgs e)
         {
-            var item = PlugController.ObservablePlugin[0];
+            var item = PlugController.ObservablePlugin[1];
 
             item.Command.ExecuteCommand(0);
         }

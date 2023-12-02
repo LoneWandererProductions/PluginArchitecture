@@ -1,3 +1,11 @@
+/*
+ * COPYRIGHT:   See COPYING in the top level directory
+ * PROJECT:     Plugin
+ * FILE:        WindowPlugin/WindowPlugin.cs
+ * PURPOSE:     Test Plugin
+ * PROGRAMER:   Peter Geinitz (Wayfarer)
+ */
+
 using System;
 using System.Collections.Generic;
 using Plugin;

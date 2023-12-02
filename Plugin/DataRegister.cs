@@ -1,4 +1,12 @@
-﻿using System.Collections.Generic;
+﻿/*
+ * COPYRIGHT:   See COPYING in the top level directory
+ * PROJECT:     Plugin
+ * FILE:        Plugin/DataRegister.cs
+ * PURPOSE:     Environment Data for use for the plugins
+ * PROGRAMER:   Peter Geinitz (Wayfarer)
+ */
+
+using System.Collections.Generic;
 
 namespace Plugin
 {
