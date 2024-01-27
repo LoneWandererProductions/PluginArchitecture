@@ -6,6 +6,9 @@
  * PROGRAMER:   Peter Geinitz (Wayfarer)
  */
 
+// ReSharper disable MemberCanBeInternal
+// ReSharper disable UnusedMethodReturnValue.Global
+
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -14,6 +17,7 @@ using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Input;
+using Plugin;
 using PluginLoader;
 
 namespace Main
@@ -127,12 +131,19 @@ namespace Main
         /// <summary>
         ///     Updates the environment variables.
         /// </summary>
-        /// <param name="id">The id of the environment variable.</param>
-        /// <param name="o">The data as object.</param>
-        public void UpdateEnvironmentVariables(int id, object o)
+        /// <param name="id">The identifier.</param>
+        /// <param name="data">The data.</param>
+        /// <returns>Success Status</returns>
+        public bool UpdateEnvironmentVariables(int id, object data)
         {
-            var check = PluginLoad.UpdateEnvironmentVariables(id, o);
-            if (!check) Trace.WriteLine("Error, could not update Environment Variable.");
+            if (DataRegister.Store.ContainsKey(id))
+                //update specified Environment Variable
+                DataRegister.Store[id] = data;
+
+            else
+                DataRegister.Store.Add(id, data);
+
+            return true;
         }
 
 

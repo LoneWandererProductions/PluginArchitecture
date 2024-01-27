@@ -34,7 +34,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\PluginLoader\PluginLoader.csproj" />
-    <ProjectReference Include="..\Plugin\Plugin.csproj" />
     <ProjectReference Include="..\ViewModel\ViewModel.csproj" />
   </ItemGroup>
 
