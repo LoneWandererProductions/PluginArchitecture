@@ -6,6 +6,9 @@
  * PROGRAMER:   Peter Geinitz (Wayfarer)
  */
 
+// ReSharper disable UnusedType.Global
+// ReSharper disable UnusedMember.Global
+
 using System.Collections.Generic;
 
 namespace Plugin

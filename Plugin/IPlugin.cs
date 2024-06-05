@@ -7,6 +7,9 @@
  * SOURCES:     https://docs.microsoft.com/en-us/dotnet/core/tutorials/creating-app-with-plugin-support
  */
 
+// ReSharper disable UnusedParameter.Global, future proofing, it is up to the person how to use this ids
+// ReSharper disable UnusedMember.Global
+
 using System;
 using System.Collections.Generic;
 
@@ -19,7 +22,7 @@ namespace Plugin
     {
         /// <summary>
         ///     Gets the name.
-        ///     This field is optional.
+        ///     This field must be equal to the file name.
         /// </summary>
         /// <value>
         ///     The name.
@@ -81,7 +84,7 @@ namespace Plugin
         ///     This method is optional.
         /// </summary>
         /// <param name="id">The identifier of the command.</param>
-        /// <returns>Status Code</returns>
+        /// <returns>Result object</returns>
         object ExecuteCommand(int id);
 
         /// <summary>

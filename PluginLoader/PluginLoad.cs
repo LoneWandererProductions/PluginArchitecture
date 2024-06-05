@@ -1,11 +1,14 @@
 ﻿/*
  * COPYRIGHT:   See COPYING in the top level directory
  * PROJECT:     Plugin
- * FILE:        Plugin/PluginLoader.cs
+ * FILE:        PluginLoader/PluginLoader.cs
  * PURPOSE:     Basic Plugin Support, Load all Plugins
  * PROGRAMER:   Peter Geinitz (Wayfarer)
  * SOURCES:     https://docs.microsoft.com/en-us/dotnet/core/tutorials/creating-app-with-plugin-support
  */
+
+// ReSharper disable MemberCanBePrivate.Global
+// ReSharper disable UnassignedField.Global
 
 using System;
 using System.Collections.Generic;
@@ -23,6 +26,11 @@ namespace PluginLoader
     public static class PluginLoad
     {
         /// <summary>
+        ///     The load error event
+        /// </summary>
+        public static EventHandler loadErrorEvent;
+
+        /// <summary>
         ///     Gets or sets the plugin container.
         /// </summary>
         /// <value>
@@ -31,51 +39,54 @@ namespace PluginLoader
         public static List<IPlugin> PluginContainer { get; private set; }
 
         /// <summary>
+        /// Gets the asynchronous plugin container.
+        /// </summary>
+        /// <value>
+        /// The asynchronous plugin container.
+        /// </value>
+        public static List<IAsyncPlugin> AsyncPluginContainer { get; private set; }
+
+        /// <summary>
         ///     Loads all.
         /// </summary>
         /// <param name="path">The path.</param>
-        /// <returns>Success Status</returns>
-        public static bool LoadAll(string path)
+        /// <param name="extension">The extension for plugins.</param>
+        /// <returns>
+        ///     Success Status
+        /// </returns>
+        public static bool LoadAll(string path, string extension = PluginLoaderResources.FileExt)
         {
-            var pluginPaths = GetFilesByExtensionFullPath(path);
+            var pluginPaths = GetFilesByExtensionFullPath(path, extension);
 
-            if (pluginPaths == null) return false;
+            if (pluginPaths == null)
+            {
+                return false;
+            }
 
             PluginContainer = new List<IPlugin>();
+            AsyncPluginContainer = new List<IAsyncPlugin>();
 
             foreach (var pluginPath in pluginPaths)
+            {
                 try
                 {
                     var pluginAssembly = LoadPlugin(pluginPath);
-                    var lst = CreateCommands(pluginAssembly).ToList();
-                    PluginContainer.AddRange(lst);
-                }
-                catch (ArgumentException ex)
-                {
-                    Trace.WriteLine(ex);
-                }
-                catch (FileLoadException ex)
-                {
-                    Trace.WriteLine(ex);
-                }
-                catch (ApplicationException ex)
-                {
-                    Trace.WriteLine(ex);
-                }
-                catch (ReflectionTypeLoadException ex)
-                {
-                    Trace.WriteLine(ex);
-                }
-                catch (BadImageFormatException ex)
-                {
-                    Trace.WriteLine(ex);
-                }
-                catch (FileNotFoundException ex)
-                {
-                    Trace.WriteLine(ex);
-                }
+                    var syncPlugins = CreateCommands<IPlugin>(pluginAssembly).ToList();
+                    var asyncPlugins = CreateCommands<IAsyncPlugin>(pluginAssembly).ToList();
 
-            return PluginContainer.Count != 0;
+                    PluginContainer.AddRange(syncPlugins);
+                    AsyncPluginContainer.AddRange(asyncPlugins);
+                }
+                catch (Exception ex) when (ex is ArgumentException or FileLoadException or ApplicationException
+                                               or ReflectionTypeLoadException or BadImageFormatException
+                                               or FileNotFoundException)
+                {
+                    Trace.WriteLine(ex);
+                    loadErrorEvent?.Invoke(nameof(LoadAll), new LoaderErrorEventArgs(ex.ToString()));
+                }
+            }
+
+            return PluginContainer.Count != 0 || AsyncPluginContainer.Count != 0;
         }
 
         /// <summary>
@@ -84,33 +95,18 @@ namespace PluginLoader
         /// <param name="store">
         ///     Sets the environment variables of the base module
         ///     The idea is, the main module has documented Environment Variables, that the plugins can use.
-        ///     / This method sets the these Variables.
+        ///     / This method sets these Variables.
         /// </param>
         /// <returns>Success Status</returns>
         public static bool SetEnvironmentVariables(Dictionary<int, object> store)
         {
-            if (store == null) return false;
+            if (store == null)
+            {
+                return false;
+            }
 
-            //key, here we define the access able Environment for the plugins
+            // Key, here we define the accessible Environment for the plugins
             DataRegister.Store = store;
-
-            return true;
-        }
-
-        /// <summary>
-        ///     Updates the environment variables.
-        /// </summary>
-        /// <param name="id">The identifier.</param>
-        /// <param name="data">The data.</param>
-        /// <returns>Success Status</returns>
-        public static bool UpdateEnvironmentVariables(int id, object data)
-        {
-            if (DataRegister.Store.ContainsKey(id))
-                //update specified Environment Variable
-                DataRegister.Store[id] = data;
-
-            else
-                DataRegister.Store.Add(id, data);
 
             return true;
         }
@@ -120,19 +116,20 @@ namespace PluginLoader
         ///     Adopted from FileHandler to decrease dependencies
         /// </summary>
         /// <param name="path">The path.</param>
+        /// <param name="extension">The custom file extension.</param>
         /// <returns>List of files by extension with full path</returns>
-        private static IEnumerable<string> GetFilesByExtensionFullPath(string path)
+        private static IEnumerable<string> GetFilesByExtensionFullPath(string path, string extension)
         {
             if (string.IsNullOrEmpty(path))
             {
-                Trace.WriteLine(PluginLoaderResources.ErrorEmptyPath);
+                Trace.WriteLine(PluginLoaderResources.ErrorPath);
                 return null;
             }
 
             if (Directory.Exists(path))
-                return Directory.EnumerateFiles(path, PluginLoaderResources.FileExt,
-                        SearchOption.TopDirectoryOnly)
-                    .ToList();
+            {
+                return Directory.EnumerateFiles(path, $"*{extension}", SearchOption.TopDirectoryOnly).ToList();
+            }
 
             Trace.WriteLine(PluginLoaderResources.ErrorDirectory);
 
@@ -147,39 +144,43 @@ namespace PluginLoader
         private static Assembly LoadPlugin(string pluginLocation)
         {
             var loadContext = new PluginLoadContext(pluginLocation);
-            return loadContext.LoadFromAssemblyName(new AssemblyName(Path.GetFileNameWithoutExtension(pluginLocation)));
+            return loadContext.LoadFromAssemblyPath(pluginLocation);
         }
 
         /// <summary>
-        ///     Creates the commands.
+        /// Creates the commands.
         /// </summary>
+        /// <typeparam name="T">Type of Plugin</typeparam>
         /// <param name="assembly">The assembly.</param>
-        /// <returns>Adds References to the Commands</returns>
-        /// <exception cref="ApplicationException">
-        ///     Can't find any type which implements ICommand in {assembly} from {assembly.Location}.\n" +
-        ///     $"Available types: {availableTypes}
-        /// </exception>
+        /// <returns>
+        /// Adds References to the Commands
+        /// </returns>
+        /// <exception cref="ApplicationException">Can't find any type which implements IPlugin in {assembly} from {assembly.Location}.\n" +
+        /// $"Available types: {availableTypes}</exception>
         /// <exception cref="ArgumentException">Could not find the Plugin</exception>
-        private static IEnumerable<IPlugin> CreateCommands(Assembly assembly)
+        private static IEnumerable<T> CreateCommands<T>(Assembly assembly) where T : class
         {
             var count = 0;
 
-            foreach (var type in assembly.GetTypes().Where(type => typeof(IPlugin).IsAssignableFrom(type)))
+            foreach (var type in assembly.GetTypes().Where(type => typeof(T).IsAssignableFrom(type)))
             {
-                if (Activator.CreateInstance(type) is not IPlugin result) continue;
+                if (Activator.CreateInstance(type) is not T result)
+                {
+                    continue;
+                }
 
                 count++;
                 yield return result;
             }
 
-            if (count != 0) yield break;
+            if (count != 0)
+            {
+                yield break;
+            }
 
-            var availableTypes =
-                string.Join(PluginLoaderResources.Separator, assembly.GetTypes().Select(t => t.FullName));
-
+            var availableTypes = string.Join(PluginLoaderResources.Separator, assembly.GetTypes().Select(t => t.FullName));
             var message = string.Concat(PluginLoaderResources.ErrorCouldNotFindPlugin,
                 PluginLoaderResources.Information(assembly, availableTypes));
-
             throw new ArgumentException(message);
         }
     }

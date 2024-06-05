@@ -6,6 +6,9 @@
  * PROGRAMER:   Peter Geinitz (Wayfarer)
  */
 
+// ReSharper disable ClassNeverInstantiated.Global
+// ReSharper disable UnusedMember.Global
+
 using System.Collections.Generic;
 
 namespace Plugin
@@ -17,7 +20,7 @@ namespace Plugin
     {
         /// <summary>
         ///     Gets the input.
-        ///     The  input is numbered and accesses the DataRegister by number as an identifiert.
+        ///     The  input is numbered and accesses the DataRegister by number as an identifier.
         ///     Also optional.
         /// </summary>
         /// <value>

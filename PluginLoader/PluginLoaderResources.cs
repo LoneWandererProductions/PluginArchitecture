@@ -1,7 +1,7 @@
 ﻿/*
  * COPYRIGHT:   See COPYING in the top level directory
  * PROJECT:     Plugin
- * FILE:        Plugin/PluginLoaderResources.cs
+ * FILE:        PluginLoader/PluginLoaderResources.cs
  * PURPOSE:     String Resources
  * PROGRAMER:   Peter Geinitz (Wayfarer)
  * SOURCES:     https://docs.microsoft.com/en-us/dotnet/core/tutorials/creating-app-with-plugin-support
@@ -30,17 +30,22 @@ namespace PluginLoader
         /// <summary>
         ///     The error could not find plugin
         /// </summary>
-        internal const string ErrorCouldNotFindPlugin = "Can't find any type which implements ICommand in";
+        internal const string ErrorCouldNotFindPlugin = "Can't find any type which implements ICommand in: ";
 
         /// <summary>
-        ///     The Error Path was empty (const). Value: "Path string  was empty.".
+        ///     The Error with the Path (const). Value: "Plugin path does not exist.".
         /// </summary>
-        internal const string ErrorEmptyPath = "Path string  was empty.";
+        internal const string ErrorPath = "Plugin path does not exist.";
 
         /// <summary>
         ///     The Error Directory did not exist (const). Value: "Directory does not exist.".
         /// </summary>
         internal const string ErrorDirectory = "Directory does not exist.";
+
+        /// <summary>
+        ///     Information about Plugin Status (const). Value: "No Plugins found.".
+        /// </summary>
+        internal const string InformationPlugin = "No Plugins found.";
 
         /// <summary>
         ///     Format Information about the specified assembly.
