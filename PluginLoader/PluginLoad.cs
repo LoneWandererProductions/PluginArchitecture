@@ -68,13 +68,27 @@ namespace PluginLoader
 
             foreach (var pluginPath in pluginPaths)
             {
+                var pluginAssembly = LoadPlugin(pluginPath);
+
                 try
                 {
-                    var pluginAssembly = LoadPlugin(pluginPath);
+
                     var syncPlugins = CreateCommands<IPlugin>(pluginAssembly).ToList();
-                    var asyncPlugins = CreateCommands<IAsyncPlugin>(pluginAssembly).ToList();
 
                     PluginContainer.AddRange(syncPlugins);
+                }
+                catch (Exception ex) when (ex is ArgumentException or FileLoadException or ApplicationException
+                                               or ReflectionTypeLoadException or BadImageFormatException
+                                               or FileNotFoundException)
+                {
+                    Trace.WriteLine(ex);
+                    loadErrorEvent?.Invoke(nameof(LoadAll), new LoaderErrorEventArgs(ex.ToString()));
+                }
+
+                try
+                {
+                    var asyncPlugins = CreateCommands<IAsyncPlugin>(pluginAssembly).ToList();
+
                     AsyncPluginContainer.AddRange(asyncPlugins);
                 }
                 catch (Exception ex) when (ex is ArgumentException or FileLoadException or ApplicationException
@@ -148,14 +162,14 @@ namespace PluginLoader
         }
 
         /// <summary>
-        /// Creates the commands.
+        ///     Creates the commands.
         /// </summary>
         /// <typeparam name="T">Type of Plugin</typeparam>
         /// <param name="assembly">The assembly.</param>
         /// <returns>
         /// Adds References to the Commands
-        /// </returns>
-        /// <exception cref="ApplicationException">Can't find any type which implements IPlugin in {assembly} from {assembly.Location}.\n" +
+        ///     Can't find any type which implements IPlugin in {assembly} from {assembly.Location}.\n" +
+        ///     $"Available types: {availableTypes}
         /// $"Available types: {availableTypes}</exception>
         /// <exception cref="ArgumentException">Could not find the Plugin</exception>
         private static IEnumerable<T> CreateCommands<T>(Assembly assembly) where T : class
