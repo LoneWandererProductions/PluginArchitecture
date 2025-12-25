@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.34114.132
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36717.8 d17.14
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Main", "Main\Main.csproj", "{9C3A57CE-F460-4CD1-AB78-7731331FF335}"
 EndProject
@@ -20,6 +20,8 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PluginLoader", "PluginLoader\PluginLoader.csproj", "{D2486B0B-8E45-4F00-A9C9-A0DEEF98D308}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Plugin", "Plugin\Plugin.csproj", "{E620F5FF-A2A5-49F4-AB22-1E47C2736CCD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Prototype", "Prototype\Prototype.csproj", "{361601AB-2CB5-4BA7-994E-ECCF3349FFE9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -51,6 +53,10 @@ Global
 		{E620F5FF-A2A5-49F4-AB22-1E47C2736CCD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E620F5FF-A2A5-49F4-AB22-1E47C2736CCD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E620F5FF-A2A5-49F4-AB22-1E47C2736CCD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{361601AB-2CB5-4BA7-994E-ECCF3349FFE9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{361601AB-2CB5-4BA7-994E-ECCF3349FFE9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{361601AB-2CB5-4BA7-994E-ECCF3349FFE9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{361601AB-2CB5-4BA7-994E-ECCF3349FFE9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
