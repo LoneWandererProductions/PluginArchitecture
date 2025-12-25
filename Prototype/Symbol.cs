@@ -1,22 +1,15 @@
-﻿using System;
-using System.Reflection;
-using static System.Runtime.InteropServices.JavaScript.JSType;
+/*
+ * COPYRIGHT:   See COPYING in the top level directory
+ * PROJECT:     Prototype
+ * FILE:        Symbol.cs
+ * PURPOSE:     Your file purpose here
+ * PROGRAMMER:  Peter Geinitz (Wayfarer)
+ */
+
+using Prototype.Enums;
 
 namespace Prototype
 {
-    public class Symbol
-    {
-        public int Id { get; set; }
+    public record Symbol(string Name, SymbolType Type, Type DataType);
 
-        public string Name { get; set; }
-
-        public SymbolKind Kind { get; set; }
-
-        public TypeInfo Type { get; set; }
-
-        public TypeDirection Direction { get; set; }
-
-        public string? Description { get; set; }
-
-    }
 }
