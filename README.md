@@ -40,16 +40,16 @@ public class SymbolDefinition
 ### Plugin Interface
 
 ```csharp
-public interface IPlugin
-{
-    string Name { get; }
-    string Version { get; }
-    IReadOnlyList<SymbolDefinition> GetSymbols();
-    void Execute(IPluginContext context);
-    Task ExecuteAsync(IPluginContext context);
-    void Initialize();
-    void Shutdown();
-}
+    public interface IPlugin
+    {
+        string Name { get; }
+        string Version { get; }
+        string Description { get; }
+        void Execute(int id);
+        Task ExecuteAsync(int id);
+        void Initialize(IPluginContext context);
+        void Shutdown();
+    }
 ```
 
 * `Execute` works with both context types
@@ -59,49 +59,56 @@ public interface IPlugin
 ## Example: AdderPlugin
 
 ```csharp
-public class AdderPlugin : IPlugin
-{
-    public string Name => "Adder";
-    public string Version => "1.0.0";
-
-    public IReadOnlyList<SymbolDefinition> GetSymbols() => new List<SymbolDefinition>
+    public class AdderPlugin: IPlugin, ISymbolProvider
     {
-        new SymbolDefinition("A", SymbolType.Data, typeof(int)),
-        new SymbolDefinition("B", SymbolType.Data, typeof(int)),
-        new SymbolDefinition("Result", SymbolType.Data, typeof(int))
-    };
+        private IPluginContext _context;
 
-    public void Execute(IPluginContext context)
-    {
-        if (context is IUnmanagedPluginContext uctx)
-            uctx.SetResult(0, uctx.GetVariable<int>(0) + uctx.GetVariable<int>(1));
-        else if (context is IManagedPluginContext mctx)
-            mctx.SetResult(0, mctx.GetVariable<int>(0) + mctx.GetVariable<int>(1));
+        public string Name => "Adder";
+        public string Version => "1.0.0";
+
+        public string Description => "Test plugin.";
+
+        public IReadOnlyList<SymbolDefinition> GetSymbols() => new List<SymbolDefinition>
+        {
+            new SymbolDefinition("A", SymbolType.Data, typeof(int)),
+            new SymbolDefinition("B", SymbolType.Data, typeof(int)),
+            new SymbolDefinition("Result", SymbolType.Data, typeof(int))
+        };
+
+        public void Execute(int id)
+        {
+            if (_context is IUnmanagedPluginContext uctx)
+            {
+                int a = uctx.GetVariable<int>(0);
+                int b = uctx.GetVariable<int>(1);
+                uctx.SetResult(0, a + b);
+            }
+            else if (_context is IManagedPluginContext mctx)
+            {
+                int a = mctx.GetVariable<int>(0);
+                int b = mctx.GetVariable<int>(1);
+                mctx.SetResult(0, a + b);
+            }
+            else
+            {
+                throw new InvalidOperationException("Unsupported plugin context type");
+            }
+        }
+
+        public Task ExecuteAsync(int id)
+        {
+            Execute(id); // simple synchronous execution
+            return Task.CompletedTask;
+        }
+
+        public void Initialize() { /* optional */ }
+        public void Shutdown() { /* optional */ }
+
+        public void Initialize(IPluginContext context) { _context = context; }
     }
-
-    public Task ExecuteAsync(IPluginContext context)
-    {
-        Execute(context);
-        return Task.CompletedTask;
-    }
-
-    public void Initialize() { }
-    public void Shutdown() { }
-}
 ```
 
 ---
-
-## Usage
-
-```csharp
-var layout = new MemoryLayout(variables, results);
-var managedContext = new ManagedPluginContext(variableCount, resultCount);
-var unmanagedContext = new UnmanagedPluginContext(layout);
-
-plugin.Execute(managedContext);
-plugin.Execute(unmanagedContext);
-```
 
 * Unmanaged context enforces value types
 * Managed context allows full object support
