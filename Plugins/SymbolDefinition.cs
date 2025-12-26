@@ -87,7 +87,6 @@ namespace Plugins
         /// </value>
         public int? Size { get; set; }
 
-
         /// <summary>
         /// Computed property
         /// Gets the size of the effective.
