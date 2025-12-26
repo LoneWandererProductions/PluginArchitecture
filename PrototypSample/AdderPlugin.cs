@@ -33,21 +33,66 @@ namespace PrototypSample
 
         public void Execute(int id)
         {
-            if (_context is IUnmanagedPluginContext uctx)
+            switch (_context)
             {
-                int a = uctx.GetVariable<int>(0);
-                int b = uctx.GetVariable<int>(1);
-                uctx.SetResult(0, a + b);
+                case IUnmanagedPluginContext uctx:
+                    ExecuteCommand(id, uctx);
+                    break;
+
+                case IManagedPluginContext mctx:
+                    ExecuteCommand(id, mctx);
+                    break;
+
+                default:
+                    throw new InvalidOperationException("Unsupported plugin context type");
             }
-            else if (_context is IManagedPluginContext mctx)
+        }
+
+        private void ExecuteCommand(int id, IManagedPluginContext context)
+        {
+            switch (id)
             {
-                int a = mctx.GetVariable<int>(0);
-                int b = mctx.GetVariable<int>(1);
-                mctx.SetResult(0, a + b);
+                case 0: // Sum
+                    {
+                        int a = context.GetVariable<int>(0);
+                        int b = context.GetVariable<int>(1);
+                        context.SetResult(0, a + b);
+                        break;
+                    }
+                case 1: // Multiply
+                    {
+                        int a = context.GetVariable<int>(0);
+                        int b = context.GetVariable<int>(1);
+                        context.SetResult(0, a * b);
+                        break;
+                    }
+                // Add more cases for other "methods"
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(id), $"Unknown command id: {id}");
             }
-            else
+        }
+
+        private static void ExecuteCommand(int id, IUnmanagedPluginContext context)
+        {
+            switch (id)
             {
-                throw new InvalidOperationException("Unsupported plugin context type");
+                case 0: // Sum
+                    {
+                        int a = context.GetVariable<int>(0);
+                        int b = context.GetVariable<int>(1);
+                        context.SetResult(0, a + b);
+                        break;
+                    }
+                case 1: // Multiply
+                    {
+                        int a = context.GetVariable<int>(0);
+                        int b = context.GetVariable<int>(1);
+                        context.SetResult(0, a * b);
+                        break;
+                    }
+                // Add more cases for other "methods"
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(id), $"Unknown command id: {id}");
             }
         }
 
