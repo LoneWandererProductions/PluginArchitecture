@@ -13,9 +13,9 @@ namespace Prototype.Interfaces
         string Name { get; }
         string Version { get; }
 
-        void Execute(PluginContext context);
+        void Execute(IPluginContext context);
 
-        Task ExecuteAsync(PluginContext context);
+        Task ExecuteAsync(IPluginContext context);
 
         void Initialize();
         void Shutdown();

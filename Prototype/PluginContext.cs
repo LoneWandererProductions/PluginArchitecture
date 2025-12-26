@@ -6,30 +6,23 @@
  * PROGRAMMER:  Peter Geinitz (Wayfarer)
  */
 
+using Prototype.Interfaces;
+
 namespace Prototype
 {
-    /// <summary>
-    /// Here we can add a custom memory manager to handle the allocation of variables and results.
-    /// </summary>
-    public class PluginContext
+    public sealed class ManagedPluginContext : IManagedPluginContext
     {
         private readonly object[] _variables;
         private readonly object[] _results;
 
-        public PluginContext(int variableCount, int resultCount)
-        {
-            _variables = new object[variableCount];
-            _results = new object[resultCount];
-        }
+        public int VariableCount => throw new NotImplementedException();
 
-        public object GetVariable(int index) => _variables[index];
-        public void SetVariable(int index, object value) => _variables[index] = value;
+        public int ResultCount => throw new NotImplementedException();
 
-        public object GetResult(int index) => _results[index];
-        public void SetResult(int index, object value) => _results[index] = value;
+        public T GetVariable<T>(int index) => (T)_variables[index];
+        public void SetVariable<T>(int index, T value) => _variables[index] = value;
 
-        public int VariableCount => _variables.Length;
-        public int ResultCount => _results.Length;
+        public T GetResult<T>(int index) => (T)_results[index];
+        public void SetResult<T>(int index, T value) => _results[index] = value;
     }
-
 }

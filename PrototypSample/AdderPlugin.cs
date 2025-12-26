@@ -1,45 +1,48 @@
-/*
- * COPYRIGHT:   See COPYING in the top level directory
- * PROJECT:     PrototypSample
- * FILE:        AdderPlugin.cs
- * PURPOSE:     Your file purpose here
- * PROGRAMMER:  Peter Geinitz (Wayfarer)
- */
-
 using Prototype;
 using Prototype.Enums;
 using Prototype.Interfaces;
 
 namespace PrototypSample
 {
-    public class AdderPlugin : IPlugin, ISymbolProvider
+    public class AdderPlugin // You can implement IPlugin/ISymbolProvider as needed
     {
         public string Name => "Adder";
         public string Version => "1.0.0";
 
-        public IReadOnlyList<Symbol> GetSymbols() => new List<Symbol>
-    {
-        new Symbol("A", SymbolType.Data, typeof(int)),
-        new Symbol("B", SymbolType.Data, typeof(int)),
-        new Symbol("Result", SymbolType.Data, typeof(int))
-    };
-
-        public void Execute(PluginContext context)
+        public IReadOnlyList<SymbolDefinition> GetSymbols() => new List<SymbolDefinition>
         {
-            int a = (int)context.GetVariable(0);
-            int b = (int)context.GetVariable(1);
-            context.SetResult(0, a + b);
+            new SymbolDefinition("A", SymbolType.Data, typeof(int)),
+            new SymbolDefinition("B", SymbolType.Data, typeof(int)),
+            new SymbolDefinition("Result", SymbolType.Data, typeof(int))
+        };
+
+        public void Execute(IPluginContext context)
+        {
+            if (context is IUnmanagedPluginContext uctx)
+            {
+                int a = uctx.GetVariable<int>(0);
+                int b = uctx.GetVariable<int>(1);
+                uctx.SetResult(0, a + b);
+            }
+            else if (context is IManagedPluginContext mctx)
+            {
+                int a = mctx.GetVariable<int>(0);
+                int b = mctx.GetVariable<int>(1);
+                mctx.SetResult(0, a + b);
+            }
+            else
+            {
+                throw new InvalidOperationException("Unsupported plugin context type");
+            }
         }
 
-        public Task ExecuteAsync(PluginContext context)
+        public Task ExecuteAsync(IPluginContext context)
         {
-            // simple sync plugin; just wrap in Task
-            Execute(context);
+            Execute(context); // simple synchronous execution
             return Task.CompletedTask;
         }
 
         public void Initialize() { /* optional */ }
         public void Shutdown() { /* optional */ }
     }
-
 }

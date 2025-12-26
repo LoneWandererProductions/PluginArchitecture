@@ -10,6 +10,6 @@ namespace Prototype.Interfaces
 {
     public interface ISymbolProvider
     {
-        IReadOnlyList<Symbol> GetSymbols();
+        IReadOnlyList<SymbolDefinition> GetSymbols();
     }
 }
