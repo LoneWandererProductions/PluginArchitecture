@@ -9,7 +9,7 @@
              d:DesignHeight="450" d:DesignWidth="800" Loaded="PluginController_Loaded">
     <Grid>
         <DataGrid
-            Name="DataGrid" MouseDoubleClick="DataGrid_MouseDoubleClick"
+            Name="DataGrid"
             CanUserAddRows="False"
             CanUserDeleteRows="False"
             AutoGenerateColumns="False"

@@ -1,13 +1,23 @@
-using Prototype;
-using Prototype.Enums;
-using Prototype.Interfaces;
+/*
+ * COPYRIGHT:   See COPYING in the top level directory
+ * PROJECT:     PrototypSample
+ * FILE:        AdderPlugin.cs
+ * PURPOSE:     Your file purpose here
+ * PROGRAMMER:  Peter Geinitz (Wayfarer)
+ */
+
+using Plugins;
+using Plugins.Enums;
+using Plugins.Interfaces;
 
 namespace PrototypSample
 {
-    public class AdderPlugin // You can implement IPlugin/ISymbolProvider as needed
+    public class AdderPlugin: IPlugin, ISymbolProvider
     {
         public string Name => "Adder";
         public string Version => "1.0.0";
+
+        public string Description => "Test plugin.";
 
         public IReadOnlyList<SymbolDefinition> GetSymbols() => new List<SymbolDefinition>
         {

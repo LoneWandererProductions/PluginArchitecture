@@ -15,7 +15,6 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Windows;
-using System.Windows.Input;
 
 namespace PluginLoader
 {
@@ -94,20 +93,6 @@ namespace PluginLoader
         }
 
         /// <summary>
-        ///     Handles the MouseDoubleClick event of the DataGrid control.
-        /// </summary>
-        /// <param name="sender">The source of the event.</param>
-        /// <param name="e">The <see cref="MouseButtonEventArgs" /> instance containing the event data.</param>
-        private void DataGrid_MouseDoubleClick(object sender, MouseButtonEventArgs e)
-        {
-            if (DataGrid.SelectedItem is PluginItem item)
-            {
-                var exe = item.Command.Execute();
-                Trace.WriteLine(exe);
-            }
-        }
-
-        /// <summary>
         ///     Handles the Loaded event of the PluginController control.
         /// </summary>
         /// <param name="sender">The source of the event.</param>
@@ -149,7 +134,6 @@ namespace PluginLoader
                     Command = plugin,
                     Name = plugin.Name,
                     Version = plugin.Version,
-                    Type = plugin.Type,
                     Description = plugin.Description
                 });
             }

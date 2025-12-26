@@ -6,8 +6,7 @@
  * PROGRAMER:   Peter Geinitz (Wayfarer)
  */
 
-using System;
-using Plugin;
+using Plugins.Interfaces;
 using ViewModel;
 
 namespace Main
@@ -37,7 +36,7 @@ namespace Main
         /// <summary>
         ///     The version
         /// </summary>
-        private Version _version;
+        private string _version;
 
         /// <summary>
         ///     Gets or sets the name.
@@ -77,7 +76,7 @@ namespace Main
         /// <value>
         ///     The version.
         /// </value>
-        public Version Version
+        public string Version
         {
             get => _version;
             set

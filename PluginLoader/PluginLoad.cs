@@ -16,7 +16,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using Plugin;
+using Plugins.Interfaces;
 
 namespace PluginLoader
 {
@@ -39,14 +39,6 @@ namespace PluginLoader
         public static List<IPlugin> PluginContainer { get; private set; }
 
         /// <summary>
-        /// Gets the asynchronous plugin container.
-        /// </summary>
-        /// <value>
-        /// The asynchronous plugin container.
-        /// </value>
-        public static List<IAsyncPlugin> AsyncPluginContainer { get; private set; }
-
-        /// <summary>
         ///     Loads all.
         /// </summary>
         /// <param name="path">The path.</param>
@@ -64,7 +56,6 @@ namespace PluginLoader
             }
 
             PluginContainer = new List<IPlugin>();
-            AsyncPluginContainer = new List<IAsyncPlugin>();
 
             foreach (var pluginPath in pluginPaths)
             {
@@ -84,45 +75,9 @@ namespace PluginLoader
                     Trace.WriteLine(ex);
                     loadErrorEvent?.Invoke(nameof(LoadAll), new LoaderErrorEventArgs(ex.ToString()));
                 }
-
-                try
-                {
-                    var asyncPlugins = CreateCommands<IAsyncPlugin>(pluginAssembly).ToList();
-
-                    AsyncPluginContainer.AddRange(asyncPlugins);
-                }
-                catch (Exception ex) when (ex is ArgumentException or FileLoadException or ApplicationException
-                                               or ReflectionTypeLoadException or BadImageFormatException
-                                               or FileNotFoundException)
-                {
-                    Trace.WriteLine(ex);
-                    loadErrorEvent?.Invoke(nameof(LoadAll), new LoaderErrorEventArgs(ex.ToString()));
-                }
             }
 
-            return PluginContainer.Count != 0 || AsyncPluginContainer.Count != 0;
-        }
-
-        /// <summary>
-        ///     Loads all.
-        /// </summary>
-        /// <param name="store">
-        ///     Sets the environment variables of the base module
-        ///     The idea is, the main module has documented Environment Variables, that the plugins can use.
-        ///     / This method sets these Variables.
-        /// </param>
-        /// <returns>Success Status</returns>
-        public static bool SetEnvironmentVariables(Dictionary<int, object> store)
-        {
-            if (store == null)
-            {
-                return false;
-            }
-
-            // Key, here we define the accessible Environment for the plugins
-            DataRegister.Store = store;
-
-            return true;
+            return PluginContainer.Count != 0;
         }
 
         /// <summary>

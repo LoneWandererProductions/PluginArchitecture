@@ -9,15 +9,12 @@
 // ReSharper disable MemberCanBeInternal
 // ReSharper disable UnusedMethodReturnValue.Global
 
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Windows;
-using System.Windows.Input;
-using Plugin;
 using PluginLoader;
 
 namespace Main
@@ -105,61 +102,13 @@ namespace Main
 
             foreach (var item in PluginLoad.PluginContainer.Select(plugin => new PluginItem
             {
-                Command = plugin, Name = plugin.Name, Version = plugin.Version, Type = plugin.Type
+                Command = plugin, Name = plugin.Name, Version = plugin.Version
             }))
                 lst.Add(item);
 
             ObservablePlugin = new ObservableCollection<PluginItem>(lst);
 
             NotifyPropertyChanged();
-        }
-
-        /// <summary>
-        ///     Sets the environment variables in the plugin Loader
-        /// </summary>
-        /// <param name="store">
-        ///     Sets the environment variables of the base module
-        ///     The idea is, the main module has documented Environment Variables, that the plugins can use.
-        ///     / This method sets the these Variables.
-        /// </param>
-        public void SetEnvironmentVariables(Dictionary<int, object> store)
-        {
-            var check = PluginLoad.SetEnvironmentVariables(store);
-            if (!check) Trace.WriteLine("Error, could not set Environment Variable.");
-        }
-
-        /// <summary>
-        ///     Updates the environment variables.
-        /// </summary>
-        /// <param name="id">The identifier.</param>
-        /// <param name="data">The data.</param>
-        /// <returns>Success Status</returns>
-        public bool UpdateEnvironmentVariables(int id, object data)
-        {
-            if (DataRegister.Store.ContainsKey(id))
-                //update specified Environment Variable
-                DataRegister.Store[id] = data;
-
-            else
-                DataRegister.Store.Add(id, data);
-
-            return true;
-        }
-
-
-        /// <summary>
-        ///     Handles the MouseDoubleClick event of the DataGrid control.
-        /// </summary>
-        /// <param name="sender">The source of the event.</param>
-        /// <param name="e">The <see cref="MouseButtonEventArgs" /> instance containing the event data.</param>
-        private void DataGrid_MouseDoubleClick(object sender, MouseButtonEventArgs e)
-        {
-            var selectedItem = DataGrid.SelectedItem;
-            if (selectedItem is not PluginItem item) return;
-
-            var exe = item.Command.Execute();
-
-            Trace.WriteLine(exe);
         }
     }
 }

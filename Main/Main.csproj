@@ -7,27 +7,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Plugins\ConsolePlugin.dll" />
     <None Remove="Plugins\Info.txt" />
-    <None Remove="Plugins\Not a plugin.dll" />
-    <None Remove="Plugins\WindowPlugin.dll" />
-    <None Remove="Plugins\WindowPlugin1.dll" />
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="Plugins\ConsolePlugin.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </EmbeddedResource>
     <EmbeddedResource Include="Plugins\Info.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Plugins\Not a plugin.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Plugins\WindowPlugin.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Plugins\WindowPlugin1.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
   </ItemGroup>

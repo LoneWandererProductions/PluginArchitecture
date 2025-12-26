@@ -1,17 +1,19 @@
 /*
  * COPYRIGHT:   See COPYING in the top level directory
- * PROJECT:     Prototype.Interfaces
+ * PROJECT:     Plugins.Interfaces
  * FILE:        IPlugin.cs
  * PURPOSE:     Your file purpose here
  * PROGRAMMER:  Peter Geinitz (Wayfarer)
  */
 
-namespace Prototype.Interfaces
+namespace Plugins.Interfaces
 {
     public interface IPlugin
     {
         string Name { get; }
         string Version { get; }
+
+        string Description { get; }
 
         void Execute(IPluginContext context);
 
