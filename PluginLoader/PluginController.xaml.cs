@@ -1,7 +1,7 @@
 ﻿/*
  * COPYRIGHT:   See COPYING in the top level directory
  * PROJECT:     PluginLoader
- * FILE:        PluginLoader/PluginController.xaml.cs
+ * FILE:        PluginController.xaml.cs
  * PURPOSE:     Plugin Control, that displays all plugins
  * PROGRAMER:   Peter Geinitz (Wayfarer)
  */
@@ -31,6 +31,9 @@ namespace PluginLoader
             typeof(string),
             typeof(PluginController), new PropertyMetadata(default(string)));
 
+        /// <summary>
+        /// The extension property
+        /// </summary>
         public static readonly DependencyProperty ExtensionProperty = DependencyProperty.Register(nameof(Extension),
             typeof(string),
             typeof(PluginController), new PropertyMetadata(default(string)));

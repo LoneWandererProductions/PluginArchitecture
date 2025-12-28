@@ -3,11 +3,15 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:local="clr-namespace:CommonControls;assembly=CommonControls"
              DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}"
              mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="800" Loaded="PluginController_Loaded">
     <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="431*"/>
+            <ColumnDefinition Width="369*"/>
+        </Grid.ColumnDefinitions>
         <DataGrid
             Name="DataGrid"
             CanUserAddRows="False"
@@ -22,5 +26,16 @@
                 <DataGridTextColumn Binding="{Binding Description}" Header="Description" />
             </DataGrid.Columns>
         </DataGrid>
+        <local:InspectorGrid SelectedObject="{Binding Variables}"/>
+        <local:InspectorGrid SelectedObject="{Binding Results}" />
+        <ItemsControl ItemsSource="{Binding Methods}">
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <Button Content="{Binding Name}"
+                    Command="{Binding ExecuteCommand}"
+                    Margin="4"/>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
     </Grid>
 </UserControl>
