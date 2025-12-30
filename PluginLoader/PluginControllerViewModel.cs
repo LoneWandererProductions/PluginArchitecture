@@ -12,6 +12,7 @@ namespace PluginLoader
         public ObservableCollection<PluginSymbolViewModel> Symbols { get; } = new();
 
         private PluginViewModel? _selectedPlugin;
+
         public PluginViewModel? SelectedPlugin
         {
             get => _selectedPlugin;
@@ -27,6 +28,7 @@ namespace PluginLoader
         }
 
         private PluginSymbolViewModel? _selectedSymbol;
+
         public PluginSymbolViewModel? SelectedSymbol
         {
             get => _selectedSymbol;

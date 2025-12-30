@@ -69,5 +69,4 @@ namespace PluginLoader
             throw new NotImplementedException();
         }
     }
-
 }

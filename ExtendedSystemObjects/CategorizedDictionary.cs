@@ -71,8 +71,14 @@ namespace ExtendedSystemObjects
             get
             {
                 _lock.EnterReadLock();
-                try { return _data.Count; }
-                finally { _lock.ExitReadLock(); }
+                try
+                {
+                    return _data.Count;
+                }
+                finally
+                {
+                    _lock.ExitReadLock();
+                }
             }
         }
 
@@ -96,7 +102,10 @@ namespace ExtendedSystemObjects
                     if (_data.TryGetValue(key, out var entry)) return entry.Value;
                     throw new KeyNotFoundException($"Key '{key}' not found.");
                 }
-                finally { _lock.ExitReadLock(); }
+                finally
+                {
+                    _lock.ExitReadLock();
+                }
             }
             set
             {
@@ -112,7 +121,10 @@ namespace ExtendedSystemObjects
                         AddInternal(string.Empty, key, value);
                     }
                 }
-                finally { _lock.ExitWriteLock(); }
+                finally
+                {
+                    _lock.ExitWriteLock();
+                }
             }
         }
 
@@ -132,8 +144,14 @@ namespace ExtendedSystemObjects
         public void Add(string category, TK key, TV value)
         {
             _lock.EnterWriteLock();
-            try { AddInternal(NormalizeCategory(category), key, value); }
-            finally { _lock.ExitWriteLock(); }
+            try
+            {
+                AddInternal(NormalizeCategory(category), key, value);
+            }
+            finally
+            {
+                _lock.ExitWriteLock();
+            }
         }
 
         /// <summary>
@@ -177,7 +195,10 @@ namespace ExtendedSystemObjects
 
                 return true;
             }
-            finally { _lock.ExitWriteLock(); }
+            finally
+            {
+                _lock.ExitWriteLock();
+            }
         }
 
         /// <summary>
@@ -190,8 +211,14 @@ namespace ExtendedSystemObjects
         public bool ContainsKey(TK key)
         {
             _lock.EnterReadLock();
-            try { return _data.ContainsKey(key); }
-            finally { _lock.ExitReadLock(); }
+            try
+            {
+                return _data.ContainsKey(key);
+            }
+            finally
+            {
+                _lock.ExitReadLock();
+            }
         }
 
         /// <summary>
@@ -215,7 +242,10 @@ namespace ExtendedSystemObjects
                 value = default;
                 return false;
             }
-            finally { _lock.ExitReadLock(); }
+            finally
+            {
+                _lock.ExitReadLock();
+            }
         }
 
         /// <summary>
@@ -239,7 +269,10 @@ namespace ExtendedSystemObjects
                 category = null;
                 return false;
             }
-            finally { _lock.ExitReadLock(); }
+            finally
+            {
+                _lock.ExitReadLock();
+            }
         }
 
         /// <summary>
@@ -257,7 +290,10 @@ namespace ExtendedSystemObjects
                 if (_data.TryGetValue(key, out var entry)) return entry.Category;
                 throw new KeyNotFoundException();
             }
-            finally { _lock.ExitReadLock(); }
+            finally
+            {
+                _lock.ExitReadLock();
+            }
         }
 
         /// <summary>
@@ -291,7 +327,10 @@ namespace ExtendedSystemObjects
 
                 return true;
             }
-            finally { _lock.ExitWriteLock(); }
+            finally
+            {
+                _lock.ExitWriteLock();
+            }
         }
 
         /// <summary>
@@ -301,8 +340,14 @@ namespace ExtendedSystemObjects
         public IEnumerable<string> GetCategories()
         {
             _lock.EnterReadLock();
-            try { return _categories.Keys; }
-            finally { _lock.ExitReadLock(); }
+            try
+            {
+                return _categories.Keys;
+            }
+            finally
+            {
+                _lock.ExitReadLock();
+            }
         }
 
         /// <summary>
@@ -320,7 +365,10 @@ namespace ExtendedSystemObjects
                     return set;
                 return Array.Empty<TK>();
             }
-            finally { _lock.ExitReadLock(); }
+            finally
+            {
+                _lock.ExitReadLock();
+            }
         }
 
         /// <summary>
@@ -336,7 +384,10 @@ namespace ExtendedSystemObjects
             {
                 return _data.Keys;
             }
-            finally { _lock.ExitReadLock(); }
+            finally
+            {
+                _lock.ExitReadLock();
+            }
         }
 
         /// <summary>
@@ -353,7 +404,10 @@ namespace ExtendedSystemObjects
                     return entry;
                 return null;
             }
-            finally { _lock.ExitReadLock(); }
+            finally
+            {
+                _lock.ExitReadLock();
+            }
         }
 
 
@@ -375,7 +429,10 @@ namespace ExtendedSystemObjects
                 foreach (var key in keys) dict[key] = _data[key].Value;
                 return dict;
             }
-            finally { _lock.ExitReadLock(); }
+            finally
+            {
+                _lock.ExitReadLock();
+            }
         }
 
         /// <summary>
@@ -389,7 +446,10 @@ namespace ExtendedSystemObjects
                 _data.Clear();
                 _categories.Clear();
             }
-            finally { _lock.ExitWriteLock(); }
+            finally
+            {
+                _lock.ExitWriteLock();
+            }
         }
 
         /// <summary>
@@ -407,7 +467,10 @@ namespace ExtendedSystemObjects
                 foreach (var kvp in _data)
                     yield return (kvp.Key, kvp.Value.Category, kvp.Value.Value);
             }
-            finally { _lock.ExitReadLock(); }
+            finally
+            {
+                _lock.ExitReadLock();
+            }
         }
 
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();

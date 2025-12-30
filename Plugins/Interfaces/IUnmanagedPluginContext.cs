@@ -48,5 +48,4 @@ namespace Plugins.Interfaces
         /// <param name="value">The value.</param>
         void SetResult<T>(int index, T value) where T : unmanaged;
     }
-
 }

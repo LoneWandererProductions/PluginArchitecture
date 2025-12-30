@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Input;
+﻿using System.Windows.Input;
 
 namespace PluginLoader
 {
@@ -12,5 +7,4 @@ namespace PluginLoader
         public string Name { get; set; } = string.Empty;
         public ICommand? ExecuteCommand { get; set; }
     }
-
 }

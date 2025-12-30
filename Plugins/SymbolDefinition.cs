@@ -95,6 +95,5 @@ namespace Plugins
         /// The size of the effective.
         /// </value>
         public int EffectiveSize => Size ?? Marshal.SizeOf(Type);
-
     }
 }
