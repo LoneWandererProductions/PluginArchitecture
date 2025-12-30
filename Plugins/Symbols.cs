@@ -15,5 +15,4 @@ namespace Plugins
     /// </summary>
     /// <seealso cref="System.IEquatable&lt;Plugins.Symbols&gt;" />
     public readonly record struct Symbols(string Name, SymbolType Type, Type DataType);
-
 }
