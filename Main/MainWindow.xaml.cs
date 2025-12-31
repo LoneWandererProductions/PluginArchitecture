@@ -24,8 +24,7 @@ namespace Main
         {
             var path = Directory.GetCurrentDirectory();
             var obj = DateTime.Now;
-            var dct = new Dictionary<int, object> {{0, path}, {1, obj}};
-
+            var dct = new Dictionary<int, object> { { 0, path }, { 1, obj } };
         }
 
         private void console_Click(object sender, RoutedEventArgs e)

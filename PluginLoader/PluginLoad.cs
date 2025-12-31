@@ -28,7 +28,7 @@ namespace PluginLoader
         /// <summary>
         ///     The load error event
         /// </summary>
-        public static EventHandler loadErrorEvent;
+        public static EventHandler? loadErrorEvent;
 
         /// <summary>
         ///     Gets or sets the plugin container.
@@ -63,7 +63,6 @@ namespace PluginLoader
 
                 try
                 {
-
                     var syncPlugins = CreateCommands<IPlugin>(pluginAssembly).ToList();
 
                     PluginContainer.AddRange(syncPlugins);
@@ -147,7 +146,8 @@ namespace PluginLoader
                 yield break;
             }
 
-            var availableTypes = string.Join(PluginLoaderResources.Separator, assembly.GetTypes().Select(t => t.FullName));
+            var availableTypes =
+                string.Join(PluginLoaderResources.Separator, assembly.GetTypes().Select(t => t.FullName));
             var message = string.Concat(PluginLoaderResources.ErrorCouldNotFindPlugin,
                 PluginLoaderResources.Information(assembly, availableTypes));
             throw new ArgumentException(message);

@@ -12,7 +12,7 @@ using Plugins.Interfaces;
 
 namespace PrototypSample
 {
-    public class AdderPlugin: IPlugin, ISymbolProvider
+    public class AdderPlugin : IPlugin, ISymbolProvider
     {
         /// <summary>
         /// The context
@@ -55,19 +55,19 @@ namespace PrototypSample
             switch (id)
             {
                 case 0: // Sum
-                    {
-                        int a = context.GetVariable<int>(0);
-                        int b = context.GetVariable<int>(1);
-                        context.SetResult(0, a + b);
-                        break;
-                    }
+                {
+                    int a = context.GetVariable<int>(0);
+                    int b = context.GetVariable<int>(1);
+                    context.SetResult(0, a + b);
+                    break;
+                }
                 case 1: // Multiply
-                    {
-                        int a = context.GetVariable<int>(0);
-                        int b = context.GetVariable<int>(1);
-                        context.SetResult(0, a * b);
-                        break;
-                    }
+                {
+                    int a = context.GetVariable<int>(0);
+                    int b = context.GetVariable<int>(1);
+                    context.SetResult(0, a * b);
+                    break;
+                }
                 // Add more cases for other "methods"
                 default:
                     throw new ArgumentOutOfRangeException(nameof(id), $"Unknown command id: {id}");
@@ -79,19 +79,19 @@ namespace PrototypSample
             switch (id)
             {
                 case 0: // Sum
-                    {
-                        int a = context.GetVariable<int>(0);
-                        int b = context.GetVariable<int>(1);
-                        context.SetResult(0, a + b);
-                        break;
-                    }
+                {
+                    int a = context.GetVariable<int>(0);
+                    int b = context.GetVariable<int>(1);
+                    context.SetResult(0, a + b);
+                    break;
+                }
                 case 1: // Multiply
-                    {
-                        int a = context.GetVariable<int>(0);
-                        int b = context.GetVariable<int>(1);
-                        context.SetResult(0, a * b);
-                        break;
-                    }
+                {
+                    int a = context.GetVariable<int>(0);
+                    int b = context.GetVariable<int>(1);
+                    context.SetResult(0, a * b);
+                    break;
+                }
                 // Add more cases for other "methods"
                 default:
                     throw new ArgumentOutOfRangeException(nameof(id), $"Unknown command id: {id}");
@@ -104,9 +104,19 @@ namespace PrototypSample
             return Task.CompletedTask;
         }
 
-        public void Initialize() { /* optional */ }
-        public void Shutdown() { /* optional */ }
+        public void Initialize()
+        {
+            /* optional */
+        }
 
-        public void Initialize(IPluginContext context) { _context = context; }
+        public void Shutdown()
+        {
+            /* optional */
+        }
+
+        public void Initialize(IPluginContext context)
+        {
+            _context = context;
+        }
     }
 }

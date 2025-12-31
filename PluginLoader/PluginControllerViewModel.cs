@@ -28,6 +28,7 @@ namespace PluginLoader
         }
 
         private PluginSymbolViewModel? _selectedSymbol;
+
         public PluginSymbolViewModel? SelectedSymbol
         {
             get => _selectedSymbol;
