@@ -24,6 +24,8 @@ namespace PrototypSample
 
         public string Description => "Test plugin.";
 
+        public IPluginContext Context => _context;
+
         public IReadOnlyList<SymbolDefinition> GetSymbols() => new List<SymbolDefinition>
         {
             new SymbolDefinition("A", SymbolType.Data, typeof(int)),

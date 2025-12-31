@@ -14,6 +14,14 @@ namespace Plugins.Interfaces
     public interface IPlugin
     {
         /// <summary>
+        /// Gets the context.
+        /// </summary>
+        /// <value>
+        /// The context.
+        /// </value>
+        IPluginContext Context { get; }
+
+        /// <summary>
         /// Gets the name.
         /// </summary>
         /// <value>

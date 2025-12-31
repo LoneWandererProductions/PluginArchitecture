@@ -16,6 +16,8 @@ namespace PluginLoader
         public string Version { get; }
         public string Description { get; }
 
+        public IPluginContext Context { get; }
+
         /// <summary>
         /// All symbols exposed by this plugin (if any).
         /// </summary>
@@ -28,6 +30,7 @@ namespace PluginLoader
             Name = plugin.Name;
             Version = plugin.Version;
             Description = plugin.Description;
+            Context = plugin.Context;
 
             LoadSymbols();
         }

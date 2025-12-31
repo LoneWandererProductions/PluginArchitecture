@@ -38,21 +38,33 @@
 
         <!-- Inspector / Method -->
         <ContentControl Grid.Column="2"
-                        Content="{Binding SelectedSymbol}">
+                Content="{Binding SelectedSymbol}">
+
             <ContentControl.Resources>
-                <!-- Data symbol -->
-                <DataTemplate DataType="{x:Type pluginloader:PluginSymbolViewModel}">
+
+                <DataTemplate x:Key="DataSymbolTemplate">
                     <local:InspectorGrid SelectedObject="{Binding}" />
                 </DataTemplate>
 
-                <!-- Method symbol -->
-                <DataTemplate DataType="{x:Type pluginloader:MethodSymbolViewModel}">
-                    <Button Content="Execute" Command="{Binding ExecuteCommand}" />
+                <DataTemplate x:Key="MethodSymbolTemplate">
+                    <Button Content="Execute"
+                    Command="{Binding ExecuteCommand}" />
                 </DataTemplate>
 
+                <pluginloader:SymbolTemplateSelector
+            x:Key="SymbolSelector"
+            DataTemplate="{StaticResource DataSymbolTemplate}"
+            MethodTemplate="{StaticResource MethodSymbolTemplate}" />
 
             </ContentControl.Resources>
+
+            <!-- THIS is the important part -->
+            <ContentControl.ContentTemplateSelector>
+                <StaticResource ResourceKey="SymbolSelector" />
+            </ContentControl.ContentTemplateSelector>
+
         </ContentControl>
+
 
     </Grid>
 </UserControl>

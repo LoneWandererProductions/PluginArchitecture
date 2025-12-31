@@ -12,6 +12,7 @@ namespace PluginLoader
         public ObservableCollection<PluginSymbolViewModel> Symbols { get; } = new();
 
         private PluginViewModel? _selectedPlugin;
+
         public PluginViewModel? SelectedPlugin
         {
             get => _selectedPlugin;
@@ -73,7 +74,8 @@ namespace PluginLoader
                 Symbols.Add(new PluginSymbolViewModel(
                     plugin: SelectedPlugin.Command,
                     symbol: symbol,
-                    index: index++));
+                    index: index++,
+                    context: SelectedPlugin.Context));
             }
         }
 
