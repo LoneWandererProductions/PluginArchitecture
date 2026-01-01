@@ -48,7 +48,8 @@ namespace PluginLoader
                 Symbols.Add(new PluginSymbolViewModel(
                     plugin: Command, // the plugin instance this ViewModel wraps
                     symbol: symbol,
-                    index: index++
+                    index: index++,
+                    context: Context
                 ));
             }
         }
