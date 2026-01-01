@@ -28,9 +28,9 @@ namespace PrototypSample
 
         public IReadOnlyList<SymbolDefinition> GetSymbols() => new List<SymbolDefinition>
         {
-            new SymbolDefinition("A", SymbolType.Data, typeof(int)),
-            new SymbolDefinition("B", SymbolType.Data, typeof(int)),
-            new SymbolDefinition("Result", SymbolType.Data, typeof(int))
+            new SymbolDefinition("A", SymbolType.Data, typeof(int)) { Direction = DirectionType.Input },
+            new SymbolDefinition("B", SymbolType.Data, typeof(int)) { Direction = DirectionType.Input },
+            new SymbolDefinition("Result", SymbolType.Data, typeof(int)) { Direction = DirectionType.Output }
         };
 
         public void Execute(int id)

@@ -2,7 +2,9 @@
  * COPYRIGHT:   See COPYING in the top level directory
  * PROJECT:     Plugins
  * FILE:        UnmanagedPluginContext.cs
- * PURPOSE:     Your file purpose here
+ * PURPOSE:     An unamanaged plugin context implementation. 
+ *              The Idea is to have a memory block only for unmanaged types.
+ *              The target is speed and low memory footprint.
  * PROGRAMMER:  Peter Geinitz (Wayfarer)
  */
 
@@ -13,6 +15,7 @@ using System.Runtime.InteropServices;
 
 namespace Plugins
 {
+    /// <inheritdoc />
     /// <summary>
     /// Unmanaged plugin context. Only allows unmanaged types. Memory layout is computed automatically from symbols.
     /// </summary>
@@ -43,6 +46,7 @@ namespace Plugins
         /// </summary>
         private readonly int[] _resultOffsets;
 
+        /// <inheritdoc />
         /// <summary>
         /// Gets the variable count.
         /// </summary>
@@ -51,6 +55,7 @@ namespace Plugins
         /// </value>
         public int VariableCount => _variables.Count;
 
+        /// <inheritdoc />
         /// <summary>
         /// Gets the result count.
         /// </summary>

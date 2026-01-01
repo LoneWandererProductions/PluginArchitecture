@@ -1,4 +1,12 @@
-﻿using Plugins;
+/*
+ * COPYRIGHT:   See COPYING in the top level directory
+ * PROJECT:     PluginLoader
+ * FILE:        SymbolValueViewModel.cs
+ * PURPOSE:     Your file purpose here
+ * PROGRAMMER:  Peter Geinitz (Wayfarer)
+ */
+
+using Plugins;
 using Plugins.Enums;
 using Plugins.Interfaces;
 using System;
