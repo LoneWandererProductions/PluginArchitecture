@@ -9,10 +9,18 @@
 
   <ItemGroup>
     <None Remove="Plugins\Info.txt" />
+    <None Remove="Plugins\Plugins.dll" />
+    <None Remove="Plugins\PrototypSample.dll" />
   </ItemGroup>
 
   <ItemGroup>
     <EmbeddedResource Include="Plugins\Info.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Plugins\Plugins.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Plugins\PrototypSample.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
   </ItemGroup>

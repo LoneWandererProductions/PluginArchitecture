@@ -63,9 +63,8 @@ namespace PluginLoader
 
                 try
                 {
-                    var syncPlugins = CreateCommands<IPlugin>(pluginAssembly).ToList();
+                    // Get all types that implement IPlugin and are not abstract
 
-                    PluginContainer.AddRange(syncPlugins);
                 }
                 catch (Exception ex) when (ex is ArgumentException or FileLoadException or ApplicationException
                                                or ReflectionTypeLoadException or BadImageFormatException
@@ -113,44 +112,6 @@ namespace PluginLoader
         {
             var loadContext = new PluginLoadContext(pluginLocation);
             return loadContext.LoadFromAssemblyPath(pluginLocation);
-        }
-
-        /// <summary>
-        ///     Creates the commands.
-        /// </summary>
-        /// <typeparam name="T">Type of Plugin</typeparam>
-        /// <param name="assembly">The assembly.</param>
-        /// <returns>
-        /// Adds References to the Commands
-        ///     Can't find any type which implements IPlugin in {assembly} from {assembly.Location}.\n" +
-        ///     $"Available types: {availableTypes}
-        /// $"Available types: {availableTypes}</exception>
-        /// <exception cref="ArgumentException">Could not find the Plugin</exception>
-        private static IEnumerable<T> CreateCommands<T>(Assembly assembly) where T : class
-        {
-            var count = 0;
-
-            foreach (var type in assembly.GetTypes().Where(type => typeof(T).IsAssignableFrom(type)))
-            {
-                if (Activator.CreateInstance(type) is not T result)
-                {
-                    continue;
-                }
-
-                count++;
-                yield return result;
-            }
-
-            if (count != 0)
-            {
-                yield break;
-            }
-
-            var availableTypes =
-                string.Join(PluginLoaderResources.Separator, assembly.GetTypes().Select(t => t.FullName));
-            var message = string.Concat(PluginLoaderResources.ErrorCouldNotFindPlugin,
-                PluginLoaderResources.Information(assembly, availableTypes));
-            throw new ArgumentException(message);
         }
     }
 }

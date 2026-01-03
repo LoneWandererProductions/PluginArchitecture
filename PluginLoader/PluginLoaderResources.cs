@@ -28,11 +28,6 @@ namespace PluginLoader
         internal const string Separator = ",";
 
         /// <summary>
-        ///     The error could not find plugin
-        /// </summary>
-        internal const string ErrorCouldNotFindPlugin = "Can't find any type which implements ICommand in: ";
-
-        /// <summary>
         ///     The Error with the Path (const). Value: "Plugin path does not exist.".
         /// </summary>
         internal const string ErrorPath = "Plugin path does not exist.";

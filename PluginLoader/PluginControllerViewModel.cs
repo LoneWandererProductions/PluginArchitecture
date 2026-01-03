@@ -8,6 +8,7 @@
 
 using Plugins;
 using Plugins.Interfaces;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
@@ -16,6 +17,7 @@ namespace PluginLoader
 {
     public sealed class PluginControllerViewModel : INotifyPropertyChanged
     {
+
         public ObservableCollection<PluginViewModel> Plugins { get; } = new();
         public ObservableCollection<PluginSymbolViewModel> Symbols { get; } = new();
 
@@ -48,6 +50,14 @@ namespace PluginLoader
                 _selectedSymbol = value;
                 OnPropertyChanged();
             }
+        }
+
+        public void SetPlugins(IEnumerable<IPlugin> plugins)
+        {
+            Plugins.Clear();
+
+            foreach (var plugin in plugins)
+                Plugins.Add(new PluginViewModel(plugin));
         }
 
         public PluginControllerViewModel()

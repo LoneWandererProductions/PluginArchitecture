@@ -6,8 +6,10 @@
 * PROGRAMER:   Peter Geinitz (Wayfarer)
 */
 
+using PluginLoader;
+using Plugins.Interfaces;
 using System;
-using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Windows;
 
@@ -15,29 +17,23 @@ namespace Main
 {
     public partial class MainWindow
     {
+        public ObservableCollection<IPlugin> Plugins { get; } = new();
+
         public MainWindow()
         {
             InitializeComponent();
+            DataContext = this;
         }
 
-        private void initiate_Click(object sender, RoutedEventArgs e)
+        private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            var path = Directory.GetCurrentDirectory();
-            var obj = DateTime.Now;
-            var dct = new Dictionary<int, object> { { 0, path }, { 1, obj } };
-        }
+            Plugins.Clear();
 
-        private void console_Click(object sender, RoutedEventArgs e)
-        {
-            var item = PlugController.ObservablePlugin[0];
+            var pluginPath = Path.Combine(AppContext.BaseDirectory, "Plugins");
+            PluginLoad.LoadAll(pluginPath);
 
-            txtOutput.Text = string.Empty;
-        }
-
-
-        private void window_Click(object sender, RoutedEventArgs e)
-        {
-            var item = PlugController.ObservablePlugin[1];
+            foreach (var plugin in PluginLoad.PluginContainer)
+                Plugins.Add(plugin);
         }
     }
 }

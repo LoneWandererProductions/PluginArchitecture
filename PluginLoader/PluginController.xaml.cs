@@ -10,7 +10,10 @@
 // ReSharper disable MemberCanBePrivate.Global
 // ReSharper disable UnusedType.Global
 
+using Plugins.Interfaces;
+using System.Collections.Generic;
 using System.ComponentModel;
+using System.Windows;
 
 namespace PluginLoader
 {
@@ -20,10 +23,42 @@ namespace PluginLoader
     /// </summary>
     public sealed partial class PluginController
     {
+        private readonly PluginControllerViewModel _vm;
+
+        public static readonly DependencyProperty PluginsProperty =
+            DependencyProperty.Register(
+            nameof(Plugins),
+            typeof(IEnumerable<IPlugin>),
+            typeof(PluginController),
+            new PropertyMetadata(null, OnPluginsChanged));
+
+        public IEnumerable<IPlugin> Plugins
+        {
+            get => (IEnumerable<IPlugin>)GetValue(PluginsProperty);
+            set => SetValue(PluginsProperty, value);
+        }
+
+
         public PluginController()
         {
             InitializeComponent();
-            DataContext = new PluginControllerViewModel();
+            _vm = new PluginControllerViewModel();
+            DataContext = _vm;
+        }
+
+        public void SetPlugins(IEnumerable<IPlugin> plugins)
+        {
+            _vm.SetPlugins(plugins);
+        }
+
+        private static void OnPluginsChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            if (d is PluginController control &&
+                control.DataContext is PluginControllerViewModel vm &&
+                e.NewValue is IEnumerable<IPlugin> plugins)
+            {
+                vm.SetPlugins(plugins);
+            }
         }
     }
 }
