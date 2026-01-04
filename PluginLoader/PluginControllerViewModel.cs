@@ -60,24 +60,6 @@ namespace PluginLoader
                 Plugins.Add(new PluginViewModel(plugin));
         }
 
-        public PluginControllerViewModel()
-        {
-            LoadPlugins();
-        }
-
-        private void LoadPlugins()
-        {
-            Plugins.Clear();
-
-            if (PluginLoad.PluginContainer == null)
-                return;
-
-            foreach (var plugin in PluginLoad.PluginContainer)
-            {
-                Plugins.Add(new PluginViewModel(plugin));
-            }
-        }
-
         private void LoadSymbols()
         {
             Symbols.Clear();

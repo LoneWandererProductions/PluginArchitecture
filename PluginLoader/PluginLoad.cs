@@ -1,7 +1,7 @@
 ﻿/*
  * COPYRIGHT:   See COPYING in the top level directory
  * PROJECT:     Plugin
- * FILE:        PluginLoader/PluginLoader.cs
+ * FILE:        PluginLoad.cs
  * PURPOSE:     Basic Plugin Support, Load all Plugins
  * PROGRAMER:   Peter Geinitz (Wayfarer)
  * SOURCES:     https://docs.microsoft.com/en-us/dotnet/core/tutorials/creating-app-with-plugin-support
@@ -20,98 +20,68 @@ using Plugins.Interfaces;
 
 namespace PluginLoader
 {
-    /// <summary>
-    ///     Basic Load System for the Plugins
-    /// </summary>
     public static class PluginLoad
     {
-        /// <summary>
-        ///     The load error event
-        /// </summary>
-        public static EventHandler? loadErrorEvent;
-
-        /// <summary>
-        ///     Gets or sets the plugin container.
-        /// </summary>
-        /// <value>
-        ///     The plugin container.
-        /// </value>
-        public static List<IPlugin> PluginContainer { get; private set; }
-
-        /// <summary>
-        ///     Loads all.
-        /// </summary>
-        /// <param name="path">The path.</param>
-        /// <param name="extension">The extension for plugins.</param>
-        /// <returns>
-        ///     Success Status
-        /// </returns>
-        public static bool LoadAll(string path, string extension = PluginLoaderResources.FileExt)
+        public static IReadOnlyList<IPlugin> LoadAll(string baseDirectory)
         {
-            var pluginPaths = GetFilesByExtensionFullPath(path, extension);
+            if (!Directory.Exists(baseDirectory))
+                return Array.Empty<IPlugin>();
 
-            if (pluginPaths == null)
+            var plugins = new List<IPlugin>();
+
+            // 1) Prefer marker files if present
+            var markerFiles = Directory.EnumerateFiles(baseDirectory, "*.plugin").ToList();
+
+            if (markerFiles.Count > 0)
             {
-                return false;
-            }
-
-            PluginContainer = new List<IPlugin>();
-
-            foreach (var pluginPath in pluginPaths)
-            {
-                var pluginAssembly = LoadPlugin(pluginPath);
-
-                try
+                foreach (var marker in markerFiles)
                 {
-                    // Get all types that implement IPlugin and are not abstract
-
+                    var dll = Path.ChangeExtension(marker, ".dll");
+                    TryLoadFromDll(dll, plugins);
                 }
-                catch (Exception ex) when (ex is ArgumentException or FileLoadException or ApplicationException
-                                               or ReflectionTypeLoadException or BadImageFormatException
-                                               or FileNotFoundException)
+            }
+            else
+            {
+                // 2) Fallback: load all dlls
+                foreach (var dll in Directory.EnumerateFiles(baseDirectory, "*.dll"))
                 {
-                    Trace.WriteLine(ex);
-                    loadErrorEvent?.Invoke(nameof(LoadAll), new LoaderErrorEventArgs(ex.ToString()));
+                    TryLoadFromDll(dll, plugins);
                 }
             }
 
-            return PluginContainer.Count != 0;
+            return plugins;
         }
 
-        /// <summary>
-        ///     Gets the files by extension full path.
-        ///     Adopted from FileHandler to decrease dependencies
-        /// </summary>
-        /// <param name="path">The path.</param>
-        /// <param name="extension">The custom file extension.</param>
-        /// <returns>List of files by extension with full path</returns>
-        private static IEnumerable<string> GetFilesByExtensionFullPath(string path, string extension)
+        private static void TryLoadFromDll(string dllPath, List<IPlugin> plugins)
         {
-            if (string.IsNullOrEmpty(path))
+            if (!File.Exists(dllPath))
+                return;
+
+            try
             {
-                Trace.WriteLine(PluginLoaderResources.ErrorPath);
-                return null;
-            }
+                var assembly = Assembly.LoadFrom(dllPath);
 
-            if (Directory.Exists(path))
+                var pluginTypes = assembly.GetTypes()
+                    .Where(t =>
+                        !t.IsAbstract &&
+                        typeof(IPlugin).IsAssignableFrom(t));
+
+                foreach (var type in pluginTypes)
+                {
+                    if (Activator.CreateInstance(type) is IPlugin plugin)
+                        plugins.Add(plugin);
+                }
+            }
+            catch (ReflectionTypeLoadException ex)
             {
-                return Directory.EnumerateFiles(path, $"*{extension}", SearchOption.TopDirectoryOnly).ToList();
+                Trace.WriteLine($"Plugin load error: {dllPath}");
+                foreach (var loaderEx in ex.LoaderExceptions)
+                    Debug.WriteLine(loaderEx);
             }
-
-            Trace.WriteLine(PluginLoaderResources.ErrorDirectory);
-
-            return null;
-        }
-
-        /// <summary>
-        ///     Loads the plugin.
-        /// </summary>
-        /// <param name="pluginLocation">The plugin location.</param>
-        /// <returns>An Assembly</returns>
-        private static Assembly LoadPlugin(string pluginLocation)
-        {
-            var loadContext = new PluginLoadContext(pluginLocation);
-            return loadContext.LoadFromAssemblyPath(pluginLocation);
+            catch (Exception ex)
+            {
+                Trace.WriteLine($"Plugin load error: {dllPath}\n{ex}");
+            }
         }
     }
 }

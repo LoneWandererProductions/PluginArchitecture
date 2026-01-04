@@ -8,7 +8,7 @@
     Title="MainWindow" Height="450" Width="800" Loaded="Window_Loaded">
     <Grid>
 
-        <PluginLoader:PluginController Plugins="{Binding Plugins}" />
+        <PluginLoader:PluginController Plugins="{Binding Plugins}" x:Name="PluginControl"/>
 
     </Grid>
 </Window>

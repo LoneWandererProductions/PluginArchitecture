@@ -32,6 +32,15 @@ namespace PluginLoader
             typeof(PluginController),
             new PropertyMetadata(null, OnPluginsChanged));
 
+
+        public static readonly DependencyProperty PluginPathProperty =
+            DependencyProperty.Register(
+                nameof(PluginPath),
+                typeof(string),
+                typeof(PluginController),
+                new PropertyMetadata(null, OnPluginPathChanged));
+
+
         public IEnumerable<IPlugin> Plugins
         {
             get => (IEnumerable<IPlugin>)GetValue(PluginsProperty);
@@ -51,6 +60,12 @@ namespace PluginLoader
             _vm.SetPlugins(plugins);
         }
 
+        public string? PluginPath
+        {
+            get => (string?)GetValue(PluginPathProperty);
+            set => SetValue(PluginPathProperty, value);
+        }
+
         private static void OnPluginsChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             if (d is PluginController control &&
@@ -59,6 +74,18 @@ namespace PluginLoader
             {
                 vm.SetPlugins(plugins);
             }
+        }
+
+        private static void OnPluginPathChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            if (d is not PluginController control)
+                return;
+
+            if (e.NewValue is not string path || string.IsNullOrWhiteSpace(path))
+                return;
+
+            var plugins = PluginLoad.LoadAll(path);
+            control._vm.SetPlugins(plugins);
         }
     }
 }
