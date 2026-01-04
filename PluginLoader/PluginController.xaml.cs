@@ -27,10 +27,10 @@ namespace PluginLoader
 
         public static readonly DependencyProperty PluginsProperty =
             DependencyProperty.Register(
-            nameof(Plugins),
-            typeof(IEnumerable<IPlugin>),
-            typeof(PluginController),
-            new PropertyMetadata(null, OnPluginsChanged));
+                nameof(Plugins),
+                typeof(IEnumerable<IPlugin>),
+                typeof(PluginController),
+                new PropertyMetadata(null, OnPluginsChanged));
 
 
         public static readonly DependencyProperty PluginPathProperty =
@@ -68,9 +68,7 @@ namespace PluginLoader
 
         private static void OnPluginsChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            if (d is PluginController control &&
-                control.DataContext is PluginControllerViewModel vm &&
-                e.NewValue is IEnumerable<IPlugin> plugins)
+            if (d is PluginController { DataContext: PluginControllerViewModel vm } && e.NewValue is IEnumerable<IPlugin> plugins)
             {
                 vm.SetPlugins(plugins);
             }

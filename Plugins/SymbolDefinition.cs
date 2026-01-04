@@ -68,7 +68,7 @@ namespace Plugins
         /// <value>
         /// The direction.
         /// </value>
-        public DirectionType Direction { get; set; }
+        public DirectionType Direction { get; init; }
 
         /// <summary>
         /// Gets or sets the description.

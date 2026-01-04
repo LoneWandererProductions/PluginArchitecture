@@ -39,7 +39,7 @@
 
         <!-- Inspector / Method -->
         <ContentControl Grid.Column="2"
-                Content="{Binding SelectedSymbol}">
+                        Content="{Binding SelectedSymbol}">
 
             <ContentControl.Resources>
 
@@ -49,13 +49,13 @@
 
                 <DataTemplate x:Key="MethodSymbolTemplate">
                     <Button Content="Execute"
-                    Command="{Binding ExecuteCommand}" />
+                            Command="{Binding ExecuteCommand}" />
                 </DataTemplate>
 
                 <pluginloader:SymbolTemplateSelector
-            x:Key="SymbolSelector"
-            DataTemplate="{StaticResource DataSymbolTemplate}"
-            MethodTemplate="{StaticResource MethodSymbolTemplate}" />
+                    x:Key="SymbolSelector"
+                    DataTemplate="{StaticResource DataSymbolTemplate}"
+                    MethodTemplate="{StaticResource MethodSymbolTemplate}" />
 
             </ContentControl.Resources>
 

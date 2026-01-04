@@ -130,8 +130,10 @@ namespace PluginTools
             sb.AppendLine("        {");
             foreach (var s in symbolsArray)
             {
-                sb.AppendLine($"            new SymbolDefinition(\"{s.Name}\", SymbolType.Data, typeof({s.Type.Name}), DirectionType.{s.Direction}),");
+                sb.AppendLine(
+                    $"            new SymbolDefinition(\"{s.Name}\", SymbolType.Data, typeof({s.Type.Name}), DirectionType.{s.Direction}),");
             }
+
             sb.AppendLine("        };");
             sb.AppendLine();
 
@@ -160,12 +162,14 @@ namespace PluginTools
                 sb.AppendLine($"                case {m.CommandId}:");
                 sb.AppendLine("                {");
 
-                var inputs = string.Join(", ", m.InputNames.Select(n => $"context.GetVariable<{_symbols[n].Type.Name}>({nameToIndex[n]})"));
+                var inputs = string.Join(", ",
+                    m.InputNames.Select(n => $"context.GetVariable<{_symbols[n].Type.Name}>({nameToIndex[n]})"));
                 var outputIndex = nameToIndex[m.OutputName];
                 sb.AppendLine($"                    context.SetResult({outputIndex}, {m.OperationCode("a", "b")});");
                 sb.AppendLine("                    break;");
                 sb.AppendLine("                }");
             }
+
             sb.AppendLine("                default: throw new ArgumentOutOfRangeException();");
             sb.AppendLine("            }");
             sb.AppendLine("        }");
@@ -180,12 +184,14 @@ namespace PluginTools
                 sb.AppendLine($"                case {m.CommandId}:");
                 sb.AppendLine("                {");
 
-                var inputs = string.Join(", ", m.InputNames.Select(n => $"context.GetVariable<{_symbols[n].Type.Name}>({nameToIndex[n]})"));
+                var inputs = string.Join(", ",
+                    m.InputNames.Select(n => $"context.GetVariable<{_symbols[n].Type.Name}>({nameToIndex[n]})"));
                 var outputIndex = nameToIndex[m.OutputName];
                 sb.AppendLine($"                    context.SetResult({outputIndex}, {m.OperationCode("a", "b")});");
                 sb.AppendLine("                    break;");
                 sb.AppendLine("                }");
             }
+
             sb.AppendLine("                default: throw new ArgumentOutOfRangeException();");
             sb.AppendLine("            }");
             sb.AppendLine("        }");

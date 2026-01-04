@@ -1,14 +1,15 @@
 /*
  * COPYRIGHT:   See COPYING in the top level directory
- * PROJECT:     PrototypSample
+ * PROJECT:     PluginTests
  * FILE:        AdderPluginUnmanagedTests.cs
  * PURPOSE:     Your file purpose here
  * PROGRAMMER:  Peter Geinitz (Wayfarer)
  */
 
 using Plugins;
+using PrototypSample;
 
-namespace PrototypSample
+namespace PluginTests
 {
     [TestClass]
     public class AdderPluginUnmanagedTests
@@ -26,8 +27,8 @@ namespace PrototypSample
             var plugin = new AdderPlugin();
             var context = CreateContext(plugin);
 
-            context.SetVariable(0, 7);  // A
-            context.SetVariable(1, 9);  // B
+            context.SetVariable(0, 7); // A
+            context.SetVariable(1, 9); // B
 
             plugin.Initialize(context);
 
