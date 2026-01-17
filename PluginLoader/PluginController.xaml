@@ -1,0 +1,71 @@
+﻿<UserControl x:Class="PluginLoader.PluginController"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:CommonControls;assembly=CommonControls"
+             xmlns:pluginloader="clr-namespace:PluginLoader"
+             Height="450"
+             Width="800">
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="2*" />
+            <ColumnDefinition Width="2*" />
+            <ColumnDefinition Width="3*" />
+        </Grid.ColumnDefinitions>
+
+        <!-- Plugins -->
+        <DataGrid Grid.Column="0"
+                  ItemsSource="{Binding Plugins}"
+                  SelectedItem="{Binding SelectedPlugin}"
+                  AutoGenerateColumns="False"
+                  IsReadOnly="True">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Name" Binding="{Binding Name}" />
+                <DataGridTextColumn Header="Version" Binding="{Binding Version}" />
+                <DataGridTextColumn Header="Description" Binding="{Binding Description}" />
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <!-- Symbols -->
+        <ListBox Grid.Column="1"
+                 ItemsSource="{Binding Symbols}"
+                 SelectedItem="{Binding SelectedSymbol}">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding Definition.Name}" />
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+
+        <!-- Inspector / Method -->
+        <ContentControl Grid.Column="2"
+                Content="{Binding SelectedSymbol}">
+
+            <ContentControl.Resources>
+
+                <DataTemplate x:Key="DataSymbolTemplate">
+                    <local:InspectorGrid SelectedObject="{Binding}" />
+                </DataTemplate>
+
+                <DataTemplate x:Key="MethodSymbolTemplate">
+                    <Button Content="Execute"
+                    Command="{Binding ExecuteCommand}" />
+                </DataTemplate>
+
+                <pluginloader:SymbolTemplateSelector
+            x:Key="SymbolSelector"
+            DataTemplate="{StaticResource DataSymbolTemplate}"
+            MethodTemplate="{StaticResource MethodSymbolTemplate}" />
+
+            </ContentControl.Resources>
+
+            <!-- THIS is the important part -->
+            <ContentControl.ContentTemplateSelector>
+                <StaticResource ResourceKey="SymbolSelector" />
+            </ContentControl.ContentTemplateSelector>
+
+        </ContentControl>
+
+
+    </Grid>
+</UserControl>
