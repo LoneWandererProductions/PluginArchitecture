@@ -26,8 +26,8 @@ namespace PrototypSample
             var plugin = new AdderPlugin();
             var context = CreateContext(plugin);
 
-            context.SetVariable(0, 7);  // A
-            context.SetVariable(1, 9);  // B
+            context.SetVariable(0, 7); // A
+            context.SetVariable(1, 9); // B
 
             plugin.Initialize(context);
 

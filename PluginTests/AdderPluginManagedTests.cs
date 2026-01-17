@@ -64,6 +64,5 @@ namespace PluginTests
             plugin.Initialize(context);
             plugin.Execute(99);
         }
-
     }
 }

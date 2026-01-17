@@ -1,14 +1,15 @@
-﻿<Window xmlns:PluginLoader="clr-namespace:PluginLoader;assembly=PluginLoader" 
-    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" d:DataContext="{d:DesignInstance Type=PluginLoader:PluginControllerViewModel}"
+﻿<Window xmlns:PluginLoader="clr-namespace:PluginLoader;assembly=PluginLoader"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        d:DataContext="{d:DesignInstance Type=PluginLoader:PluginControllerViewModel}"
         x:Class="Main.MainWindow"
-    mc:Ignorable="d"
-    Title="MainWindow" Height="450" Width="800" Loaded="Window_Loaded">
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800" Loaded="Window_Loaded">
     <Grid>
 
-        <PluginLoader:PluginController Plugins="{Binding Plugins}" x:Name="PluginControl"/>
+        <PluginLoader:PluginController Plugins="{Binding Plugins}" x:Name="PluginControl" />
 
     </Grid>
 </Window>

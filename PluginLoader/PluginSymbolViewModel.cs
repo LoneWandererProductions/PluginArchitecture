@@ -171,6 +171,5 @@ namespace PluginLoader
             throw new NotSupportedException(
                 $"Unmanaged type '{type}' is not supported.");
         }
-
     }
 }

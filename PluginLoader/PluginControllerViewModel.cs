@@ -17,7 +17,6 @@ namespace PluginLoader
 {
     public sealed class PluginControllerViewModel : INotifyPropertyChanged
     {
-
         public ObservableCollection<PluginViewModel> Plugins { get; } = new();
         public ObservableCollection<PluginSymbolViewModel> Symbols { get; } = new();
 

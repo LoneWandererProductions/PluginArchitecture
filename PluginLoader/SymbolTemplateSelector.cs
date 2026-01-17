@@ -26,5 +26,4 @@ namespace PluginLoader
             return base.SelectTemplate(item, container);
         }
     }
-
 }

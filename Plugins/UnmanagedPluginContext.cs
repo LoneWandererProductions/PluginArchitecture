@@ -148,7 +148,6 @@ namespace Plugins
             Write(_resultOffsets[index], symbol.EffectiveSize, value);
         }
 
-        /// <inheritdoc />
         private T Read<T>(int offset, int size) where T : unmanaged
         {
             var span = _memory.AsSpan(offset, size);
