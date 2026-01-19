@@ -2,7 +2,7 @@
  * COPYRIGHT:   See COPYING in the top level directory
  * PROJECT:     PluginLoader
  * FILE:        SymbolTemplateSelector.cs
- * PURPOSE:     Your file purpose here
+ * PURPOSE:     Used in the PluginLoader Control to select between method and data symbol templates.
  * PROGRAMMER:  Peter Geinitz (Wayfarer)
  */
 
@@ -11,6 +11,10 @@ using System.Windows.Controls;
 
 namespace PluginLoader
 {
+    /// <summary>
+    /// Selects between method and data symbol templates.
+    /// </summary>
+    /// <seealso cref="System.Windows.Controls.DataTemplateSelector" />
     public sealed class SymbolTemplateSelector : DataTemplateSelector
     {
         public DataTemplate? DataTemplate { get; set; }

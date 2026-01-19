@@ -2,7 +2,7 @@
  * COPYRIGHT:   See COPYING in the top level directory
  * PROJECT:     PluginLoader
  * FILE:        PluginSymbolViewModel.cs
- * PURPOSE:     Your file purpose here
+ * PURPOSE:     The ViewModel for a single Plugin Symbol and its interaction logic.
  * PROGRAMMER:  Peter Geinitz (Wayfarer)
  */
 
@@ -16,6 +16,10 @@ using ViewModel;
 
 namespace PluginLoader
 {
+    /// <summary>
+    /// ViewModel for a single Plugin Symbol and its interaction logic.
+    /// </summary>
+    /// <seealso cref="System.ComponentModel.INotifyPropertyChanged" />
     public sealed class PluginSymbolViewModel : INotifyPropertyChanged
     {
         public IPlugin Plugin { get; }

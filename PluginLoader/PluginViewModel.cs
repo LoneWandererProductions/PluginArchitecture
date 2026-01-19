@@ -2,7 +2,8 @@
  * COPYRIGHT:   See COPYING in the top level directory
  * PROJECT:     PluginLoader
  * FILE:        PluginViewModel.cs
- * PURPOSE:     Your file purpose here
+ * PURPOSE:     Plugin ViewModel for use in the PluginLoader Control.
+ *              Tries to expose all relevant information about a plugin via Symbols, if they are not exposed via Interface ISymbolProvider, we do not show any symbols.
  * PROGRAMMER:  Peter Geinitz (Wayfarer)
  */
 
@@ -12,6 +13,9 @@ using System.Collections.ObjectModel;
 
 namespace PluginLoader
 {
+    /// <summary>
+    /// Entry point ViewModel for a Plugin.
+    /// </summary>
     public sealed class PluginViewModel
     {
         /// <summary>
@@ -31,6 +35,10 @@ namespace PluginLoader
         /// </summary>
         public ObservableCollection<PluginSymbolViewModel> Symbols { get; } = new();
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PluginViewModel"/> class.
+        /// </summary>
+        /// <param name="plugin">The plugin.</param>
         public PluginViewModel(IPlugin plugin)
         {
             Command = plugin;
