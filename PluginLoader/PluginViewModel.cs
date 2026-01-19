@@ -3,7 +3,8 @@
  * PROJECT:     PluginLoader
  * FILE:        PluginViewModel.cs
  * PURPOSE:     Plugin ViewModel for use in the PluginLoader Control.
- *              Tries to expose all relevant information about a plugin via Symbols, if they are not exposed via Interface ISymbolProvider, we do not show any symbols.
+ *              Tries to expose all relevant information about a plugin via Symbols.
+ *              If they are not exposed via <see cref="ISymbolProvider"/>, no symbols are shown.
  * PROGRAMMER:  Peter Geinitz (Wayfarer)
  */
 
@@ -14,31 +15,48 @@ using System.Collections.ObjectModel;
 namespace PluginLoader
 {
     /// <summary>
-    /// Entry point ViewModel for a Plugin.
+    /// Root ViewModel representing a single plugin instance.
+    /// Exposes plugin metadata, execution context and symbol view models
+    /// for UI binding and inspection.
     /// </summary>
     public sealed class PluginViewModel
     {
         /// <summary>
-        /// The raw plugin instance.
-        /// Needed for execution and context access.
+        /// Gets the raw plugin instance.
+        /// Required for execution and context access.
         /// </summary>
         public IPlugin Command { get; }
 
+        /// <summary>
+        /// Gets the plugin name.
+        /// </summary>
         public string Name { get; }
+
+        /// <summary>
+        /// Gets the plugin version.
+        /// </summary>
         public string Version { get; }
+
+        /// <summary>
+        /// Gets the plugin description.
+        /// </summary>
         public string Description { get; }
 
+        /// <summary>
+        /// Gets the plugin execution context.
+        /// </summary>
         public IPluginContext Context { get; }
 
         /// <summary>
-        /// All symbols exposed by this plugin (if any).
+        /// Gets all symbols exposed by this plugin (if any).
+        /// Each symbol is wrapped into a <see cref="PluginSymbolViewModel"/>.
         /// </summary>
         public ObservableCollection<PluginSymbolViewModel> Symbols { get; } = new();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="PluginViewModel"/> class.
         /// </summary>
-        /// <param name="plugin">The plugin.</param>
+        /// <param name="plugin">The plugin instance.</param>
         public PluginViewModel(IPlugin plugin)
         {
             Command = plugin;
@@ -51,6 +69,10 @@ namespace PluginLoader
             LoadSymbols();
         }
 
+        /// <summary>
+        /// Loads all symbols from the plugin if it implements <see cref="ISymbolProvider"/>.
+        /// Clears previous symbols and recreates the symbol view models.
+        /// </summary>
         private void LoadSymbols()
         {
             Symbols.Clear();
@@ -59,10 +81,11 @@ namespace PluginLoader
                 return;
 
             int index = 0;
+
             foreach (SymbolDefinition symbol in provider.GetSymbols())
             {
                 Symbols.Add(new PluginSymbolViewModel(
-                    plugin: Command, // the plugin instance this ViewModel wraps
+                    plugin: Command,
                     symbol: symbol,
                     index: index++,
                     context: Context
