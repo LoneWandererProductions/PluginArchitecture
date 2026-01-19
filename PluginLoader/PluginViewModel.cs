@@ -10,7 +10,9 @@
 
 using Plugins;
 using Plugins.Interfaces;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 
 namespace PluginLoader
 {
@@ -52,6 +54,35 @@ namespace PluginLoader
         /// Each symbol is wrapped into a <see cref="PluginSymbolViewModel"/>.
         /// </summary>
         public ObservableCollection<PluginSymbolViewModel> Symbols { get; } = new();
+
+        /// <summary>
+        /// Gets a value indicating whether this instance has symbols.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if this instance has symbols; otherwise, <c>false</c>.
+        /// </value>
+        public bool HasSymbols => Symbols.Count > 0;
+
+        /// <summary>
+        /// Refreshes this instance.
+        /// </summary>
+        public void Refresh() => LoadSymbols();
+
+        /// <summary>
+        /// Gets the methods.
+        /// </summary>
+        /// <value>
+        /// The methods.
+        /// </value>
+        public IEnumerable<PluginSymbolViewModel> Methods => Symbols.Where(s => s.IsMethod);
+
+        /// <summary>
+        /// Gets the data.
+        /// </summary>
+        /// <value>
+        /// The data.
+        /// </value>
+        public IEnumerable<PluginSymbolViewModel> Data => Symbols.Where(s => s.IsData);
 
         /// <summary>
         /// Initializes a new instance of the <see cref="PluginViewModel"/> class.

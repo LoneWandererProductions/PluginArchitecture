@@ -73,6 +73,16 @@ namespace Plugins
         public int TotalSize { get; }
 
         /// <summary>
+        /// The variable lookup
+        /// </summary>
+        private readonly Dictionary<string, int> _variableLookup = new();
+
+        /// <summary>
+        /// The result lookup
+        /// </summary>
+        private readonly Dictionary<string, int> _resultLookup = new();
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="UnmanagedPluginContext"/> class.
         /// </summary>
         /// <param name="symbols">The symbols.</param>
@@ -95,6 +105,9 @@ namespace Plugins
                 .Where(s => s.Direction == DirectionType.Output || s.Direction == DirectionType.InOut)
                 .ToList();
 
+            // Set Lookup for symbol names
+            RegisterSymbols();
+
             // Compute offsets
             _variableOffsets = new int[_variables.Count];
             _resultOffsets = new int[_results.Count];
@@ -114,6 +127,53 @@ namespace Plugins
 
             TotalSize = offset;
             _memory = new byte[TotalSize];
+        }
+
+        /// <summary>
+        /// Registers the symbols.
+        /// </summary>
+        private void RegisterSymbols()
+        {
+            _variableLookup.Clear();
+            _resultLookup.Clear();
+
+            for (int i = 0; i < _variables.Count; i++)
+                _variableLookup[_variables[i].Name] = i;
+
+            for (int i = 0; i < _results.Count; i++)
+                _resultLookup[_results[i].Name] = i;
+        }
+
+        /// <inheritdoc />
+        public int Find(SymbolDefinition symbol)
+        {
+            return symbol.Direction == DirectionType.Output
+                ? FindResult(symbol.Name)
+                : FindVariable(symbol.Name);
+        }
+
+        /// <inheritdoc />
+        public int Find(string name)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <inheritdoc />
+        public int FindVariable(string name)
+        {
+            if (!_variableLookup.TryGetValue(name, out var index))
+                throw new KeyNotFoundException($"Variable symbol '{name}' not found.");
+
+            return index;
+        }
+
+        /// <inheritdoc />
+        public int FindResult(string name)
+        {
+            if (!_resultLookup.TryGetValue(name, out var index))
+                throw new KeyNotFoundException($"Result symbol '{name}' not found.");
+
+            return index;
         }
 
         /// <inheritdoc />

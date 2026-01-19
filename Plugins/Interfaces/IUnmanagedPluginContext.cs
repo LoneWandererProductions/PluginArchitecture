@@ -3,7 +3,7 @@
  * PROJECT:     Plugins.Interfaces
  * FILE:        IUnmanagedPluginContext.cs
  * PURPOSE:     Unmanaged plugin context interface. Only allows unmanaged data types.
- *              The Idea is to reduce Memory footprint and increacse performance.
+ *              The Idea is to reduce Memory footprint and improve performance.
  * PROGRAMMER:  Peter Geinitz (Wayfarer)
  */
 
@@ -21,7 +21,7 @@ namespace Plugins.Interfaces
         /// </summary>
         /// <typeparam name="T">Generic DataType</typeparam>
         /// <param name="index">The index.</param>
-        /// <returns></returns>
+        /// <returns>Value of Variable at index.</returns>
         T GetVariable<T>(int index) where T : unmanaged;
 
         /// <summary>
@@ -37,7 +37,7 @@ namespace Plugins.Interfaces
         /// </summary>
         /// <typeparam name="T">Generic DataType</typeparam>
         /// <param name="index">The index.</param>
-        /// <returns></returns>
+        /// <returns>Value of Result at index.</returns>
         T GetResult<T>(int index) where T : unmanaged;
 
         /// <summary>
