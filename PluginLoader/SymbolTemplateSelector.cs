@@ -24,7 +24,11 @@ namespace PluginLoader
         {
             if (item is PluginSymbolViewModel vm)
             {
-                return vm.IsMethod ? MethodTemplate : DataTemplate;
+                if (vm.IsMethod)
+                    return MethodTemplate ?? base.SelectTemplate(item, container);
+
+                if (vm.IsData)
+                    return DataTemplate ?? base.SelectTemplate(item, container);
             }
 
             return base.SelectTemplate(item, container);
