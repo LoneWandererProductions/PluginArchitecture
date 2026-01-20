@@ -9,6 +9,7 @@
 using Plugins;
 using Plugins.Enums;
 using Plugins.Interfaces;
+using System.Diagnostics;
 
 namespace PrototypSample
 {
@@ -53,17 +54,24 @@ namespace PrototypSample
         /// <returns>
         /// a List of Symbol Definitions so an outsider can use the Plugin provided.
         /// </returns>
-        public IReadOnlyList<SymbolDefinition> GetSymbols() => new List<SymbolDefinition>
+        public IReadOnlyList<SymbolDefinition> GetSymbols()
         {
-            // Methods
-            new SymbolDefinition("Sum", SymbolType.Method, typeof(void)) { Id = 0 },
-            new SymbolDefinition("Multiply", SymbolType.Method, typeof(void)) { Id = 1 },
-            // Data
-            new SymbolDefinition("A", SymbolType.Data, typeof(int)) { Id = 10, Direction = DirectionType.Input },
-            new SymbolDefinition("B", SymbolType.Data, typeof(int)) { Id = 11, Direction = DirectionType.Input },
-            new SymbolDefinition("Result", SymbolType.Data, typeof(int)) { Id = 12, Direction = DirectionType.Output },
+            Trace.WriteLine("AdderPlugin.GetSymbols CALLED");
 
-        };
+            var lst = new List<SymbolDefinition>
+            {
+                // Methods
+                new SymbolDefinition("Sum", SymbolType.Method, typeof(void)) { Id = 0 },
+                new SymbolDefinition("Multiply", SymbolType.Method, typeof(void)) { Id = 1 },
+                // Data
+                new SymbolDefinition("A", SymbolType.Data, typeof(int)) { Id = 10, Direction = DirectionType.Input },
+                new SymbolDefinition("B", SymbolType.Data, typeof(int)) { Id = 11, Direction = DirectionType.Input },
+                new SymbolDefinition("Result", SymbolType.Data, typeof(int)) { Id = 12, Direction = DirectionType.Output }
+            };
+
+            return lst;
+        }
+
 
         /// <inheritdoc />
         public void Initialize(IPluginContext context)

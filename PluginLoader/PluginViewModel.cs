@@ -113,7 +113,10 @@ namespace PluginLoader
 
             int index = 0;
 
-            foreach (SymbolDefinition symbol in provider.GetSymbols())
+            var symbols = provider.GetSymbols();
+            System.Diagnostics.Trace.WriteLine($"Returned symbols: {symbols.Count}");
+
+            foreach (SymbolDefinition symbol in symbols)
             {
                 Symbols.Add(new PluginSymbolViewModel(
                     plugin: Command,
