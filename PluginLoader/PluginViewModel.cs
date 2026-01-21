@@ -9,6 +9,7 @@
  */
 
 using Plugins;
+using Plugins.Enums;
 using Plugins.Interfaces;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -27,7 +28,7 @@ namespace PluginLoader
         /// Gets the raw plugin instance.
         /// Required for execution and context access.
         /// </summary>
-        public IPlugin Command { get; }
+        public IPlugin Plugin { get; }
 
         /// <summary>
         /// Gets the plugin name.
@@ -85,12 +86,20 @@ namespace PluginLoader
         public IEnumerable<PluginSymbolViewModel> Data => Symbols.Where(s => s.IsData);
 
         /// <summary>
+        /// Gets the index.
+        /// </summary>
+        /// <value>
+        /// The index.
+        /// </value>
+        public int? Index { get; }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="PluginViewModel"/> class.
         /// </summary>
         /// <param name="plugin">The plugin instance.</param>
         public PluginViewModel(IPlugin plugin)
         {
-            Command = plugin;
+            Plugin = plugin;
 
             Name = plugin.Name;
             Version = plugin.Version;
@@ -108,20 +117,22 @@ namespace PluginLoader
         {
             Symbols.Clear();
 
-            if (Command is not ISymbolProvider provider)
+            if (Plugin is not ISymbolProvider provider)
                 return;
 
-            int index = 0;
-
             var symbols = provider.GetSymbols();
-            System.Diagnostics.Trace.WriteLine($"Returned symbols: {symbols.Count}");
 
             foreach (SymbolDefinition symbol in symbols)
             {
+                int index = 0;
+
+                if (symbol.Kind == SymbolType.Data)
+                    index = Plugin.Context.Find(symbol);
+
                 Symbols.Add(new PluginSymbolViewModel(
-                    plugin: Command,
+                    plugin: Plugin,
                     symbol: symbol,
-                    index: index++,
+                    contextIndex: index,
                     context: Context
                 ));
             }

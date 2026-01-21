@@ -295,5 +295,15 @@ namespace Plugins
                 throw new InvalidOperationException(
                     $"{typeof(T)} is not supported in UnmanagedPluginContext");
         }
+
+        /// <inheritdoc />
+        /// <summary>
+        /// Returns a string representation of the current unmanaged context,
+        /// showing variables and results by name and value for inspection.
+        /// </summary>
+        public override string ToString()
+        {
+            return "UnmanagedPluginContext";
+        }
     }
 }

@@ -10,9 +10,12 @@
 // ReSharper disable MemberCanBePrivate.Global
 // ReSharper disable UnusedType.Global
 
+using Plugins;
 using Plugins.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Configuration;
 using System.Windows;
 
 namespace PluginLoader
@@ -48,6 +51,9 @@ namespace PluginLoader
         }
 
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PluginController"/> class.
+        /// </summary>
         public PluginController()
         {
             InitializeComponent();

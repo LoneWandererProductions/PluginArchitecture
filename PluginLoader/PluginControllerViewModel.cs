@@ -2,26 +2,52 @@
  * COPYRIGHT:   See COPYING in the top level directory
  * PROJECT:     PluginLoader
  * FILE:        PluginControllerViewModel.cs
- * PURPOSE:     Your file purpose here
+ * PURPOSE:     Main View Model and entry point for the PluginLoader Control.
  * PROGRAMMER:  Peter Geinitz (Wayfarer)
  */
 
 using Plugins;
+using Plugins.Enums;
 using Plugins.Interfaces;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
+using ViewModel;
 
 namespace PluginLoader
 {
-    public sealed class PluginControllerViewModel : INotifyPropertyChanged
+    /// <summary>
+    /// Main ViewModel for the PluginLoader control.
+    /// </summary>
+    /// <seealso cref="ViewModel.ViewModelBase" />
+    public sealed class PluginControllerViewModel : ViewModelBase
     {
+        /// <summary>
+        /// Gets the plugins.
+        /// </summary>
+        /// <value>
+        /// The plugins.
+        /// </value>
         public ObservableCollection<PluginViewModel> Plugins { get; } = new();
+
+        /// <summary>
+        /// Gets the symbols.
+        /// </summary>
+        /// <value>
+        /// The symbols.
+        /// </value>
         public ObservableCollection<PluginSymbolViewModel> Symbols { get; } = new();
 
+        /// <summary>
+        /// The selected plugin
+        /// </summary>
         private PluginViewModel? _selectedPlugin;
 
+        /// <summary>
+        /// Gets or sets the selected plugin.
+        /// </summary>
+        /// <value>
+        /// The selected plugin.
+        /// </value>
         public PluginViewModel? SelectedPlugin
         {
             get => _selectedPlugin;
@@ -38,6 +64,12 @@ namespace PluginLoader
 
         private PluginSymbolViewModel? _selectedSymbol;
 
+        /// <summary>
+        /// Gets or sets the selected symbol.
+        /// </summary>
+        /// <value>
+        /// The selected symbol.
+        /// </value>
         public PluginSymbolViewModel? SelectedSymbol
         {
             get => _selectedSymbol;
@@ -51,37 +83,54 @@ namespace PluginLoader
             }
         }
 
+        /// <summary>
+        /// Sets the plugins.
+        /// </summary>
+        /// <param name="plugins">The plugins.</param>
         public void SetPlugins(IEnumerable<IPlugin> plugins)
         {
             Plugins.Clear();
 
             foreach (var plugin in plugins)
+            {
+                IPluginContext? context = null;
+
+                if (plugin is ISymbolProvider provider)
+                {
+                    var symbols = provider.GetSymbols();
+                    context = new ManagedPluginContext(symbols);
+                    plugin.Initialize(context);
+                }
+
                 Plugins.Add(new PluginViewModel(plugin));
+            }
         }
 
+        /// <summary>
+        /// Loads the symbols.
+        /// </summary>
         private void LoadSymbols()
         {
             Symbols.Clear();
             SelectedSymbol = null;
 
-            if (SelectedPlugin?.Command is not ISymbolProvider provider)
+            if (SelectedPlugin?.Plugin is not ISymbolProvider provider)
                 return;
-
-            int index = 0;
 
             foreach (SymbolDefinition symbol in provider.GetSymbols())
             {
+                int? contextIndex = null;
+
+                if (symbol.Kind == SymbolType.Data)
+                    contextIndex = SelectedPlugin.Context.Find(symbol);
+
                 Symbols.Add(new PluginSymbolViewModel(
-                    plugin: SelectedPlugin.Command,
+                    plugin: SelectedPlugin.Plugin,
                     symbol: symbol,
-                    index: index++,
+                    contextIndex: contextIndex,
                     context: SelectedPlugin.Context));
             }
         }
 
-        public event PropertyChangedEventHandler? PropertyChanged;
-
-        private void OnPropertyChanged([CallerMemberName] string? name = null)
-            => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
     }
 }

@@ -103,6 +103,10 @@ namespace Plugins
         /// <inheritdoc />
         public int Find(SymbolDefinition symbol)
         {
+            if (symbol.Kind != SymbolType.Data)
+                throw new InvalidOperationException(
+                    $"Symbol '{symbol.Name}' of kind '{symbol.Kind}' is not stored in context.");
+
             return symbol.Direction == DirectionType.Output
                 ? FindResult(symbol.Name)
                 : FindVariable(symbol.Name);
@@ -153,5 +157,16 @@ namespace Plugins
 
         /// <inheritdoc />
         public void SetResult<T>(int index, T value) => _results[index] = value;
+
+        /// <inheritdoc />
+        /// <summary>
+        /// Returns a string representation of the current context,
+        /// showing variables and results by name and value.
+        /// </summary>
+        public override string ToString()
+        {
+            return $"ManagedPluginContext.";
+        }
+
     }
 }

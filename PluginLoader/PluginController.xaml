@@ -47,9 +47,18 @@
                 </DataTemplate>
 
                 <DataTemplate x:Key="MethodSymbolTemplate">
-                    <Button Content="Execute"
-                            Command="{Binding ExecuteCommand}" />
+                    <Grid>
+                        <Button Content="Execute"
+                                Command="{Binding ExecuteCommand}"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Top"
+                                Padding="16,6"
+                                MinWidth="100"
+                                Height="32"
+                                Margin="8"/>
+                    </Grid>
                 </DataTemplate>
+
 
                 <pluginloader:SymbolTemplateSelector
                     x:Key="SymbolSelector"
@@ -58,7 +67,6 @@
 
             </ContentControl.Resources>
 
-            <!-- THIS is the important part -->
             <ContentControl.ContentTemplateSelector>
                 <StaticResource ResourceKey="SymbolSelector" />
             </ContentControl.ContentTemplateSelector>

@@ -21,7 +21,7 @@ namespace PluginLoader
     /// Acts as the MVVM bridge between plugin metadata, runtime context, and UI binding.
     /// </summary>
     /// <seealso cref="INotifyPropertyChanged" />
-    public sealed class PluginSymbolViewModel : INotifyPropertyChanged
+    public sealed class PluginSymbolViewModel : ViewModelBase
     {
         /// <summary>
         /// Gets the owning plugin instance.
@@ -37,12 +37,27 @@ namespace PluginLoader
         /// Gets or sets the active plugin execution context.
         /// May be <c>null</c> if the symbol is not yet bound.
         /// </summary>
-        public IPluginContext? Context { get; set; }
+        public IPluginContext? Context
+        {
+            get => _context;
+            private set => SetPropertyAndCallback(ref _context, value, _ =>
+            {
+                RaisePropertyChangedFor(nameof(Value));
+            });
+        }
 
         /// <summary>
-        /// Gets the symbol index inside the plugin.
+        /// The symbol ID (always from SymbolDefinition)
         /// </summary>
-        public int Index { get; }
+        public int Id => Definition.Id;
+
+        /// <summary>
+        /// Gets the index of the context (for data symbols only)
+        /// </summary>
+        /// <value>
+        /// The index of the context.
+        /// </value>
+        public int? ContextIndex { get; }
 
         /// <summary>
         /// Gets the execute command for method symbols.
@@ -51,40 +66,38 @@ namespace PluginLoader
         public ICommand? ExecuteCommand { get; }
 
         /// <summary>
+        /// The context
+        /// </summary>
+        private IPluginContext? _context;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="PluginSymbolViewModel"/> class.
         /// </summary>
         /// <param name="plugin">The plugin instance.</param>
         /// <param name="symbol">The symbol definition.</param>
-        /// <param name="index">The symbol index.</param>
+        /// <param name="contextIndex">The symbol index in the context (null for methods).</param>
         /// <param name="context">The plugin context.</param>
-        public PluginSymbolViewModel(IPlugin plugin, SymbolDefinition symbol, int index, IPluginContext context)
+        public PluginSymbolViewModel(
+            IPlugin plugin,
+            SymbolDefinition symbol,
+            int? contextIndex,
+            IPluginContext context)
         {
-            Plugin = plugin;
-            Definition = symbol;
-            Index = index;
-            Context = context;
+            Plugin = plugin ?? throw new ArgumentNullException(nameof(plugin));
+            Definition = symbol ?? throw new ArgumentNullException(nameof(symbol));
+            ContextIndex = contextIndex;
+            Context = context ?? throw new ArgumentNullException(nameof(context));
 
+            // Only methods have an execute command
             if (IsMethod)
             {
                 ExecuteCommand = new RelayCommand(() =>
                 {
-                    plugin.Execute(index);
+                    plugin.Execute(Id); // Use Id for methods, not ContextIndex
                     OnPropertyChanged(nameof(Value));
                 });
             }
         }
-
-        /// <summary>
-        /// Raises a property changed notification.
-        /// </summary>
-        /// <param name="propertyName">Name of the changed property.</param>
-        private void OnPropertyChanged(string propertyName)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-
-        /// <inheritdoc />
-        public event PropertyChangedEventHandler? PropertyChanged;
 
         /// <summary>
         /// Updates the plugin context.
@@ -110,11 +123,6 @@ namespace PluginLoader
         /// Gets a value indicating whether the data symbol is editable.
         /// </summary>
         public bool IsEditable => IsData && Definition.Direction != DirectionType.Output;
-
-        /// <summary>
-        /// Gets the symbol identifier.
-        /// </summary>
-        public int Id => Definition.Id;
 
         /// <summary>
         /// Gets the symbol name.
@@ -159,29 +167,29 @@ namespace PluginLoader
         {
             get
             {
-                if (!IsData || Context == null)
+                if (!IsData || Context == null || ContextIndex == null)
                     return null;
 
                 return Context switch
                 {
-                    IManagedPluginContext m => m.GetVariable<object>(Index),
-                    IUnmanagedPluginContext u => GetUnmanagedValue(u),
+                    IManagedPluginContext m => m.GetVariable<object>(ContextIndex.Value),
+                    IUnmanagedPluginContext u => GetUnmanagedValue(u, ContextIndex.Value),
                     _ => null
                 };
             }
             set
             {
-                if (!IsEditable || Context == null)
+                if (!IsEditable || Context == null || ContextIndex == null)
                     return;
 
                 switch (Context)
                 {
                     case IManagedPluginContext m:
-                        m.SetVariable(Index, value);
+                        m.SetVariable(ContextIndex.Value, value);
                         break;
 
                     case IUnmanagedPluginContext u:
-                        SetUnmanagedValue(u, value);
+                        SetUnmanagedValue(u, ContextIndex.Value, value);
                         break;
                 }
 
@@ -193,9 +201,10 @@ namespace PluginLoader
         /// Sets a value in an unmanaged context with type conversion.
         /// </summary>
         /// <param name="context">The context.</param>
+        /// <param name="index">The variable index.</param>
         /// <param name="value">The value.</param>
         /// <exception cref="System.NotSupportedException">Unmanaged type '{type}' is not supported.</exception>
-        private void SetUnmanagedValue(IUnmanagedPluginContext context, object? value)
+        private void SetUnmanagedValue(IUnmanagedPluginContext context, int index, object? value)
         {
             if (value == null)
                 return;
@@ -203,19 +212,19 @@ namespace PluginLoader
             var type = Definition.Type;
 
             if (type == typeof(int))
-                context.SetVariable(Index, Convert.ToInt32(value));
+                context.SetVariable(index, Convert.ToInt32(value));
             else if (type == typeof(float))
-                context.SetVariable(Index, Convert.ToSingle(value));
+                context.SetVariable(index, Convert.ToSingle(value));
             else if (type == typeof(double))
-                context.SetVariable(Index, Convert.ToDouble(value));
+                context.SetVariable(index, Convert.ToDouble(value));
             else if (type == typeof(bool))
-                context.SetVariable(Index, Convert.ToBoolean(value));
+                context.SetVariable(index, Convert.ToBoolean(value));
             else if (type == typeof(long))
-                context.SetVariable(Index, Convert.ToInt64(value));
+                context.SetVariable(index, Convert.ToInt64(value));
             else if (type == typeof(short))
-                context.SetVariable(Index, Convert.ToInt16(value));
+                context.SetVariable(index, Convert.ToInt16(value));
             else if (type == typeof(byte))
-                context.SetVariable(Index, Convert.ToByte(value));
+                context.SetVariable(index, Convert.ToByte(value));
             else
                 throw new NotSupportedException($"Unmanaged type '{type}' is not supported.");
         }
@@ -224,26 +233,27 @@ namespace PluginLoader
         /// Reads a value from an unmanaged context with proper typing.
         /// </summary>
         /// <param name="context">The context.</param>
+        /// <param name="index">The variable index.</param>
         /// <returns></returns>
         /// <exception cref="System.NotSupportedException">Unmanaged type '{type}' is not supported.</exception>
-        private object? GetUnmanagedValue(IUnmanagedPluginContext context)
+        private object? GetUnmanagedValue(IUnmanagedPluginContext context, int index)
         {
             var type = Definition.Type;
 
             if (type == typeof(int))
-                return context.GetVariable<int>(Index);
+                return context.GetVariable<int>(index);
             if (type == typeof(float))
-                return context.GetVariable<float>(Index);
+                return context.GetVariable<float>(index);
             if (type == typeof(double))
-                return context.GetVariable<double>(Index);
+                return context.GetVariable<double>(index);
             if (type == typeof(bool))
-                return context.GetVariable<bool>(Index);
+                return context.GetVariable<bool>(index);
             if (type == typeof(long))
-                return context.GetVariable<long>(Index);
+                return context.GetVariable<long>(index);
             if (type == typeof(short))
-                return context.GetVariable<short>(Index);
+                return context.GetVariable<short>(index);
             if (type == typeof(byte))
-                return context.GetVariable<byte>(Index);
+                return context.GetVariable<byte>(index);
 
             throw new NotSupportedException($"Unmanaged type '{type}' is not supported.");
         }
