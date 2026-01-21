@@ -59,25 +59,66 @@ public class SymbolDefinition
 ## Example: AdderPlugin
 
 ```csharp
-    public class AdderPlugin: IPlugin, ISymbolProvider
+    public class AdderPlugin : IPlugin, ISymbolProvider
     {
-        /// <summary>
-        /// The context
-        /// </summary>
         private IPluginContext _context;
 
+        /// <inheritdoc />
         public string Name => "Adder";
+
+        /// <inheritdoc />
         public string Version => "1.0.0";
 
+        /// <inheritdoc />
         public string Description => "Test plugin.";
 
-        public IReadOnlyList<SymbolDefinition> GetSymbols() => new List<SymbolDefinition>
-        {
-            new SymbolDefinition("A", SymbolType.Data, typeof(int)),
-            new SymbolDefinition("B", SymbolType.Data, typeof(int)),
-            new SymbolDefinition("Result", SymbolType.Data, typeof(int))
-        };
+        /// <inheritdoc />
+        public IPluginContext Context => _context;
 
+        private int _aIndex;
+        private int _bIndex;
+        private int _resultIndex;
+
+        /// <inheritdoc />
+        public IReadOnlyList<SymbolDefinition> GetSymbols()
+        {
+            Trace.WriteLine("AdderPlugin.GetSymbols CALLED");
+
+            var lst = new List<SymbolDefinition>
+            {
+                // Methods
+                new SymbolDefinition("Sum", SymbolType.Method, typeof(void)) { Id = 0 },
+                new SymbolDefinition("Multiply", SymbolType.Method, typeof(void)) { Id = 1 },
+                // Data
+                new SymbolDefinition("A", SymbolType.Data, typeof(int)) { Id = 10, Direction = DirectionType.Input },
+                new SymbolDefinition("B", SymbolType.Data, typeof(int)) { Id = 11, Direction = DirectionType.Input },
+                new SymbolDefinition("Result", SymbolType.Data, typeof(int)) { Id = 12, Direction = DirectionType.Output }
+            };
+
+            return lst;
+        }
+
+
+        /// <inheritdoc />
+        public void Initialize(IPluginContext context)
+        {
+            _context = context;
+
+            if (context is IManagedPluginContext mctx)
+            {
+                _aIndex = mctx.FindVariable("A");
+                _bIndex = mctx.FindVariable("B");
+                _resultIndex = mctx.FindResult("Result");
+            }
+            else if (context is IUnmanagedPluginContext uctx)
+            {
+                _aIndex = uctx.FindVariable("A");
+                _bIndex = uctx.FindVariable("B");
+                _resultIndex = uctx.FindResult("Result");
+            }
+        }
+
+        /// <inheritdoc />
         public void Execute(int id)
         {
             switch (_context)
@@ -101,58 +142,63 @@ public class SymbolDefinition
             {
                 case 0: // Sum
                     {
-                        int a = context.GetVariable<int>(0);
-                        int b = context.GetVariable<int>(1);
-                        context.SetResult(0, a + b);
+                        int a = context.GetVariable<int>(_aIndex);
+                        int b = context.GetVariable<int>(_bIndex);
+                        context.SetResult(_resultIndex, a + b);
                         break;
                     }
                 case 1: // Multiply
                     {
-                        int a = context.GetVariable<int>(0);
-                        int b = context.GetVariable<int>(1);
-                        context.SetResult(0, a * b);
+                        int a = context.GetVariable<int>(_aIndex);
+                        int b = context.GetVariable<int>(_bIndex);
+                        context.SetResult(_resultIndex, a * b);
                         break;
                     }
-                // Add more cases for other "methods"
                 default:
                     throw new ArgumentOutOfRangeException(nameof(id), $"Unknown command id: {id}");
             }
         }
 
-        private static void ExecuteCommand(int id, IUnmanagedPluginContext context)
+        private void ExecuteCommand(int id, IUnmanagedPluginContext context)
         {
             switch (id)
             {
                 case 0: // Sum
-                    {
-                        int a = context.GetVariable<int>(0);
-                        int b = context.GetVariable<int>(1);
-                        context.SetResult(0, a + b);
+                {
+                        int a = context.GetVariable<int>(_aIndex);
+                        int b = context.GetVariable<int>(_bIndex);
+                        context.SetResult(context.FindResult("Result"), a + b);
                         break;
-                    }
+                }
                 case 1: // Multiply
-                    {
-                        int a = context.GetVariable<int>(0);
-                        int b = context.GetVariable<int>(1);
-                        context.SetResult(0, a * b);
+                {
+                        int a = context.GetVariable<int>(_aIndex);
+                        int b = context.GetVariable<int>(_bIndex);
+                        context.SetResult(context.FindResult("Result"), a * b);
                         break;
-                    }
-                // Add more cases for other "methods"
+                }
                 default:
                     throw new ArgumentOutOfRangeException(nameof(id), $"Unknown command id: {id}");
             }
         }
 
+        /// <inheritdoc />
         public Task ExecuteAsync(int id)
         {
             Execute(id); // simple synchronous execution
             return Task.CompletedTask;
         }
 
-        public void Initialize() { /* optional */ }
-        public void Shutdown() { /* optional */ }
+        public void Initialize()
+        {
+            /* optional */
+        }
 
-        public void Initialize(IPluginContext context) { _context = context; }
+        /// <inheritdoc />
+        public void Shutdown()
+        {
+            /* optional */
+        }
     }
 ```
 
