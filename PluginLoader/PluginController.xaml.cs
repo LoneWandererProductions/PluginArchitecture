@@ -10,12 +10,9 @@
 // ReSharper disable MemberCanBePrivate.Global
 // ReSharper disable UnusedType.Global
 
-using Plugins;
 using Plugins.Interfaces;
-using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Configuration;
 using System.Windows;
 
 namespace PluginLoader

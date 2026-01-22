@@ -19,7 +19,7 @@ namespace Plugins
     /// <summary>
     /// Unmanaged plugin context. Only allows unmanaged types. Memory layout is computed automatically from symbols.
     /// </summary>
-    public sealed class UnmanagedPluginContext : IUnmanagedPluginContext
+    public class UnmanagedPluginContext : IUnmanagedPluginContext
     {
         /// <summary>
         /// The memory
@@ -218,7 +218,7 @@ namespace Plugins
         /// <summary>
         /// Writes the specified offset.
         /// </summary>
-        /// <typeparam name="T">Generic Datatype, only Primitves.</typeparam>
+        /// <typeparam name="T">Generic Datatype, only Primitives.</typeparam>
         /// <param name="offset">The offset.</param>
         /// <param name="size">The size.</param>
         /// <param name="value">The value.</param>
@@ -248,9 +248,9 @@ namespace Plugins
         /// <summary>
         /// Validates the result access.
         /// </summary>
-        /// <typeparam name="T">Generic Datatype, only Primitves.</typeparam>
+        /// <typeparam name="T">Generic Datatype, only Primitives.</typeparam>
         /// <param name="index">The index.</param>
-        /// <returns>Verifiy Resukt against Symbol.</returns>
+        /// <returns>Verify Result against Symbol.</returns>
         /// <exception cref="System.IndexOutOfRangeException"></exception>
         private SymbolDefinition ValidateResultAccess<T>(int index)
         {
@@ -265,7 +265,7 @@ namespace Plugins
         /// <summary>
         /// Validates the type.
         /// </summary>
-        /// <typeparam name="T">Generic Datatype, only Primitves.</typeparam>
+        /// <typeparam name="T">Generic Datatype, only Primitives.</typeparam>
         /// <param name="declared">The declared.</param>
         /// <param name="size">The size.</param>
         /// <exception cref="System.InvalidOperationException">
@@ -287,7 +287,7 @@ namespace Plugins
         /// <summary>
         /// Enforces the unmanaged.
         /// </summary>
-        /// <returns>Verifiy that Input is possible to be managed as unmanaged.</returns>
+        /// <returns>Verify that Input is possible to be managed as unmanaged.</returns>
         /// <exception cref="System.InvalidOperationException"></exception>
         private static void EnforceUnmanaged<T>()
         {

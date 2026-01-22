@@ -16,7 +16,7 @@ namespace Plugins
     /// Sample Implementation of a Managed Plugin Context.
     /// </summary>
     /// <seealso cref="Plugins.Interfaces.IManagedPluginContext" />
-    public sealed class ManagedPluginContext : IManagedPluginContext
+    public class ManagedPluginContext : IManagedPluginContext
     {
         /// <summary>
         /// The variables
