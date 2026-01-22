@@ -113,6 +113,12 @@ namespace PrototypSample
             }
         }
 
+        /// <summary>
+        /// Executes the command.
+        /// </summary>
+        /// <param name="id">The identifier.</param>
+        /// <param name="context">The context.</param>
+        /// <exception cref="System.ArgumentOutOfRangeException">id - Unknown command id: {id}</exception>
         private void ExecuteCommand(int id, IManagedPluginContext context)
         {
             switch (id)
