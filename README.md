@@ -46,6 +46,7 @@ public class SymbolDefinition
         string Version { get; }
         string Description { get; }
         void Execute(int id);
+        PluginContextSupport SupportedContexts { get; }
         Task ExecuteAsync(int id);
         void Initialize(IPluginContext context);
         void Shutdown();
@@ -74,6 +75,11 @@ public class SymbolDefinition
 
         /// <inheritdoc />
         public IPluginContext Context => _context;
+
+        /// <inheritdoc />
+        public PluginContextSupport SupportedContexts =>
+            PluginContextSupport.Managed | PluginContextSupport.Unmanaged;
+
 
         private int _aIndex;
         private int _bIndex;
