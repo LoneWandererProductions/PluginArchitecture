@@ -9,6 +9,7 @@
 using Plugins;
 using Plugins.Enums;
 using Plugins.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using ViewModel;
@@ -36,6 +37,16 @@ namespace PluginLoader
         /// The symbols.
         /// </value>
         public ObservableCollection<PluginSymbolViewModel> Symbols { get; } = new();
+
+        /// <summary>
+        /// Gets or sets the preferred context.
+        /// </summary>
+        /// <value>
+        /// The preferred context.
+        /// </value>
+        public PluginContextSupport PreferredContext { get; set; }
+    = PluginContextSupport.Managed;
+
 
         /// <summary>
         /// The selected plugin
@@ -98,7 +109,31 @@ namespace PluginLoader
                 if (plugin is ISymbolProvider provider)
                 {
                     var symbols = provider.GetSymbols();
-                    context = new ManagedPluginContext(symbols);
+
+                    // Determine which context to use
+                    PluginContextSupport chosenContext = PreferredContext;
+
+                    // If preferred context is not supported, pick any supported one
+                    if (!plugin.SupportedContexts.HasFlag(chosenContext))
+                    {
+                        if (plugin.SupportedContexts.HasFlag(PluginContextSupport.Managed))
+                            chosenContext = PluginContextSupport.Managed;
+                        else if (plugin.SupportedContexts.HasFlag(PluginContextSupport.Unmanaged))
+                            chosenContext = PluginContextSupport.Unmanaged;
+                        else
+                            throw new InvalidOperationException(
+                                $"Plugin {plugin.Name} does not support any known context types.");
+                    }
+
+                    // Create the actual context instance
+                    context = chosenContext switch
+                    {
+                        PluginContextSupport.Managed => new ManagedPluginContext(symbols),
+                        PluginContextSupport.Unmanaged => new UnmanagedPluginContext(symbols),
+                        _ => throw new InvalidOperationException("Unsupported PluginContextSupport type.")
+                    };
+
+                    // Initialize plugin with chosen context
                     plugin.Initialize(context);
                 }
 

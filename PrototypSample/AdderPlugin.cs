@@ -32,6 +32,10 @@ namespace PrototypSample
         /// <inheritdoc />
         public IPluginContext Context => _context;
 
+        /// <inheritdoc />
+        public PluginContextSupport SupportedContexts =>
+            PluginContextSupport.Managed | PluginContextSupport.Unmanaged;
+
         /// <summary>
         /// a index
         /// </summary>
@@ -71,7 +75,6 @@ namespace PrototypSample
 
             return lst;
         }
-
 
         /// <inheritdoc />
         public void Initialize(IPluginContext context)

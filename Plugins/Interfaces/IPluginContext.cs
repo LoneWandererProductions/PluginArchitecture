@@ -10,7 +10,7 @@
 namespace Plugins.Interfaces
 {
     /// <summary>
-    /// 
+    /// Context Interface.
     /// </summary>
     public interface IPluginContext
     {

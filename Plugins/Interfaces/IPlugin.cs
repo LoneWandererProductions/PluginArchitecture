@@ -14,6 +14,14 @@ namespace Plugins.Interfaces
     public interface IPlugin
     {
         /// <summary>
+        /// Gets the supported contexts.
+        /// </summary>
+        /// <value>
+        /// The supported contexts.
+        /// </value>
+        PluginContextSupport SupportedContexts { get; }
+
+        /// <summary>
         /// Gets the context.
         /// </summary>
         /// <value>
