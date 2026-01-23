@@ -1,12 +1,12 @@
 ﻿/*
  * COPYRIGHT:   See COPYING in the top level directory
- * PROJECT:     Plugins
+ * PROJECT:     Plugins.Enums
  * FILE:        PluginContextSupport.cs
  * PURPOSE:     Supported plugin context types.
  * PROGRAMMER:  Peter Geinitz (Wayfarer)
  */
 
-namespace Plugins
+namespace Plugins.Enums
 {
     /// <summary>
     /// Signifies supported plugin context types.

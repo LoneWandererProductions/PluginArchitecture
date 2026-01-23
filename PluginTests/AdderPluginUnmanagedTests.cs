@@ -7,8 +7,9 @@
  */
 
 using Plugins;
+using PrototypSample;
 
-namespace PrototypSample
+namespace PluginTests
 {
     [TestClass]
     public class AdderPluginUnmanagedTests
@@ -66,7 +67,7 @@ namespace PrototypSample
             var plugin = new AdderPlugin();
             var context = CreateContext(plugin);
 
-            context.SetVariable<float>(0, 1.5f); // declared int → boom
+            context.SetVariable(0, 1.5f); // declared int → boom
         }
     }
 }

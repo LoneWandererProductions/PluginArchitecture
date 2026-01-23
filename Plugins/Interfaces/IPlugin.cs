@@ -6,6 +6,8 @@
  * PROGRAMMER:  Peter Geinitz (Wayfarer)
  */
 
+using Plugins.Enums;
+
 namespace Plugins.Interfaces
 {
     /// <summary>
