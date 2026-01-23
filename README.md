@@ -36,7 +36,7 @@ public class SymbolDefinition
 
 * `IManagedPluginContext` — supports all CLR types
 * `IUnmanagedPluginContext` — supports unmanaged types only
-* `IPluginCommunicator` — Optional Interface for notifying host of changes
+* `IPluginCommunicator` — Optional Interface for notifying host of changes, it is inherited from IManagedPluginContext and notifies the host when a result value is changed.
 
 
 ### Plugin Interface
