@@ -5,6 +5,9 @@
              xmlns:pluginloader="clr-namespace:PluginLoader"
              Height="450"
              Width="800">
+    <UserControl.Resources>
+        <pluginloader:EnumToBooleanConverter x:Key="EnumToBooleanConverter"/>
+    </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="25"/>
@@ -29,19 +32,19 @@
                 <!-- Preferred context selection -->
                 <MenuItem Header="Preferred _Context">
                     <MenuItem Header="Managed"
-                      IsCheckable="True"/>
-                      <!--IsChecked="{Binding PreferredContext, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter=Managed}"-->
-                      <!--Command="{Binding SetPreferredContextCommand}"
+                      IsCheckable="True"
+                      IsChecked="{Binding PreferredContext, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter=Managed}"/>
+                    <!--Command="{Binding SetPreferredContextCommand}"
                       CommandParameter="Managed"/>-->
-                        <MenuItem Header="ManagedCom"
-                      IsCheckable="True"/>
-                      <!--IsChecked="{Binding PreferredContext, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter=ManagedCom}"-->
-                      <!--Command="{Binding SetPreferredContextCommand}"
+                    <MenuItem Header="ManagedCom"
+                      IsCheckable="True"
+                      IsChecked="{Binding PreferredContext, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter=ManagedCom}"/>
+                    <!--Command="{Binding SetPreferredContextCommand}"
                       CommandParameter="ManagedCom"/>-->
-                        <MenuItem Header="Unmanaged"
-                      IsCheckable="True"/>
-                      <!--IsChecked="{Binding PreferredContext, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter=Unmanaged}"-->
-                      <!--Command="{Binding SetPreferredContextCommand}"
+                    <MenuItem Header="Unmanaged"
+                      IsCheckable="True"
+                      IsChecked="{Binding PreferredContext, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter=Unmanaged}"/>
+                    <!--Command="{Binding SetPreferredContextCommand}"
                       CommandParameter="Unmanaged"/>-->
                 </MenuItem>
             </MenuItem>
