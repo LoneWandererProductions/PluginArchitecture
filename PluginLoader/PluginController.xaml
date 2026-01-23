@@ -32,21 +32,25 @@
                 <!-- Preferred context selection -->
                 <MenuItem Header="Preferred _Context">
                     <MenuItem Header="Managed"
-                      IsCheckable="True"
-                      IsChecked="{Binding PreferredContext, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter=Managed}"/>
-                    <!--Command="{Binding SetPreferredContextCommand}"
-                      CommandParameter="Managed"/>-->
+              IsCheckable="True"
+              IsChecked="{Binding PreferredContext,
+                          Converter={StaticResource EnumToBooleanConverter},
+                          ConverterParameter=Managed}" />
+
                     <MenuItem Header="ManagedCom"
-                      IsCheckable="True"
-                      IsChecked="{Binding PreferredContext, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter=ManagedCom}"/>
-                    <!--Command="{Binding SetPreferredContextCommand}"
-                      CommandParameter="ManagedCom"/>-->
+              IsCheckable="True"
+              IsChecked="{Binding PreferredContext,
+                          Converter={StaticResource EnumToBooleanConverter},
+                          ConverterParameter=ManagedCom}" />
+
                     <MenuItem Header="Unmanaged"
-                      IsCheckable="True"
-                      IsChecked="{Binding PreferredContext, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter=Unmanaged}"/>
-                    <!--Command="{Binding SetPreferredContextCommand}"
-                      CommandParameter="Unmanaged"/>-->
+              IsCheckable="True"
+              IsChecked="{Binding PreferredContext,
+                          Converter={StaticResource EnumToBooleanConverter},
+                          ConverterParameter=Unmanaged}" />
                 </MenuItem>
+
+                <!--Command="{Binding SetPreferredContextCommand}"-->
             </MenuItem>
 
             <MenuItem Header="_Settings">
