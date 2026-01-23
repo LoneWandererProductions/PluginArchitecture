@@ -24,9 +24,15 @@ namespace Plugins
         /// </summary>
         Managed = 1,
 
+
+        /// <summary>
+        ///  Managed Communication Supported
+        /// </summary>
+        ManagedCom = 2,
+
         /// <summary>
         /// Unmanaged Supported
         /// </summary>
-        Unmanaged = 2
+        Unmanaged = 4
     }
 }

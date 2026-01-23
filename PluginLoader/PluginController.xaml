@@ -6,6 +6,11 @@
              Height="450"
              Width="800">
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="25"/>
+            <RowDefinition Height="367*"/>
+            <RowDefinition Height="50"/>
+        </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="2*" />
             <ColumnDefinition Width="2*" />
@@ -17,7 +22,7 @@
                   ItemsSource="{Binding Plugins}"
                   SelectedItem="{Binding SelectedPlugin}"
                   AutoGenerateColumns="False"
-                  IsReadOnly="True">
+                  IsReadOnly="True" Grid.ColumnSpan="2" Grid.Row="1">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Name" Binding="{Binding Name}" />
                 <DataGridTextColumn Header="Version" Binding="{Binding Version}" />
@@ -28,7 +33,7 @@
         <!-- Symbols -->
         <ListBox Grid.Column="1"
                  ItemsSource="{Binding Symbols}"
-                 SelectedItem="{Binding SelectedSymbol}">
+                 SelectedItem="{Binding SelectedSymbol}" Grid.Row="1" >
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <TextBlock Text="{Binding Definition.Name}" />
@@ -38,7 +43,7 @@
 
         <!-- Inspector / Method -->
         <ContentControl Grid.Column="2"
-                        Content="{Binding SelectedSymbol}">
+                        Content="{Binding SelectedSymbol}" Grid.Row="1">
 
             <ContentControl.Resources>
 
@@ -72,6 +77,10 @@
             </ContentControl.ContentTemplateSelector>
 
         </ContentControl>
+
+        <TextBox Text="{Binding PluginMessages}"
+         IsReadOnly="True"
+         AcceptsReturn="True" Grid.ColumnSpan="3" Grid.Row="2"/>
 
     </Grid>
 </UserControl>

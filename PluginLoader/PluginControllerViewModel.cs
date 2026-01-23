@@ -39,6 +39,22 @@ namespace PluginLoader
         public ObservableCollection<PluginSymbolViewModel> Symbols { get; } = new();
 
         /// <summary>
+        /// Gets all messages produced by plugins.
+        /// </summary>
+        public string PluginMessages
+        {
+            get => _pluginMessages;
+            set
+            {
+                if (_pluginMessages == value)
+                    return;
+
+                _pluginMessages = value;
+                OnPropertyChanged();
+            }
+        }
+
+        /// <summary>
         /// Gets or sets the preferred context.
         /// </summary>
         /// <value>
@@ -47,6 +63,11 @@ namespace PluginLoader
         public PluginContextSupport PreferredContext { get; set; }
     = PluginContextSupport.Managed;
 
+
+        /// <summary>
+        /// The plugin messages
+        /// </summary>
+        private string _pluginMessages = string.Empty;
 
         /// <summary>
         /// The selected plugin
@@ -95,7 +116,8 @@ namespace PluginLoader
         }
 
         /// <summary>
-        /// Sets the plugins.
+        /// Sets the plugins and creates an appropriate context for each.
+        /// Also subscribes to ResultChanged events if the context supports it.
         /// </summary>
         /// <param name="plugins">The plugins.</param>
         public void SetPlugins(IEnumerable<IPlugin> plugins)
@@ -116,7 +138,9 @@ namespace PluginLoader
                     // If preferred context is not supported, pick any supported one
                     if (!plugin.SupportedContexts.HasFlag(chosenContext))
                     {
-                        if (plugin.SupportedContexts.HasFlag(PluginContextSupport.Managed))
+                        if (plugin.SupportedContexts.HasFlag(PluginContextSupport.ManagedCom))
+                            chosenContext = PluginContextSupport.ManagedCom;
+                        else if (plugin.SupportedContexts.HasFlag(PluginContextSupport.Managed))
                             chosenContext = PluginContextSupport.Managed;
                         else if (plugin.SupportedContexts.HasFlag(PluginContextSupport.Unmanaged))
                             chosenContext = PluginContextSupport.Unmanaged;
@@ -128,17 +152,35 @@ namespace PluginLoader
                     // Create the actual context instance
                     context = chosenContext switch
                     {
+                        PluginContextSupport.ManagedCom => new ManagedPluginContextCom(symbols),
                         PluginContextSupport.Managed => new ManagedPluginContext(symbols),
                         PluginContextSupport.Unmanaged => new UnmanagedPluginContext(symbols),
                         _ => throw new InvalidOperationException("Unsupported PluginContextSupport type.")
                     };
 
+                    // Subscribe to result changes if context supports IPluginCommunicator
+                    if (context is IPluginCommunicator communicator)
+                    {
+                        communicator.ResultChanged += OnPluginResultChanged;
+                    }
+
                     // Initialize plugin with chosen context
                     plugin.Initialize(context);
                 }
 
+                // Pass both plugin and context to the view model
                 Plugins.Add(new PluginViewModel(plugin));
             }
+        }
+
+        /// <summary>
+        /// Called when [plugin result changed].
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="e">The <see cref="ResultChangedEventArgs"/> instance containing the event data.</param>
+        private void OnPluginResultChanged(object? sender, ResultChangedEventArgs e)
+        {
+            PluginMessages += $"[{DateTime.Now:HH:mm:ss}] {e.Name}: {e.Value}{Environment.NewLine}";
         }
 
         /// <summary>
