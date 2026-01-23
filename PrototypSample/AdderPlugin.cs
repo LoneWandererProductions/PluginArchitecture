@@ -144,7 +144,6 @@ namespace PrototypSample
             }
         }
 
-
         /// <summary>
         /// Executes the command.
         /// </summary>

@@ -154,11 +154,6 @@ public class SymbolDefinition
                         int b = context.GetVariable<int>(_bIndex);
                         context.SetResult(_resultIndex, a + b);
 
-                        if (context is IPluginCommunicator comm)
-                        {
-                            comm.NotifyResultChanged("Result", a + b);
-                        }
-
                         break;
                     }
                 case 1: // Multiply
@@ -166,11 +161,6 @@ public class SymbolDefinition
                         int a = context.GetVariable<int>(_aIndex);
                         int b = context.GetVariable<int>(_bIndex);
                         context.SetResult(_resultIndex, a * b);
-
-                        if (context is IPluginCommunicator comm)
-                        {
-                            comm.NotifyResultChanged("Result", a * b);
-                        }
 
                         break;
                     }
@@ -189,11 +179,6 @@ public class SymbolDefinition
                         int b = context.GetVariable<int>(_bIndex);
                         context.SetResult(context.FindResult("Result"), a + b);
 
-                        if (context is IPluginCommunicator comm)
-                        {
-                            comm.NotifyResultChanged("Result", a + b);
-                        }
-
                         break;
                 }
                 case 1: // Multiply
@@ -201,11 +186,6 @@ public class SymbolDefinition
                         int a = context.GetVariable<int>(_aIndex);
                         int b = context.GetVariable<int>(_bIndex);
                         context.SetResult(context.FindResult("Result"), a * b);
-
-                        if (context is IPluginCommunicator comm)
-                        {
-                            comm.NotifyResultChanged("Result", a * b);
-                        }
 
                         break;
                 }
