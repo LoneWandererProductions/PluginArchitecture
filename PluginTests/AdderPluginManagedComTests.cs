@@ -25,10 +25,10 @@ namespace PluginTests
             int? notifiedValue = null;
             string? notifiedName = null;
 
-            context.ResultChanged += (name, value) =>
+            context.ResultChanged += (sender, e) =>
             {
-                notifiedName = name;
-                notifiedValue = (int)value!;
+                notifiedName = e.Name;
+                notifiedValue = (int)e.Value!;
             };
 
             context.SetVariable(0, 2);
@@ -55,10 +55,10 @@ namespace PluginTests
             int? notifiedValue = null;
             string? notifiedName = null;
 
-            context.ResultChanged += (name, value) =>
+            context.ResultChanged += (sender, e) =>
             {
-                notifiedName = name;
-                notifiedValue = (int)value!;
+                notifiedName = e.Name;
+                notifiedValue = (int)e.Value!;
             };
 
             context.SetVariable(0, 4);

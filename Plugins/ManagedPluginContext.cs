@@ -156,7 +156,7 @@ namespace Plugins
         public T GetResult<T>(int index) => (T)_results[index];
 
         /// <inheritdoc />
-        public void SetResult<T>(int index, T value) => _results[index] = value;
+        public virtual void SetResult<T>(int index, T value) => _results[index] = value;
 
         /// <inheritdoc />
         /// <summary>

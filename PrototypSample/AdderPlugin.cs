@@ -129,11 +129,6 @@ namespace PrototypSample
                         int b = context.GetVariable<int>(_bIndex);
                         context.SetResult(_resultIndex, a + b);
 
-                        if (context is IPluginCommunicator comm)
-                        {
-                            comm.NotifyResultChanged("Result", a + b);
-                        }
-
                         break;
                     }
                 case 1: // Multiply
@@ -141,11 +136,6 @@ namespace PrototypSample
                         int a = context.GetVariable<int>(_aIndex);
                         int b = context.GetVariable<int>(_bIndex);
                         context.SetResult(_resultIndex, a * b);
-
-                        if (context is IPluginCommunicator comm)
-                        {
-                            comm.NotifyResultChanged("Result", a * b);
-                        }
 
                         break;
                     }
@@ -171,11 +161,6 @@ namespace PrototypSample
                         int b = context.GetVariable<int>(_bIndex);
                         context.SetResult(context.FindResult("Result"), a + b);
 
-                        if (context is IPluginCommunicator comm)
-                        {
-                            comm.NotifyResultChanged("Result", a + b);
-                        }
-
                         break;
                 }
                 case 1: // Multiply
@@ -183,11 +168,6 @@ namespace PrototypSample
                         int a = context.GetVariable<int>(_aIndex);
                         int b = context.GetVariable<int>(_bIndex);
                         context.SetResult(context.FindResult("Result"), a * b);
-
-                        if (context is IPluginCommunicator comm)
-                        {
-                            comm.NotifyResultChanged("Result", a * b);
-                        }
 
                         break;
                 }

@@ -8,6 +8,7 @@
  * PROGRAMMER:  Peter Geinitz (Wayfarer)
  */
 
+using Plugins.Enums;
 using Plugins.Interfaces;
 
 namespace Plugins
@@ -19,12 +20,17 @@ namespace Plugins
     /// </summary>
     /// <seealso cref="ManagedPluginContext"/>
     /// <seealso cref="IPluginCommunicator"/>
-    public sealed class ManagedPluginContextCom : ManagedPluginContext, IPluginCommunicator
+    public class ManagedPluginContextCom : ManagedPluginContext, IPluginCommunicator
     {
         /// <summary>
         /// Event fired when a result changes.
         /// </summary>
-        public event Action<string, object?>? ResultChanged;
+        public event EventHandler<ResultChangedEventArgs>? ResultChanged;
+
+        /// <summary>
+        /// Reverse lookup table for result symbols (index -> name)
+        /// </summary>
+        private readonly Dictionary<int, string> _resultIndexLookup = new();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ManagedPluginContextCom"/> class.
@@ -32,7 +38,18 @@ namespace Plugins
         /// <param name="symbols">The symbol definitions used to initialize variables and results.</param>
         public ManagedPluginContextCom(IReadOnlyList<SymbolDefinition> symbols)
             : base(symbols)
-        { }
+        {
+            if (symbols == null)
+                throw new ArgumentNullException(nameof(symbols));
+
+            var resultSymbols = symbols
+                .Where(s => s.Kind == SymbolType.Data &&
+                           (s.Direction == DirectionType.Output || s.Direction == DirectionType.InOut))
+                .ToList();
+
+            for (int i = 0; i < resultSymbols.Count; i++)
+                _resultIndexLookup[i] = resultSymbols[i].Name;
+        }
 
         /// <inheritdoc />
         /// <summary>
@@ -40,9 +57,10 @@ namespace Plugins
         /// </summary>
         /// <param name="name">The name of the result that changed.</param>
         /// <param name="value">The new value of the result.</param>
-        public void NotifyResultChanged(string name, object? value)
+        protected virtual void NotifyResultChanged(ResultChangedEventArgs args)
         {
-            ResultChanged?.Invoke(name, value);
+            var handler = ResultChanged;
+            handler?.Invoke(this, args);
         }
 
         /// <summary>
@@ -52,13 +70,23 @@ namespace Plugins
         /// <typeparam name="T">Type of the result value.</typeparam>
         /// <param name="index">The index of the result in the context.</param>
         /// <param name="value">The value to set.</param>
-        public new void SetResult<T>(int index, T value)
+        public override void SetResult<T>(int index, T value)
         {
             base.SetResult(index, value);
 
-            // Get name from index
             string name = GetResultNameByIndex(index);
-            NotifyResultChanged(name, value);
+            RaiseResultChanged(name, index, value);
+        }
+
+        /// <summary>
+        /// Raises the result changed.
+        /// </summary>
+        /// <param name="name">The name.</param>
+        /// <param name="index">The index.</param>
+        /// <param name="value">The value.</param>
+        private void RaiseResultChanged(string name, int index, object? value)
+        {
+            NotifyResultChanged(new ResultChangedEventArgs(this, name, index, value));
         }
 
         /// <summary>
@@ -70,8 +98,10 @@ namespace Plugins
         /// <exception cref="NotImplementedException">Thrown if not yet implemented.</exception>
         private string GetResultNameByIndex(int index)
         {
-            // TODO: Implement mapping from index -> result name
-            throw new NotImplementedException();
+            if (_resultIndexLookup.TryGetValue(index, out var name))
+                return name;
+
+            return $"Result[{index}]";
         }
     }
 }

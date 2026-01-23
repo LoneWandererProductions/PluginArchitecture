@@ -15,16 +15,8 @@ namespace Plugins.Interfaces
     public interface IPluginCommunicator
     {
         /// <summary>
-        /// Occurs when [result changed].
+        /// Occurs when a result value has changed.
         /// </summary>
-        event Action<string, object?> ResultChanged;
-
-        /// <summary>
-        /// Notifies the result changed.
-        /// </summary>
-        /// <param name="name">The name.</param>
-        /// <param name="value">The value.</param>
-        void NotifyResultChanged(string name, object? value);
+        event EventHandler<ResultChangedEventArgs>? ResultChanged;
     }
-
 }
