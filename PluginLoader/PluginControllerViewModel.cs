@@ -12,6 +12,7 @@ using Plugins.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Text;
 using ViewModel;
 
 namespace PluginLoader
@@ -55,24 +56,27 @@ namespace PluginLoader
         }
 
         /// <summary>
-        /// Gets or sets the preferred context.
+        /// Gets or sets the plugin path.
         /// </summary>
         /// <value>
-        /// The preferred context.
+        /// The plugin path.
         /// </value>
-        public PluginContextSupport PreferredContext { get; set; }
-    = PluginContextSupport.Managed;
+        public string? PluginPath
+        {
+            get => _pluginPath;
+            set
+            {
+                if (_pluginPath == value) return;
+                _pluginPath = value;
+                OnPropertyChanged();
 
-
-        /// <summary>
-        /// The plugin messages
-        /// </summary>
-        private string _pluginMessages = string.Empty;
-
-        /// <summary>
-        /// The selected plugin
-        /// </summary>
-        private PluginViewModel? _selectedPlugin;
+                if (!string.IsNullOrWhiteSpace(_pluginPath))
+                {
+                    var plugins = PluginLoad.LoadAll(_pluginPath);
+                    SetPlugins(plugins);
+                }
+            }
+        }
 
         /// <summary>
         /// Gets or sets the selected plugin.
@@ -94,7 +98,13 @@ namespace PluginLoader
             }
         }
 
-        private PluginSymbolViewModel? _selectedSymbol;
+        /// <summary>
+        /// Gets or sets the preferred context.
+        /// </summary>
+        /// <value>
+        /// The preferred context.
+        /// </value>
+        public PluginContextSupport PreferredContext { get; set; } = PluginContextSupport.Managed;
 
         /// <summary>
         /// Gets or sets the selected symbol.
@@ -114,6 +124,36 @@ namespace PluginLoader
                 OnPropertyChanged();
             }
         }
+
+        /// <summary>
+        /// The plugin messages
+        /// </summary>
+        private string _pluginMessages = string.Empty;
+
+        /// <summary>
+        /// The plugin path
+        /// </summary>
+        private string? _pluginPath;
+
+        /// <summary>
+        /// The selected plugin
+        /// </summary>
+        private PluginViewModel? _selectedPlugin;
+
+        /// <summary>
+        /// The selected symbol
+        /// </summary>
+        private PluginSymbolViewModel? _selectedSymbol;
+
+        /// <summary>
+        /// The messages builder
+        /// </summary>
+        private readonly StringBuilder _messagesBuilder = new();
+
+        /// <summary>
+        /// The last update
+        /// </summary>
+        private DateTime _lastUpdate = DateTime.MinValue;
 
         /// <summary>
         /// Sets the plugins and creates an appropriate context for each.
@@ -180,7 +220,15 @@ namespace PluginLoader
         /// <param name="e">The <see cref="ResultChangedEventArgs"/> instance containing the event data.</param>
         private void OnPluginResultChanged(object? sender, ResultChangedEventArgs e)
         {
-            PluginMessages += $"[{DateTime.Now:HH:mm:ss}] {e.Name}: {e.Value}{Environment.NewLine}";
+            // Append to builder
+            _messagesBuilder.AppendLine($"[{DateTime.Now:HH:mm:ss}] {e.Name}: {e.Value}");
+
+            // Throttle UI updates to at most 5 times per second
+            if ((DateTime.Now - _lastUpdate).TotalMilliseconds > 200)
+            {
+                _lastUpdate = DateTime.Now;
+                PluginMessages = _messagesBuilder.ToString();
+            }
         }
 
         /// <summary>
