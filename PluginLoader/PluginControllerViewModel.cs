@@ -104,7 +104,18 @@ namespace PluginLoader
         /// <value>
         /// The preferred context.
         /// </value>
-        public PluginContextSupport PreferredContext { get; set; } = PluginContextSupport.Managed;
+        public PluginContextSupport PreferredContext
+        {
+            get => _preferredContext;
+            set
+            {
+                if (_preferredContext != value)
+                {
+                    _preferredContext = value;
+                    OnPropertyChanged(nameof(PreferredContext));
+                }
+            }
+        }
 
         /// <summary>
         /// Gets or sets the selected symbol.
@@ -124,6 +135,15 @@ namespace PluginLoader
                 OnPropertyChanged();
             }
         }
+
+        /// <summary>
+        /// Gets the set preferred context command.
+        /// </summary>
+        /// <value>
+        /// The set preferred context command.
+        /// </value>
+        public DelegateCommand<PluginContextSupport> SetPreferredContextCommand { get; }
+
 
         /// <summary>
         /// The plugin messages
@@ -154,6 +174,11 @@ namespace PluginLoader
         /// The last update
         /// </summary>
         private DateTime _lastUpdate = DateTime.MinValue;
+
+        /// <summary>
+        /// The preferred context
+        /// </summary>
+        private PluginContextSupport _preferredContext = PluginContextSupport.Managed;
 
         /// <summary>
         /// Sets the plugins and creates an appropriate context for each.
@@ -214,6 +239,17 @@ namespace PluginLoader
         }
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="PluginControllerViewModel"/> class.
+        /// </summary>
+        public PluginControllerViewModel()
+        {
+            SetPreferredContextCommand = new DelegateCommand<PluginContextSupport>(
+                ExecuteSetPreferredContext,
+                CanSetPreferredContext
+            );
+        }
+
+        /// <summary>
         /// Called when [plugin result changed].
         /// </summary>
         /// <param name="sender">The sender.</param>
@@ -257,5 +293,42 @@ namespace PluginLoader
             }
         }
 
+        /// <summary>
+        /// Determines whether this instance [can set preferred context] the specified context.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <returns>
+        ///   <c>true</c> if this instance [can set preferred context] the specified context; otherwise, <c>false</c>.
+        /// </returns>
+        private bool CanSetPreferredContext(PluginContextSupport context)
+        {
+            return context != PreferredContext;
+        }
+
+        /// <summary>
+        /// Executes the set preferred context.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        private void ExecuteSetPreferredContext(PluginContextSupport context)
+        {
+            PreferredContext = context;
+
+            // Make the change actually affect runtime behavior
+            RebuildPluginContexts();
+        }
+
+        /// <summary>
+        /// Rebuilds the plugin contexts.
+        /// </summary>
+        private void RebuildPluginContexts()
+        {
+            if (string.IsNullOrWhiteSpace(PluginPath))
+                return;
+
+            var plugins = PluginLoad.LoadAll(PluginPath);
+            SetPlugins(plugins);
+
+            LoadSymbols();
+        }
     }
 }

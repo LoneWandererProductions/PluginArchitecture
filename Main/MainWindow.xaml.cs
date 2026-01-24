@@ -2,7 +2,7 @@
 * COPYRIGHT:   See COPYING in the top level directory
 * PROJECT:     Plugin
 * FILE:        Main/MainWindow.xaml.cs
-* PURPOSE:     MainWindow
+* PURPOSE:     MainWindow, just for showcasing the PluginController Usercontrol.
 * PROGRAMER:   Peter Geinitz (Wayfarer)
 */
 
@@ -25,6 +25,9 @@ namespace Main
     /// <seealso cref="System.Windows.Markup.IComponentConnector" />
     public partial class MainWindow : INotifyPropertyChanged
     {
+        /// <summary>
+        /// The plugins
+        /// </summary>
         private ObservableCollection<IPlugin> _plugins = new();
 
         public ObservableCollection<IPlugin> Plugins
@@ -40,23 +43,38 @@ namespace Main
             }
         }
 
+        /// <summary>
+        /// Occurs when a property value changes.
+        /// </summary>
         public event PropertyChangedEventHandler? PropertyChanged;
 
+        /// <summary>
+        /// Called when [property changed].
+        /// </summary>
+        /// <param name="name">The name.</param>
         protected void OnPropertyChanged([CallerMemberName] string? name = null)
             => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MainWindow"/> class.
+        /// </summary>
         public MainWindow()
         {
             InitializeComponent();
             DataContext = this;
         }
 
+        /// <summary>
+        /// Handles the Loaded event of the Window control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="RoutedEventArgs"/> instance containing the event data.</param>
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             var pluginPath = Path.Combine(AppContext.BaseDirectory, "Plugins");
             var plugins = PluginLoad.LoadAll(pluginPath);
             // simply set the raw IPlugin collection
-            PluginControl.Plugins = plugins;
+            PluginControl.SetPlugins(plugins);
         }
     }
 }

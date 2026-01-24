@@ -8,6 +8,10 @@
 
 namespace Main
 {
+    /// <summary>
+    /// Startup class.
+    /// </summary>
+    /// <seealso cref="System.Windows.Application" />
     internal sealed partial class App
     {
     }

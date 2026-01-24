@@ -34,36 +34,41 @@
 
                 <!-- Preferred context selection -->
                 <MenuItem Header="Preferred _Context">
+
                     <MenuItem Header="Managed"
-              IsCheckable="True"
-              IsChecked="{Binding PreferredContext,
-                          Converter={StaticResource EnumToBooleanConverter},
-                          ConverterParameter=Managed}" />
+                      IsCheckable="True"
+                      Command="{Binding SetPreferredContextCommand}"
+                      CommandParameter="Managed"
+                      IsChecked="{Binding PreferredContext,
+                                  Converter={StaticResource EnumToBooleanConverter},
+                                  ConverterParameter=Managed}" />
 
                     <MenuItem Header="ManagedCom"
-              IsCheckable="True"
-              IsChecked="{Binding PreferredContext,
-                          Converter={StaticResource EnumToBooleanConverter},
-                          ConverterParameter=ManagedCom}" />
+                      IsCheckable="True"
+                      Command="{Binding SetPreferredContextCommand}"
+                      CommandParameter="ManagedCom"
+                      IsChecked="{Binding PreferredContext,
+                                  Converter={StaticResource EnumToBooleanConverter},
+                                  ConverterParameter=ManagedCom}" />
 
                     <MenuItem Header="Unmanaged"
-              IsCheckable="True"
-              IsChecked="{Binding PreferredContext,
-                          Converter={StaticResource EnumToBooleanConverter},
-                          ConverterParameter=Unmanaged}" />
-                </MenuItem>
+                      IsCheckable="True"
+                      Command="{Binding SetPreferredContextCommand}"
+                      CommandParameter="Unmanaged"
+                      IsChecked="{Binding PreferredContext,
+                                  Converter={StaticResource EnumToBooleanConverter},
+                                  ConverterParameter=Unmanaged}" />
 
-                <!--Command="{Binding SetPreferredContextCommand}"-->
+                </MenuItem>
             </MenuItem>
 
             <MenuItem Header="_Settings">
                 <!-- Set plugin folder path -->
-                <MenuItem Header="_Plugin Path..."/>
+                <MenuItem Header="_Plugin Path..." />
                 <!--Command="{Binding SetPluginPathCommand}" />-->
             </MenuItem>
         </Menu>
-
-
+        
         <!-- Plugins -->
         <DataGrid Grid.Column="0"
                   ItemsSource="{Binding Plugins}"
