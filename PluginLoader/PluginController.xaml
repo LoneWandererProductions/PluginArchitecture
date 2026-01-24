@@ -2,11 +2,14 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:CommonControls;assembly=CommonControls"
+             xmlns:conv="clr-namespace:CommonControls.Converter;assembly=CommonControls.Converter" 
              xmlns:pluginloader="clr-namespace:PluginLoader"
              Height="450"
              Width="800">
+
     <UserControl.Resources>
-        <pluginloader:EnumToBooleanConverter x:Key="EnumToBooleanConverter"/>
+        <!-- Enum to Boolean Converter -->
+        <conv:EnumToBooleanConverter x:Key="EnumToBooleanConverter"/>
     </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>

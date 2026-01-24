@@ -27,6 +27,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PluginTests", "PluginTests\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PluginTools", "PluginTools\PluginTools.csproj", "{694932CB-989B-49B2-9F30-2B4F0B846244}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommonControls.Converter", "CommonControls.Converter\CommonControls.Converter.csproj", "{B78CBC75-AADF-50B5-561C-0483FAD81611}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -69,6 +71,10 @@ Global
 		{694932CB-989B-49B2-9F30-2B4F0B846244}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{694932CB-989B-49B2-9F30-2B4F0B846244}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{694932CB-989B-49B2-9F30-2B4F0B846244}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B78CBC75-AADF-50B5-561C-0483FAD81611}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B78CBC75-AADF-50B5-561C-0483FAD81611}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B78CBC75-AADF-50B5-561C-0483FAD81611}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B78CBC75-AADF-50B5-561C-0483FAD81611}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
