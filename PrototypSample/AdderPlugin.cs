@@ -70,7 +70,8 @@ namespace PrototypSample
                 // Data
                 new SymbolDefinition("A", SymbolType.Data, typeof(int)) { Id = 10, Direction = DirectionType.Input },
                 new SymbolDefinition("B", SymbolType.Data, typeof(int)) { Id = 11, Direction = DirectionType.Input },
-                new SymbolDefinition("Result", SymbolType.Data, typeof(int)) { Id = 12, Direction = DirectionType.Output }
+                new SymbolDefinition("Result", SymbolType.Data, typeof(int))
+                    { Id = 12, Direction = DirectionType.Output }
             };
 
             return lst;
@@ -124,21 +125,21 @@ namespace PrototypSample
             switch (id)
             {
                 case 0: // Sum
-                    {
-                        int a = context.GetVariable<int>(_aIndex);
-                        int b = context.GetVariable<int>(_bIndex);
-                        context.SetResult(_resultIndex, a + b);
+                {
+                    int a = context.GetVariable<int>(_aIndex);
+                    int b = context.GetVariable<int>(_bIndex);
+                    context.SetResult(_resultIndex, a + b);
 
-                        break;
-                    }
+                    break;
+                }
                 case 1: // Multiply
-                    {
-                        int a = context.GetVariable<int>(_aIndex);
-                        int b = context.GetVariable<int>(_bIndex);
-                        context.SetResult(_resultIndex, a * b);
+                {
+                    int a = context.GetVariable<int>(_aIndex);
+                    int b = context.GetVariable<int>(_bIndex);
+                    context.SetResult(_resultIndex, a * b);
 
-                        break;
-                    }
+                    break;
+                }
                 default:
                     throw new ArgumentOutOfRangeException(nameof(id), $"Unknown command id: {id}");
             }
@@ -156,19 +157,19 @@ namespace PrototypSample
             {
                 case 0: // Sum
                 {
-                        int a = context.GetVariable<int>(_aIndex);
-                        int b = context.GetVariable<int>(_bIndex);
-                        context.SetResult(context.FindResult("Result"), a + b);
+                    int a = context.GetVariable<int>(_aIndex);
+                    int b = context.GetVariable<int>(_bIndex);
+                    context.SetResult(context.FindResult("Result"), a + b);
 
-                        break;
+                    break;
                 }
                 case 1: // Multiply
                 {
-                        int a = context.GetVariable<int>(_aIndex);
-                        int b = context.GetVariable<int>(_bIndex);
-                        context.SetResult(context.FindResult("Result"), a * b);
+                    int a = context.GetVariable<int>(_aIndex);
+                    int b = context.GetVariable<int>(_bIndex);
+                    context.SetResult(context.FindResult("Result"), a * b);
 
-                        break;
+                    break;
                 }
                 default:
                     throw new ArgumentOutOfRangeException(nameof(id), $"Unknown command id: {id}");

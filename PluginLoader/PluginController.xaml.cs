@@ -71,7 +71,8 @@ namespace PluginLoader
 
         private static void OnPluginsChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            if (d is PluginController { DataContext: PluginControllerViewModel vm } && e.NewValue is IEnumerable<IPlugin> plugins)
+            if (d is PluginController { DataContext: PluginControllerViewModel vm } &&
+                e.NewValue is IEnumerable<IPlugin> plugins)
             {
                 vm.SetPlugins(plugins);
             }
