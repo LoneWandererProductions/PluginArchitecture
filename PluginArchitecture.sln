@@ -29,6 +29,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PluginTools", "PluginTools\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommonControls.Converter", "CommonControls.Converter\CommonControls.Converter.csproj", "{B78CBC75-AADF-50B5-561C-0483FAD81611}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommonDialogs", "CommonDialogs\CommonDialogs.csproj", "{9EBB121C-4E36-68EC-08D7-7DE8E27D4997}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -75,6 +77,10 @@ Global
 		{B78CBC75-AADF-50B5-561C-0483FAD81611}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B78CBC75-AADF-50B5-561C-0483FAD81611}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B78CBC75-AADF-50B5-561C-0483FAD81611}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9EBB121C-4E36-68EC-08D7-7DE8E27D4997}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9EBB121C-4E36-68EC-08D7-7DE8E27D4997}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9EBB121C-4E36-68EC-08D7-7DE8E27D4997}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9EBB121C-4E36-68EC-08D7-7DE8E27D4997}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
