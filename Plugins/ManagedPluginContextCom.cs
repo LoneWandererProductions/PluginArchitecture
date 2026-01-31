@@ -44,7 +44,7 @@ namespace Plugins
 
             var resultSymbols = symbols
                 .Where(s => s.Kind == SymbolType.Data &&
-                           (s.Direction == DirectionType.Output || s.Direction == DirectionType.InOut))
+                            (s.Direction == DirectionType.Output || s.Direction == DirectionType.InOut))
                 .ToList();
 
             for (int i = 0; i < resultSymbols.Count; i++)

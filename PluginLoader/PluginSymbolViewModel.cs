@@ -40,10 +40,8 @@ namespace PluginLoader
         public IPluginContext? Context
         {
             get => _context;
-            private set => SetPropertyAndCallback(ref _context, value, _ =>
-            {
-                RaisePropertyChangedFor(nameof(Value));
-            });
+            private set =>
+                SetPropertyAndCallback(ref _context, value, _ => { RaisePropertyChangedFor(nameof(Value)); });
         }
 
         /// <summary>

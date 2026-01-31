@@ -167,6 +167,5 @@ namespace Plugins
         {
             return $"ManagedPluginContext.";
         }
-
     }
 }
