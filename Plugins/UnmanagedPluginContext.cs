@@ -155,7 +155,9 @@ namespace Plugins
         /// <inheritdoc />
         public int Find(string name)
         {
-            throw new NotImplementedException();
+            if (_variableLookup.TryGetValue(name, out var vIndex)) return vIndex;
+            if (_resultLookup.TryGetValue(name, out var rIndex)) return rIndex;
+            throw new KeyNotFoundException($"Symbol '{name}' not found in variables or results.");
         }
 
         /// <inheritdoc />
