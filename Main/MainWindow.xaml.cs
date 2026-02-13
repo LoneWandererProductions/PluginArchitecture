@@ -2,7 +2,7 @@
 * COPYRIGHT:   See COPYING in the top level directory
 * PROJECT:     Plugin
 * FILE:        Main/MainWindow.xaml.cs
-* PURPOSE:     MainWindow, just for showcasing the PluginController Usercontrol.
+* PURPOSE:     MainWindow, just for showcasing the PluginController User control.
 * PROGRAMER:   Peter Geinitz (Wayfarer)
 */
 
