@@ -163,7 +163,7 @@ namespace PluginTools
                 sb.AppendLine("                {");
 
 
-                //Todo
+                //Todo looks unused
                 var inputs = string.Join(", ",
                     m.InputNames.Select(n => $"context.GetVariable<{_symbols[n].Type.Name}>({nameToIndex[n]})"));
                 var outputIndex = nameToIndex[m.OutputName];
