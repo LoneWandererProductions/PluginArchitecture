@@ -214,7 +214,7 @@ namespace PluginLoader
                     }
 
                     // Create the actual context instance
-                    IPluginContext? context = chosenContext switch
+                    IPluginContext context = chosenContext switch
                     {
                         PluginContextSupport.ManagedCom => new ManagedPluginContextCom(symbols),
                         PluginContextSupport.Managed => new ManagedPluginContext(symbols),

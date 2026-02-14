@@ -50,7 +50,7 @@ namespace Plugins.Runtime
         /// <value>
         ///   <c>true</c> if this instance is running; otherwise, <c>false</c>.
         /// </value>
-        public bool IsRunning => _cycleTask != null && !_cycleTask.IsCompleted;
+        public bool IsRunning => _cycleTask is { IsCompleted: false };
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CycleRunner"/> class.
@@ -104,8 +104,15 @@ namespace Plugins.Runtime
             _cts.Cancel();
             if (_cycleTask != null)
             {
-                try { await _cycleTask; } catch (OperationCanceledException) { }
+                try
+                {
+                    await _cycleTask;
+                }
+                catch (OperationCanceledException)
+                {
+                }
             }
+
             _cts = null;
             _cycleTask = null;
         }
