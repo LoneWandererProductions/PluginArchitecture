@@ -100,7 +100,7 @@ namespace PluginTools
         /// <summary>
         /// Generates this instance.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Generate the plugin cs file.</returns>
         public string Generate()
         {
             // Build a lookup table for symbol names -> indices
@@ -162,12 +162,12 @@ namespace PluginTools
                 sb.AppendLine($"                case {m.CommandId}:");
                 sb.AppendLine("                {");
 
-
-                //Todo looks unused
-                var inputs = string.Join(", ",
-                    m.InputNames.Select(n => $"context.GetVariable<{_symbols[n].Type.Name}>({nameToIndex[n]})"));
+                var inputAccessors = m.InputNames
+                    .Select(n => $"context.GetVariable<{_symbols[n].Type.Name}>({nameToIndex[n]})")
+                    .ToArray();
                 var outputIndex = nameToIndex[m.OutputName];
-                sb.AppendLine($"                    context.SetResult({outputIndex}, {m.OperationCode("a", "b")});");
+
+                sb.AppendLine($"                    context.SetResult({outputIndex}, {m.OperationCode(inputAccessors[0], inputAccessors[1])});");
                 sb.AppendLine("                    break;");
                 sb.AppendLine("                }");
             }
@@ -186,12 +186,12 @@ namespace PluginTools
                 sb.AppendLine($"                case {m.CommandId}:");
                 sb.AppendLine("                {");
 
-
-                //TODO possible bug here
-                var inputs = string.Join(", ",
-                    m.InputNames.Select(n => $"context.GetVariable<{_symbols[n].Type.Name}>({nameToIndex[n]})"));
+                var inputAccessors = m.InputNames
+                    .Select(n => $"context.GetVariable<{_symbols[n].Type.Name}>({nameToIndex[n]})")
+                    .ToArray();
                 var outputIndex = nameToIndex[m.OutputName];
-                sb.AppendLine($"                    context.SetResult({outputIndex}, {m.OperationCode("a", "b")});");
+
+                sb.AppendLine($"                    context.SetResult({outputIndex}, {m.OperationCode(inputAccessors[0], inputAccessors[1])});");
                 sb.AppendLine("                    break;");
                 sb.AppendLine("                }");
             }
@@ -209,7 +209,7 @@ namespace PluginTools
         /// <summary>
         /// Exports the definition.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>PluginDefinition.</returns>
         public PluginDefinition ExportDefinition()
         {
             return new PluginDefinition
