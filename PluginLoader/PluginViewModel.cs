@@ -8,7 +8,6 @@
  * PROGRAMMER:  Peter Geinitz (Wayfarer)
  */
 
-using Plugins;
 using Plugins.Enums;
 using Plugins.Interfaces;
 using System.Collections.Generic;

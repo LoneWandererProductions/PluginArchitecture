@@ -46,6 +46,7 @@ namespace PluginLoader
                     if (File.Exists(dll))
                         plugins.AddRange(loader.Load<IPlugin>(Path.GetDirectoryName(dll) ?? ""));
                 }
+
                 return plugins;
             }
 

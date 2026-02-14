@@ -157,6 +157,7 @@ namespace Plugins
         {
             if (_variableLookup.TryGetValue(name, out var vIndex)) return vIndex;
             if (_resultLookup.TryGetValue(name, out var rIndex)) return rIndex;
+
             throw new KeyNotFoundException($"Symbol '{name}' not found in variables or results.");
         }
 
