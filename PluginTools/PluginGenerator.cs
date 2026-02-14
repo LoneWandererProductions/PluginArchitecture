@@ -162,6 +162,8 @@ namespace PluginTools
                 sb.AppendLine($"                case {m.CommandId}:");
                 sb.AppendLine("                {");
 
+
+                //Todo
                 var inputs = string.Join(", ",
                     m.InputNames.Select(n => $"context.GetVariable<{_symbols[n].Type.Name}>({nameToIndex[n]})"));
                 var outputIndex = nameToIndex[m.OutputName];
