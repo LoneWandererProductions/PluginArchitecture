@@ -132,7 +132,7 @@
 
         <TextBox Text="{Binding PluginMessages}"
                  IsReadOnly="True"
-                 AcceptsReturn="True" Grid.ColumnSpan="3" Grid.Row="2" />
+                 AcceptsReturn="True" Grid.ColumnSpan="3" Grid.Column="0" Grid.Row="2" />
 
     </Grid>
 </UserControl>

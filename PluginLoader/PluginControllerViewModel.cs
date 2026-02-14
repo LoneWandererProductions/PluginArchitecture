@@ -67,6 +67,7 @@ namespace PluginLoader
             set
             {
                 if (_pluginPath == value) return;
+
                 _pluginPath = value;
                 OnPropertyChanged();
 
@@ -191,14 +192,12 @@ namespace PluginLoader
 
             foreach (var plugin in plugins)
             {
-                IPluginContext? context = null;
-
                 if (plugin is ISymbolProvider provider)
                 {
                     var symbols = provider.GetSymbols();
 
                     // Determine which context to use
-                    PluginContextSupport chosenContext = PreferredContext;
+                    var chosenContext = PreferredContext;
 
                     // If preferred context is not supported, pick any supported one
                     if (!plugin.SupportedContexts.HasFlag(chosenContext))
@@ -215,7 +214,7 @@ namespace PluginLoader
                     }
 
                     // Create the actual context instance
-                    context = chosenContext switch
+                    IPluginContext? context = chosenContext switch
                     {
                         PluginContextSupport.ManagedCom => new ManagedPluginContextCom(symbols),
                         PluginContextSupport.Managed => new ManagedPluginContext(symbols),
@@ -278,7 +277,7 @@ namespace PluginLoader
             if (SelectedPlugin?.Plugin is not ISymbolProvider provider)
                 return;
 
-            foreach (SymbolDefinition symbol in provider.GetSymbols())
+            foreach (var symbol in provider.GetSymbols())
             {
                 int? contextIndex = null;
 

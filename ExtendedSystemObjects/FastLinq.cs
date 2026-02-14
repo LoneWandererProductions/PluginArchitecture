@@ -59,7 +59,7 @@ namespace ExtendedSystemObjects
             if (destination.Length < span.Length)
                 throw new ArgumentException("Destination span is too small.");
 
-            for (int i = 0; i < span.Length; i++)
+            for (var i = 0; i < span.Length; i++)
                 destination[i] = selector(span[i]);
         }
 
@@ -77,7 +77,7 @@ namespace ExtendedSystemObjects
             Span<T> destination,
             Func<T, bool> predicate)
         {
-            int count = 0;
+            var count = 0;
             foreach (var t in span)
                 if (predicate(t))
                     destination[count++] = t;

@@ -112,14 +112,14 @@ namespace Plugins
             _variableOffsets = new int[_variables.Count];
             _resultOffsets = new int[_results.Count];
 
-            int offset = 0;
-            for (int i = 0; i < _variables.Count; i++)
+            var offset = 0;
+            for (var i = 0; i < _variables.Count; i++)
             {
                 _variableOffsets[i] = offset;
                 offset += _variables[i].EffectiveSize;
             }
 
-            for (int i = 0; i < _results.Count; i++)
+            for (var i = 0; i < _results.Count; i++)
             {
                 _resultOffsets[i] = offset;
                 offset += _results[i].EffectiveSize;
@@ -137,10 +137,10 @@ namespace Plugins
             _variableLookup.Clear();
             _resultLookup.Clear();
 
-            for (int i = 0; i < _variables.Count; i++)
+            for (var i = 0; i < _variables.Count; i++)
                 _variableLookup[_variables[i].Name] = i;
 
-            for (int i = 0; i < _results.Count; i++)
+            for (var i = 0; i < _results.Count; i++)
                 _resultLookup[_results[i].Name] = i;
         }
 

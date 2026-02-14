@@ -67,25 +67,25 @@ namespace Plugins
             _results = new object[resultSymbols.Count];
 
             // Build lookup tables
-            for (int i = 0; i < variableSymbols.Count; i++)
+            for (var i = 0; i < variableSymbols.Count; i++)
                 _variableLookup[variableSymbols[i].Name] = i;
 
-            for (int i = 0; i < resultSymbols.Count; i++)
+            for (var i = 0; i < resultSymbols.Count; i++)
                 _resultLookup[resultSymbols[i].Name] = i;
 
             // Initialize defaults
-            for (int i = 0; i < _variables.Length; i++)
+            for (var i = 0; i < _variables.Length; i++)
                 _variables[i] = GetDefault(variableSymbols[i].Type);
 
-            for (int i = 0; i < _results.Length; i++)
+            for (var i = 0; i < _results.Length; i++)
                 _results[i] = GetDefault(resultSymbols[i].Type);
         }
 
         /// <inheritdoc />
         public int Find(string name)
         {
-            bool hasVar = _variableLookup.ContainsKey(name);
-            bool hasRes = _resultLookup.ContainsKey(name);
+            var hasVar = _variableLookup.ContainsKey(name);
+            var hasRes = _resultLookup.ContainsKey(name);
 
             if (hasVar && hasRes)
                 throw new InvalidOperationException(
@@ -165,7 +165,7 @@ namespace Plugins
         /// </summary>
         public override string ToString()
         {
-            return $"ManagedPluginContext.";
+            return "ManagedPluginContext.";
         }
     }
 }

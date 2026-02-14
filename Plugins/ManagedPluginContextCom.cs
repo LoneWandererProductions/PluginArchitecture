@@ -20,7 +20,7 @@ namespace Plugins
     /// </summary>
     /// <seealso cref="ManagedPluginContext"/>
     /// <seealso cref="IPluginCommunicator"/>
-    public class ManagedPluginContextCom : ManagedPluginContext, IPluginCommunicator
+    public sealed class ManagedPluginContextCom : ManagedPluginContext, IPluginCommunicator
     {
         /// <summary>
         /// Event fired when a result changes.
@@ -47,17 +47,15 @@ namespace Plugins
                             (s.Direction == DirectionType.Output || s.Direction == DirectionType.InOut))
                 .ToList();
 
-            for (int i = 0; i < resultSymbols.Count; i++)
+            for (var i = 0; i < resultSymbols.Count; i++)
                 _resultIndexLookup[i] = resultSymbols[i].Name;
         }
 
-        /// <inheritdoc />
         /// <summary>
         /// Notifies subscribers that a result has changed.
         /// </summary>
-        /// <param name="name">The name of the result that changed.</param>
-        /// <param name="value">The new value of the result.</param>
-        protected virtual void NotifyResultChanged(ResultChangedEventArgs args)
+        /// <param name="args">The <see cref="ResultChangedEventArgs"/> instance containing the event data.</param>
+        private void NotifyResultChanged(ResultChangedEventArgs args)
         {
             var handler = ResultChanged;
             handler?.Invoke(this, args);
@@ -74,7 +72,7 @@ namespace Plugins
         {
             base.SetResult(index, value);
 
-            string name = GetResultNameByIndex(index);
+            var name = GetResultNameByIndex(index);
             RaiseResultChanged(name, index, value);
         }
 

@@ -38,7 +38,7 @@ namespace PluginTests
             plugin.Execute(0); // Sum
 
             // Assert
-            int result = context.GetResult<int>(0);
+            var result = context.GetResult<int>(0);
             Assert.AreEqual(5, result);
             Assert.AreEqual("Result", notifiedName);
             Assert.AreEqual(5, notifiedValue);
@@ -68,7 +68,7 @@ namespace PluginTests
             plugin.Execute(1); // Multiply
 
             // Assert
-            int result = context.GetResult<int>(0);
+            var result = context.GetResult<int>(0);
             Assert.AreEqual(20, result);
             Assert.AreEqual("Result", notifiedName);
             Assert.AreEqual(20, notifiedValue);

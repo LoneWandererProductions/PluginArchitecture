@@ -126,16 +126,16 @@ namespace PrototypSample
             {
                 case 0: // Sum
                 {
-                    int a = context.GetVariable<int>(_aIndex);
-                    int b = context.GetVariable<int>(_bIndex);
+                    var a = context.GetVariable<int>(_aIndex);
+                    var b = context.GetVariable<int>(_bIndex);
                     context.SetResult(_resultIndex, a + b);
 
                     break;
                 }
                 case 1: // Multiply
                 {
-                    int a = context.GetVariable<int>(_aIndex);
-                    int b = context.GetVariable<int>(_bIndex);
+                    var a = context.GetVariable<int>(_aIndex);
+                    var b = context.GetVariable<int>(_bIndex);
                     context.SetResult(_resultIndex, a * b);
 
                     break;
@@ -157,16 +157,16 @@ namespace PrototypSample
             {
                 case 0: // Sum
                 {
-                    int a = context.GetVariable<int>(_aIndex);
-                    int b = context.GetVariable<int>(_bIndex);
+                    var a = context.GetVariable<int>(_aIndex);
+                    var b = context.GetVariable<int>(_bIndex);
                     context.SetResult(context.FindResult("Result"), a + b);
 
                     break;
                 }
                 case 1: // Multiply
                 {
-                    int a = context.GetVariable<int>(_aIndex);
-                    int b = context.GetVariable<int>(_bIndex);
+                    var a = context.GetVariable<int>(_aIndex);
+                    var b = context.GetVariable<int>(_bIndex);
                     context.SetResult(context.FindResult("Result"), a * b);
 
                     break;

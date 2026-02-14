@@ -122,9 +122,9 @@ namespace PluginLoader
 
             var symbols = provider.GetSymbols();
 
-            foreach (SymbolDefinition symbol in symbols)
+            foreach (var symbol in symbols)
             {
-                int index = 0;
+                var index = 0;
 
                 if (symbol.Kind == SymbolType.Data)
                     index = Plugin.Context.Find(symbol);

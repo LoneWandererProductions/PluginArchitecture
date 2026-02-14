@@ -100,6 +100,7 @@ namespace ExtendedSystemObjects
                 try
                 {
                     if (_data.TryGetValue(key, out var entry)) return entry.Value;
+
                     throw new KeyNotFoundException($"Key '{key}' not found.");
                 }
                 finally
@@ -288,6 +289,7 @@ namespace ExtendedSystemObjects
             try
             {
                 if (_data.TryGetValue(key, out var entry)) return entry.Category;
+
                 throw new KeyNotFoundException();
             }
             finally
@@ -363,6 +365,7 @@ namespace ExtendedSystemObjects
             {
                 if (_categories.TryGetValue(category, out var set))
                     return set;
+
                 return Array.Empty<TK>();
             }
             finally
@@ -402,6 +405,7 @@ namespace ExtendedSystemObjects
             {
                 if (_data.TryGetValue(key, out var entry))
                     return entry;
+
                 return null;
             }
             finally

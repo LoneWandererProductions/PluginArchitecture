@@ -30,7 +30,7 @@ namespace PluginTests
             plugin.Execute(0); // Sum
 
             // Assert
-            int result = context.GetResult<int>(0);
+            var result = context.GetResult<int>(0);
             Assert.AreEqual(8, result);
         }
 
@@ -50,7 +50,7 @@ namespace PluginTests
             plugin.Execute(1); // Multiply
 
             // Assert
-            int result = context.GetResult<int>(0);
+            var result = context.GetResult<int>(0);
             Assert.AreEqual(24, result);
         }
 
