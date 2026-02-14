@@ -10,78 +10,47 @@
 // ReSharper disable MemberCanBePrivate.Global
 // ReSharper disable UnassignedField.Global
 
+using Loader;
+using Plugins.Interfaces;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Reflection;
-using Plugins.Interfaces;
 
 namespace PluginLoader
 {
+    /// <summary>
+    /// Specific Loader for IPlugin implementations
+    /// </summary>
     public static class PluginLoad
     {
+        /// <summary>
+        /// Loads all IPlugin implementations from the specified directory.
+        /// Supports optional marker files (*.plugin) to restrict which DLLs are loaded.
+        /// </summary>
         public static IReadOnlyList<IPlugin> LoadAll(string baseDirectory)
         {
             if (!Directory.Exists(baseDirectory))
                 return Array.Empty<IPlugin>();
 
-            var plugins = new List<IPlugin>();
+            var loader = new PluginLoading();
 
             // 1) Prefer marker files if present
-            var markerFiles = Directory.EnumerateFiles(baseDirectory, "*.plugin").ToList();
-
-            if (markerFiles.Count > 0)
+            var markerFiles = Directory.EnumerateFiles(baseDirectory, "*.plugin");
+            if (markerFiles.Any())
             {
+                var plugins = new List<IPlugin>();
                 foreach (var marker in markerFiles)
                 {
                     var dll = Path.ChangeExtension(marker, ".dll");
-                    TryLoadFromDll(dll, plugins);
+                    if (File.Exists(dll))
+                        plugins.AddRange(loader.Load<IPlugin>(Path.GetDirectoryName(dll) ?? ""));
                 }
-            }
-            else
-            {
-                // 2) Fallback: load all dlls
-                foreach (var dll in Directory.EnumerateFiles(baseDirectory, "*.dll"))
-                {
-                    TryLoadFromDll(dll, plugins);
-                }
+                return plugins;
             }
 
-            return plugins;
-        }
-
-        private static void TryLoadFromDll(string dllPath, List<IPlugin> plugins)
-        {
-            if (!File.Exists(dllPath))
-                return;
-
-            try
-            {
-                var assembly = Assembly.LoadFrom(dllPath);
-
-                var pluginTypes = assembly.GetTypes()
-                    .Where(t =>
-                        !t.IsAbstract &&
-                        typeof(IPlugin).IsAssignableFrom(t));
-
-                foreach (var type in pluginTypes)
-                {
-                    if (Activator.CreateInstance(type) is IPlugin plugin)
-                        plugins.Add(plugin);
-                }
-            }
-            catch (ReflectionTypeLoadException ex)
-            {
-                Trace.WriteLine($"Plugin load error: {dllPath}");
-                foreach (var loaderEx in ex.LoaderExceptions)
-                    Debug.WriteLine(loaderEx);
-            }
-            catch (Exception ex)
-            {
-                Trace.WriteLine($"Plugin load error: {dllPath}\n{ex}");
-            }
+            // 2) Fallback: load all DLLs
+            return loader.Load<IPlugin>(baseDirectory);
         }
     }
 }
