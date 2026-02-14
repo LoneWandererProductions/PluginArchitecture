@@ -14,6 +14,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Plugins\Plugins.csproj" />
+    <ProjectReference Include="..\PluginTools\PluginTools.csproj" />
     <ProjectReference Include="..\PrototypSample\PrototypSample.csproj" />
   </ItemGroup>
 
