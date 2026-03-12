@@ -55,7 +55,9 @@ namespace Plugins
 
             // Split variables vs results based on Direction
             var variableSymbols = dataSymbols
-                .Where(s => s.Direction == DirectionType.Input || s.Direction == DirectionType.InOut)
+                .Where(s => s.Direction == DirectionType.Input ||
+                            s.Direction == DirectionType.InOut ||
+                            s.Direction == DirectionType.Internal)
                 .ToList();
 
             var resultSymbols = dataSymbols

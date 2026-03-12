@@ -7,10 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Core.StateExecutive.Builder\Core.StateExecutive.Builder.csproj" />
     <ProjectReference Include="..\Core.StateExecutive.Interfaces\Core.StateExecutive.Interfaces.csproj" />
-    <ProjectReference Include="..\Core.StateExecutive\Core.StateExecutive.csproj" />
-    <ProjectReference Include="..\Plugins\Plugins.csproj" />
   </ItemGroup>
 
 </Project>

@@ -100,5 +100,33 @@ namespace Plugins
 
             throw new KeyNotFoundException($"Result '{name}' not found.");
         }
+
+        /// <summary>
+        /// Finds the internal.
+        /// </summary>
+        /// <param name="provider">The provider.</param>
+        /// <param name="name">The name.</param>
+        /// <returns>
+        /// Id of result Variable.
+        /// </returns>
+        /// <exception cref="System.ArgumentNullException">provider</exception>
+        /// <exception cref="System.Collections.Generic.KeyNotFoundException">Result '{name}' not found.</exception>
+        public static int FindInternal(this ISymbolProvider provider, string name)
+        {
+            if (provider == null)
+                throw new ArgumentNullException(nameof(provider));
+
+            foreach (var symbol in provider.GetSymbols())
+            {
+                if (symbol.Kind == SymbolType.Data &&
+                    symbol.Direction == DirectionType.Internal &&
+                    string.Equals(symbol.Name, name, StringComparison.OrdinalIgnoreCase))
+                {
+                    return symbol.Id;
+                }
+            }
+
+            throw new KeyNotFoundException($"Result '{name}' not found.");
+        }
     }
 }

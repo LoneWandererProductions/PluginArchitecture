@@ -2,7 +2,7 @@
  * COPYRIGHT:   See COPYING in the top level directory
  * PROJECT:     PluginTests
  * FILE:        AdderPluginManagedTests.cs
- * PURPOSE:     Your file purpose here
+ * PURPOSE:     Adder with Managed Context Tests - Validates that the AdderPlugin correctly performs addition and multiplication when used with a ManagedPluginContext, ensuring proper memory management and command execution.
  * PROGRAMMER:  Peter Geinitz (Wayfarer)
  */
 

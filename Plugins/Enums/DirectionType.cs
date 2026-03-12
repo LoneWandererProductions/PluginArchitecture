@@ -26,6 +26,7 @@ namespace Plugins.Enums
         /// <summary>
         /// The in out
         /// </summary>
-        InOut = 2
+        InOut = 2,
+        Internal = 3
     }
 }

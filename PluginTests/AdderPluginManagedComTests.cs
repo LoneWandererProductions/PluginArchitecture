@@ -14,6 +14,9 @@ namespace PluginTests
     [TestClass]
     public class AdderPluginManagedComTests
     {
+        /// <summary>
+        /// Adders the sum fires result changed.
+        /// </summary>
         [TestMethod]
         public void Adder_Sum_Fires_ResultChanged()
         {
@@ -44,6 +47,9 @@ namespace PluginTests
             Assert.AreEqual(5, notifiedValue);
         }
 
+        /// <summary>
+        /// Adders the multiply fires result changed.
+        /// </summary>
         [TestMethod]
         public void Adder_Multiply_Fires_ResultChanged()
         {
@@ -74,6 +80,9 @@ namespace PluginTests
             Assert.AreEqual(20, notifiedValue);
         }
 
+        /// <summary>
+        /// Executes the unknown command throws with COM.
+        /// </summary>
         [TestMethod]
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void Execute_Unknown_Command_Throws_With_Com()

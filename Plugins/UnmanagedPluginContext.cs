@@ -97,8 +97,10 @@ namespace Plugins
                 .ToList();
 
             // Split into variables and results based on direction
-            _variables = dataSymbols
-                .Where(s => s.Direction == DirectionType.Input || s.Direction == DirectionType.InOut)
+            var variableSymbols = dataSymbols
+                .Where(s => s.Direction == DirectionType.Input ||
+                            s.Direction == DirectionType.InOut ||
+                            s.Direction == DirectionType.Internal)
                 .ToList();
 
             _results = dataSymbols

@@ -2,7 +2,7 @@
  * COPYRIGHT:   See COPYING in the top level directory
  * PROJECT:     PrototypSample
  * FILE:        AdderPluginUnmanagedTests.cs
- * PURPOSE:     Your file purpose here
+ * PURPOSE:     Unmanaged plugin context tests for AdderPlugin
  * PROGRAMMER:  Peter Geinitz (Wayfarer)
  */
 
@@ -11,15 +11,26 @@ using PrototypSample;
 
 namespace PluginTests
 {
+    /// <summary>
+    /// Unmanaged plugin context tests for AdderPlugin. These tests ensure that the AdderPlugin can be correctly initialized and executed using an unmanaged plugin context, and that it handles type mismatches appropriately.
+    /// </summary>
     [TestClass]
     public class AdderPluginUnmanagedTests
     {
+        /// <summary>
+        /// Creates the context.
+        /// </summary>
+        /// <param name="plugin">The plugin.</param>
+        /// <returns>Get a new Context</returns>
         private static UnmanagedPluginContext CreateContext(AdderPlugin plugin)
         {
             var symbols = plugin.GetSymbols();
             return new UnmanagedPluginContext(symbols);
         }
 
+        /// <summary>
+        /// Adders the sum works with unmanaged context.
+        /// </summary>
         [TestMethod]
         public void Adder_Sum_Works_With_Unmanaged_Context()
         {
@@ -40,6 +51,9 @@ namespace PluginTests
             Assert.AreEqual(16, result);
         }
 
+        /// <summary>
+        /// Adders the multiply works with unmanaged context.
+        /// </summary>
         [TestMethod]
         public void Adder_Multiply_Works_With_Unmanaged_Context()
         {
@@ -60,6 +74,9 @@ namespace PluginTests
             Assert.AreEqual(33, result);
         }
 
+        /// <summary>
+        /// Unmanaged type of the context rejects wrong type input.
+        /// </summary>
         [TestMethod]
         [ExpectedException(typeof(InvalidOperationException))]
         public void Unmanaged_Context_Rejects_Wrong_Type()

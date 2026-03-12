@@ -7,12 +7,15 @@
  */
 
 
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Plugins.Enums;
 using PluginTools;
 
 namespace PluginTests
 {
+    /// <summary>
+    /// Test our plugin code generator to ensure it produces correct code based on the MethodSpec and symbol definitions. 
+    /// This includes verifying that variable indices are correctly assigned and that the generated code correctly accesses variables and sets results according to the specified logic.
+    /// </summary>
     [TestClass]
     public class PluginGeneratorTests
     {
