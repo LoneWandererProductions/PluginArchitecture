@@ -13,7 +13,7 @@ using PluginTools;
 namespace PluginTests
 {
     /// <summary>
-    /// Test our plugin code generator to ensure it produces correct code based on the MethodSpec and symbol definitions. 
+    /// Test our plugin code generator to ensure it produces correct code based on the MethodSpec and symbol definitions.
     /// This includes verifying that variable indices are correctly assigned and that the generated code correctly accesses variables and sets results according to the specified logic.
     /// </summary>
     [TestClass]
@@ -29,8 +29,8 @@ namespace PluginTests
             var generator = new PluginGenerator("MathPlugin", "1.0.0", "Unit Test Plugin");
 
             // 1. Add Symbols (Order matters for index verification)
-            generator.AddSymbol("VarA", typeof(int), DirectionType.Input);    // Index 0
-            generator.AddSymbol("VarB", typeof(int), DirectionType.Input);    // Index 1
+            generator.AddSymbol("VarA", typeof(int), DirectionType.Input); // Index 0
+            generator.AddSymbol("VarB", typeof(int), DirectionType.Input); // Index 1
             generator.AddSymbol("VarOut", typeof(int), DirectionType.Output); // Index 2
 
             // 2. Add Method using the MethodSpec record

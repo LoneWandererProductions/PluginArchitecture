@@ -58,7 +58,7 @@ namespace PrototypSample
         /// <inheritdoc />
         public void Log(string message)
         {
-            // You could map this to a specific string Result in the plugin, 
+            // You could map this to a specific string Result in the plugin,
             // or write to a standard logger.
             Console.WriteLine($"[GPSE Plugin Log]: {message}");
         }

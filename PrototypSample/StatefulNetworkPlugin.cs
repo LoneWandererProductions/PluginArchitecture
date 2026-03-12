@@ -56,12 +56,14 @@ namespace PrototypSample
             return new List<SymbolDefinition>
             {
                 // Inputs from the Host
-                new SymbolDefinition("CurrentCommand", SymbolType.Data, typeof(int)) { Direction = DirectionType.Input },
+                new SymbolDefinition("CurrentCommand", SymbolType.Data, typeof(int))
+                    { Direction = DirectionType.Input },
                 new SymbolDefinition("IsServerAwake", SymbolType.Data, typeof(int)) { Direction = DirectionType.Input },
-                
+
                 // Internal GPSE Resources
-                new SymbolDefinition("ConnectionRetries", SymbolType.Data, typeof(int)) { Direction = DirectionType.Internal },
-                
+                new SymbolDefinition("ConnectionRetries", SymbolType.Data, typeof(int))
+                    { Direction = DirectionType.Internal },
+
                 // Outputs back to the Host
                 new SymbolDefinition("CurrentState", SymbolType.Data, typeof(int)) { Direction = DirectionType.Output }
             };
@@ -77,22 +79,22 @@ namespace PrototypSample
             // GPSE Definition
             var disconnectedState = StateBuilder.Create("Disconnected")
                 .TransitionTo("Connecting")
-                    .When(ctx => GetVariableAsInt("CurrentCommand") == 1)
-                    .OnTransition(ctx => ctx.Log("Connecting..."))
-                    .OnTransition(ctx => SetResultAsInt("CurrentState", 1))
-                    .EndTransition()
+                .When(ctx => GetVariableAsInt("CurrentCommand") == 1)
+                .OnTransition(ctx => ctx.Log("Connecting..."))
+                .OnTransition(ctx => SetResultAsInt("CurrentState", 1))
+                .EndTransition()
                 .Build();
 
             var connectingState = StateBuilder.Create("Connecting")
                 .TransitionTo("Connected")
-                    .When(ctx => GetVariableAsInt("IsServerAwake") == 1)
-                    .OnTransition(ctx => SetResultAsInt("CurrentState", 2))
-                    .EndTransition()
+                .When(ctx => GetVariableAsInt("IsServerAwake") == 1)
+                .OnTransition(ctx => SetResultAsInt("CurrentState", 2))
+                .EndTransition()
                 .TransitionTo("Disconnected")
-                    // The GPSE claims the retry token directly from unmanaged/managed memory!
-                    .Claim("ConnectionRetries", 1)
-                    .OnTransition(ctx => SetResultAsInt("CurrentState", 0))
-                    .EndTransition()
+                // The GPSE claims the retry token directly from unmanaged/managed memory!
+                .Claim("ConnectionRetries", 1)
+                .OnTransition(ctx => SetResultAsInt("CurrentState", 0))
+                .EndTransition()
                 .Build();
 
             var connectedState = StateBuilder.Create("Connected").Build();

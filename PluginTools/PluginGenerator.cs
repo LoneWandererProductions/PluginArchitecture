@@ -167,7 +167,8 @@ namespace PluginTools
                     .ToArray();
                 var outputIndex = nameToIndex[m.OutputName];
 
-                sb.AppendLine($"                    context.SetResult({outputIndex}, {m.OperationCode(inputAccessors[0], inputAccessors[1])});");
+                sb.AppendLine(
+                    $"                    context.SetResult({outputIndex}, {m.OperationCode(inputAccessors[0], inputAccessors[1])});");
                 sb.AppendLine("                    break;");
                 sb.AppendLine("                }");
             }
@@ -191,7 +192,8 @@ namespace PluginTools
                     .ToArray();
                 var outputIndex = nameToIndex[m.OutputName];
 
-                sb.AppendLine($"                    context.SetResult({outputIndex}, {m.OperationCode(inputAccessors[0], inputAccessors[1])});");
+                sb.AppendLine(
+                    $"                    context.SetResult({outputIndex}, {m.OperationCode(inputAccessors[0], inputAccessors[1])});");
                 sb.AppendLine("                    break;");
                 sb.AppendLine("                }");
             }
