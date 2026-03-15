@@ -96,6 +96,13 @@ namespace Plugins
                 .Where(s => s.Kind == SymbolType.Data)
                 .ToList();
 
+            // Assign to the private field _variables
+            _variables = dataSymbols
+                .Where(s => s.Direction == DirectionType.Input ||
+                            s.Direction == DirectionType.InOut ||
+                            s.Direction == DirectionType.Internal)
+                .ToList();
+
             // Split into variables and results based on direction
             var variableSymbols = dataSymbols
                 .Where(s => s.Direction == DirectionType.Input ||

@@ -6,6 +6,9 @@
  * PROGRAMMER:  Peter Geinitz (Wayfarer)
  */
 
+// ReSharper disable UnusedMember.Global
+// ReSharper disable MemberCanBeInternal
+
 using System;
 
 namespace ExtendedSystemObjects
@@ -59,7 +62,7 @@ namespace ExtendedSystemObjects
             if (destination.Length < span.Length)
                 throw new ArgumentException("Destination span is too small.");
 
-            for (var i = 0; i < span.Length; i++)
+            for (int i = 0; i < span.Length; i++)
                 destination[i] = selector(span[i]);
         }
 
@@ -72,15 +75,25 @@ namespace ExtendedSystemObjects
         /// <param name="destination">The destination span to receive filtered elements.</param>
         /// <param name="predicate">A function to test each element for inclusion.</param>
         /// <returns>The number of elements written to the destination span.</returns>
-        public static int WhereFast<T>(
-            this ReadOnlySpan<T> span,
-            Span<T> destination,
-            Func<T, bool> predicate)
+        public static int WhereFast<T>(this ReadOnlySpan<T> span, Span<T> destination, Func<T, bool> predicate)
         {
-            var count = 0;
+            int count = 0;
+            int destLength = destination.Length; // Cache length to help JIT
+
             foreach (var t in span)
+            {
                 if (predicate(t))
-                    destination[count++] = t;
+                {
+                    if ((uint)count < (uint)destLength) // Use uint cast for faster bounds check
+                    {
+                        destination[count++] = t;
+                    }
+                    else
+                    {
+                        throw new ArgumentException("Destination span is too small.");
+                    }
+                }
+            }
 
             return count;
         }

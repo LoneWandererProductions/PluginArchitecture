@@ -11,6 +11,9 @@ using PrototypSample;
 
 namespace PluginTests
 {
+    /// <summary>
+    /// Sample Plugin with Communication.
+    /// </summary>
     [TestClass]
     public class AdderPluginManagedComTests
     {

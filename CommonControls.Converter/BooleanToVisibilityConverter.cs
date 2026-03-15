@@ -39,10 +39,14 @@ namespace CommonControls.Converter
         /// </returns>
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value is bool b)
-                return b ? Visibility.Visible : (Collapse ? Visibility.Collapsed : Visibility.Hidden);
+            bool b = value is bool booleanValue && booleanValue;
 
-            return Visibility.Hidden;
+            if (b)
+            {
+                return Visibility.Visible;
+            }
+
+            return Collapse ? Visibility.Collapsed : Visibility.Hidden;
         }
 
         /// <summary>

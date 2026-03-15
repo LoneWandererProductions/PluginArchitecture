@@ -1,6 +1,6 @@
 ﻿/*
  * COPYRIGHT:   See COPYING in the top level directory
- * PROJECT:     CommonDialogs
+ * PROJECT:     Common.Dialogs
  * FILE:        DialogHandler.cs
  * PURPOSE:     Extension for Dialogs, some smaller extras and Extensions like a Folder View
  * PROGRAMER:   Peter Geinitz (Wayfarer)
@@ -12,7 +12,7 @@
 using System.IO;
 using Microsoft.Win32;
 
-namespace CommonDialogs
+namespace Common.Dialogs
 {
     /// <summary>
     ///     Loads all the basic Files on StartUp

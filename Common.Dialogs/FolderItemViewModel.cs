@@ -1,6 +1,6 @@
 ﻿/* 
  * COPYRIGHT:   See COPYING in the top level directory
- * PROJECT:     CommonDialogs
+ * PROJECT:     Common.Dialogs
  * FILE:        FolderItemViewModel.cs
  * PURPOSE:     ViewModel representing a single folder or file in a TreeView
  * PROGRAMMER:  Peter Geinitz (Wayfarer)
@@ -13,7 +13,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 
-namespace CommonDialogs
+namespace Common.Dialogs
 {
     /// <inheritdoc />
     /// <summary>
@@ -88,7 +88,7 @@ namespace CommonDialogs
         public FolderItemViewModel(string path, FolderViewModel parentVm)
         {
             Path = path;
-            Header = System.IO.Path.GetFileName(path) ?? path;
+            Header = System.IO.Path.GetFileName(path);
             _parentVm = parentVm;
             HasChildren = SafeHasChildren(path);
         }

@@ -1,6 +1,6 @@
 ﻿/* 
  * COPYRIGHT:   See COPYING in the top level directory
- * PROJECT:     CommonDialogs
+ * PROJECT:     Common.Dialogs
  * FILE:        FolderViewModel.cs
  * PURPOSE:     ViewModel for FolderControl UserControl, handles folder navigation and loading
  * PROGRAMMER:  Peter Geinitz (Wayfarer)
@@ -15,11 +15,11 @@ using System.Threading.Tasks;
 using System.Windows;
 using ViewModel;
 
-namespace CommonDialogs
+namespace Common.Dialogs
 {
     /// <inheritdoc />
     /// <summary>
-    /// ViewModel for the <see cref="T:CommonDialogs.FolderControl" /> UserControl.
+    /// ViewModel for the <see cref="T:Common.Dialogs.FolderControl" /> UserControl.
     /// Handles folder navigation, file/folder loading, and command bindings for UI interaction.
     /// Implements async loading to keep the UI responsive.
     /// </summary>
@@ -290,7 +290,7 @@ namespace CommonDialogs
                 {
                     foreach (var file in files)
                         FolderItems.Add(
-                            new FolderItemViewModel(file, this) { Header = Path.GetFileName(file) ?? file });
+                            new FolderItemViewModel(file, this) { Header = Path.GetFileName(file) });
                 }
             });
         }

@@ -1,7 +1,7 @@
 ﻿/*
  * COPYRIGHT:   See COPYING in the top level directory
  * PROJECT:     ExtendedSystemObjects
- * FILE:        ExtendedSystemObjects/ExtendedList.cs
+ * FILE:        ExtendedList.cs
  * PURPOSE:     Generic System Functions for Lists, most operations are not thread safe, so beware.
  * PROGRAMER:   Peter Geinitz (Wayfarer)
  */
@@ -253,11 +253,21 @@ namespace ExtendedSystemObjects
         /// <returns>List split into chunks</returns>
         public static List<List<TValue>> ChunkBy<TValue>(this IEnumerable<TValue> source, int chunkSize)
         {
-            return source
-                .Select((x, i) => new { Index = i, Value = x })
-                .GroupBy(x => x.Index / chunkSize)
-                .Select(x => x.Select(v => v.Value).ToList())
-                .ToList();
+            var result = new List<List<TValue>>();
+            var subList = new List<TValue>(chunkSize);
+
+            foreach (var item in source)
+            {
+                subList.Add(item);
+                if (subList.Count == chunkSize)
+                {
+                    result.Add(subList);
+                    subList = new List<TValue>(chunkSize);
+                }
+            }
+
+            if (subList.Count > 0) result.Add(subList);
+            return result;
         }
 
         /// <summary>
