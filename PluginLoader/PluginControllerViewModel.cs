@@ -6,6 +6,7 @@
  * PROGRAMMER:  Peter Geinitz (Wayfarer)
  */
 
+using Common.Dialogs;
 using Plugins;
 using Plugins.Enums;
 using Plugins.Interfaces;
@@ -145,7 +146,6 @@ namespace PluginLoader
         /// </value>
         public DelegateCommand<PluginContextSupport> SetPreferredContextCommand { get; }
 
-
         /// <summary>
         /// The plugin messages
         /// </summary>
@@ -237,6 +237,23 @@ namespace PluginLoader
             }
         }
 
+
+        /// <summary>
+        /// Gets the load plugins command.
+        /// </summary>
+        /// <value>
+        /// The load plugins command.
+        /// </value>
+        public RelayCommand LoadPluginsCommand { get; }
+
+        /// <summary>
+        /// Gets the clear plugins command.
+        /// </summary>
+        /// <value>
+        /// The clear plugins command.
+        /// </value>
+        public RelayCommand ClearPluginsCommand { get; }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="PluginControllerViewModel"/> class.
         /// </summary>
@@ -246,6 +263,9 @@ namespace PluginLoader
                 ExecuteSetPreferredContext,
                 CanSetPreferredContext
             );
+
+            LoadPluginsCommand = new RelayCommand(ExecuteLoadPlugins);
+            ClearPluginsCommand = new RelayCommand(ExecuteClearPlugins);
         }
 
         /// <summary>
@@ -328,6 +348,27 @@ namespace PluginLoader
             SetPlugins(plugins);
 
             LoadSymbols();
+        }
+
+        private void ExecuteLoadPlugins()
+        {
+            //TODO Multiselect = true,
+            var obj = DialogHandler.HandleFileOpen("Plugin Assemblies (*.dll)|*.dll");
+
+            if (obj != null)
+            {
+                //foreach (var filePath in dialog.FileNames)
+                {
+                    // Logic to pass filePath to your plugin loader
+                    // e.g., _pluginService.Load(filePath);
+                }
+            }
+        }
+
+        private void ExecuteClearPlugins()
+        {
+            // Logic to dispose and clear your UnmanagedPluginContext list
+            // e.g., LoadedPlugins.Clear();
         }
     }
 }

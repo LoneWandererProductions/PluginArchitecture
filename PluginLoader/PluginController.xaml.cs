@@ -23,8 +23,14 @@ namespace PluginLoader
     /// </summary>
     public sealed partial class PluginController
     {
+        /// <summary>
+        /// The vm
+        /// </summary>
         private readonly PluginControllerViewModel _vm;
 
+        /// <summary>
+        /// The plugins property
+        /// </summary>
         public static readonly DependencyProperty PluginsProperty =
             DependencyProperty.Register(
                 nameof(Plugins),
@@ -33,6 +39,9 @@ namespace PluginLoader
                 new PropertyMetadata(null, OnPluginsChanged));
 
 
+        /// <summary>
+        /// The plugin path property
+        /// </summary>
         public static readonly DependencyProperty PluginPathProperty =
             DependencyProperty.Register(
                 nameof(PluginPath),
@@ -41,6 +50,12 @@ namespace PluginLoader
                 new PropertyMetadata(null, OnPluginPathChanged));
 
 
+        /// <summary>
+        /// Gets or sets the plugins.
+        /// </summary>
+        /// <value>
+        /// The plugins.
+        /// </value>
         public IEnumerable<IPlugin> Plugins
         {
             get => (IEnumerable<IPlugin>)GetValue(PluginsProperty);
@@ -58,11 +73,21 @@ namespace PluginLoader
             DataContext = _vm;
         }
 
+        /// <summary>
+        /// Sets the plugins.
+        /// </summary>
+        /// <param name="plugins">The plugins.</param>
         public void SetPlugins(IEnumerable<IPlugin> plugins)
         {
             _vm.SetPlugins(plugins);
         }
 
+        /// <summary>
+        /// Gets or sets the plugin path.
+        /// </summary>
+        /// <value>
+        /// The plugin path.
+        /// </value>
         public string? PluginPath
         {
             get => (string?)GetValue(PluginPathProperty);
@@ -78,6 +103,12 @@ namespace PluginLoader
             }
         }
 
+        /// <summary>
+        /// Called when [plugin path changed].
+        /// </summary>
+        /// <param name="d">The d.</param>
+        /// <param name="e">The <see cref="System.Windows.DependencyPropertyChangedEventArgs"/> instance containing the event data.</param>
+        /// <returns></returns>
         private static void OnPluginPathChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             if (d is not PluginController control)
