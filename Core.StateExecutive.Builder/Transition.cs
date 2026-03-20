@@ -27,7 +27,7 @@ namespace Core.StateExecutive.Builder
         private readonly Func<IStateContext, bool> _condition;
 
         /// <summary>
-        /// The claims
+        /// The claims.
         /// </summary>
         private readonly List<(string key, int amount)> _claims;
 
