@@ -152,7 +152,7 @@ namespace ExtendedSystemObjects
         /// <summary>
         /// High-performance 'All' check for Lists to avoid LINQ's IEnumerable overhead.
         /// </summary>
-        /// <typeparam name="T"></typeparam>
+        /// <typeparam name="T">The element type of the collection.</typeparam>
         /// <param name="list">The list.</param>
         /// <param name="predicate">The predicate.</param>
         /// <returns>True if all elements satisfy the predicate; otherwise false.</returns>
