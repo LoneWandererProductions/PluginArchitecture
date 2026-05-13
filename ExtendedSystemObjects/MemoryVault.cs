@@ -9,6 +9,7 @@
 // ReSharper disable MemberCanBeInternal
 // ReSharper disable MemberCanBePrivate.Global
 // ReSharper disable EventNeverSubscribedTo.Global
+// ReSharper disable UnusedMethodReturnValue.Global
 
 using System;
 using System.Collections.Concurrent;
@@ -18,6 +19,7 @@ using System.IO;
 using System.Text.Json;
 using System.Threading;
 using ExtendedSystemObjects.Helper;
+
 
 namespace ExtendedSystemObjects
 {
@@ -99,7 +101,7 @@ namespace ExtendedSystemObjects
             {
                 _cleanupInterval = value;
                 // Reschedule the timer to use the new interval
-                _cleanupTimer?.Change(value, value);
+                _cleanupTimer.Change(value, value);
             }
         }
 
@@ -123,7 +125,7 @@ namespace ExtendedSystemObjects
         /// <value>
         /// The memory threshold.
         /// </value>
-        public long MemoryThreshold { get; set; } = 10 * 1024 * 1024; // Default 10 MB
+        public long MemoryThreshold { get; init; } = 10 * 1024 * 1024; // Default 10 MB
 
         /// <summary>
         ///     Event triggered when memory usage exceeds the threshold.
@@ -161,7 +163,7 @@ namespace ExtendedSystemObjects
             _vault[identifier] = vaultItem;
 
             // Increment total bytes atomically
-            long itemSize = vaultItem.DataSize + (description?.Length * 2 ?? 0);
+            var itemSize = vaultItem.DataSize + (description?.Length * 2 ?? 0);
             Interlocked.Add(ref _totalBytes, itemSize);
 
             if (Interlocked.Read(ref _totalBytes) > MemoryThreshold)
@@ -372,15 +374,17 @@ namespace ExtendedSystemObjects
         {
             foreach (var kvp in _vault)
             {
-                if (kvp.Value.HasExpireTime && kvp.Value.HasExpired)
+                if (!kvp.Value.HasExpireTime || !kvp.Value.HasExpired)
                 {
-                    if (!_vault.TryRemove(kvp.Key, out var item))
-                    {
-                        continue;
-                    }
-
-                    DecrementMemory(item);
+                    continue;
                 }
+
+                if (!_vault.TryRemove(kvp.Key, out var item))
+                {
+                    continue;
+                }
+
+                DecrementMemory(item);
             }
         }
 
@@ -404,7 +408,7 @@ namespace ExtendedSystemObjects
         /// <param name="item">The item.</param>
         private void DecrementMemory(VaultItem<TU> item)
         {
-            long size = item.DataSize + (item.Description?.Length * 2 ?? 0);
+            var size = item.DataSize + (item.Description?.Length * 2 ?? 0);
             // Add additional metadata estimate if it exists
             if (item.AdditionalMetadata != null) size += item.AdditionalMetadata.Count * 64;
 
