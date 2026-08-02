@@ -3,7 +3,7 @@
  * PROJECT:     Common.Controls
  * FILE:        GlobalKeyHandler.cs
  * PURPOSE:     Attached Control to handle global Keystrokes
- * PROGRAMER:   Peter Geinitz (Wayfarer)
+ * PROGRAMMER:  Peter Geinitz (Wayfarer)
  */
 
 using System;
@@ -152,7 +152,7 @@ namespace Common.Controls
             }
 
             // 1. Capture the currently pressed modifier keys (Ctrl, Alt, Shift, or None)
-            ModifierKeys currentModifiers = Keyboard.Modifiers;
+            var currentModifiers = Keyboard.Modifiers;
 
             // 2. Create the lookup tuple based on the current modifiers and the pressed key
             var keyCombination = new Tuple<ModifierKeys, Key>(currentModifiers, e.Key);

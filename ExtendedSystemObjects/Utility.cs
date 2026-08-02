@@ -3,7 +3,7 @@
  * PROJECT:     ExtendedSystemObjects
  * FILE:        Utility.cs
  * PURPOSE:     Some Methods I seem to use very often. Might add a better way to search the keys!
- * PROGRAMER:   Peter Geinitz (Wayfarer)
+ * PROGRAMMER:  Peter Geinitz (Wayfarer)
  */
 
 // ReSharper disable MemberCanBePrivate.Global
@@ -146,7 +146,7 @@ namespace ExtendedSystemObjects
         /// <param name="position">The position.</param>
         /// <param name="lst">The LST.</param>
         /// <returns>Next Element</returns>
-        public static int GetNextElement(int position, List<int> lst)
+        public static int GetNextElement(int position, List<int>? lst)
         {
             if (lst == null || lst.Count == 0) return -1;
 
@@ -165,7 +165,7 @@ namespace ExtendedSystemObjects
         /// <param name="position">The position.</param>
         /// <param name="lst">The LST.</param>
         /// <returns>Previous Element</returns>
-        public static int GetPreviousElement(int position, List<int> lst)
+        public static int GetPreviousElement(int position, List<int>? lst)
         {
             if (lst == null || lst.Count == 0) return -1;
 
@@ -259,7 +259,7 @@ namespace ExtendedSystemObjects
         /// <param name="numbers">The input list.</param>
         /// <param name="sequenceLength">The min count of the sequence.</param>
         /// <returns>List of Sequences, with start and end index, null if none were found.</returns>
-        public static List<KeyValuePair<int, int>>? Sequencer(List<int> numbers, int sequenceLength)
+        public static List<KeyValuePair<int, int>>? Sequencer(List<int>? numbers, int sequenceLength)
         {
             if (numbers == null || numbers.Count < sequenceLength || sequenceLength <= 1)
             {
@@ -267,8 +267,8 @@ namespace ExtendedSystemObjects
             }
 
             var results = new List<KeyValuePair<int, int>>();
-            int startValue = numbers[0];
-            int count = 1;
+            var startValue = numbers[0];
+            var count = 1;
 
             // Logic uses a single pass O(N) approach
             for (var i = 1; i < numbers.Count; i++)
@@ -306,7 +306,7 @@ namespace ExtendedSystemObjects
         /// <param name="stepWidth">The step width.</param>
         /// <param name="sequenceLength">The sequence.</param>
         /// <returns>List of Sequences, with start and end index, null if none were found.</returns>
-        public static List<KeyValuePair<int, int>>? Sequencer(List<int> numbers, int stepWidth, int sequenceLength)
+        public static List<KeyValuePair<int, int>>? Sequencer(List<int>? numbers, int stepWidth, int sequenceLength)
         {
             if (numbers == null || numbers.Count < sequenceLength || sequenceLength <= 1)
             {
@@ -354,13 +354,13 @@ namespace ExtendedSystemObjects
         /// </summary>
         /// <param name="numbers">The numbers.</param>
         /// <returns>Return the start, end, and the repeated value of that streak.</returns>
-        public static List<(int start, int end, int value)> FindSequences(List<int> numbers)
+        public static List<(int start, int end, int value)> FindSequences(List<int>? numbers)
         {
             var result = new List<(int start, int end, int value)>();
             if (numbers == null || numbers.Count == 0) return result;
 
-            int start = 0;
-            for (int i = 1; i <= numbers.Count; i++)
+            var start = 0;
+            for (var i = 1; i <= numbers.Count; i++)
             {
                 if (i == numbers.Count || numbers[i] != numbers[start])
                 {

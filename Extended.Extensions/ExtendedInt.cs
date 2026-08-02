@@ -3,14 +3,12 @@
  * PROJECT:     ExtendedSystemObjects
  * FILE:        ExtendedInt.cs
  * PURPOSE:     Some Extensions for int
- * PROGRAMER:   Peter Geinitz (Wayfarer)
+ * PROGRAMMER:  Peter Geinitz (Wayfarer)
  */
 
 // ReSharper disable UnusedMember.Global
 
-using System;
-
-namespace ExtendedSystemObjects
+namespace Extended.Extensions
 {
     /// <summary>
     ///     Some extensions for int

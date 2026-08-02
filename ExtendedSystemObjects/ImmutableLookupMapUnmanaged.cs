@@ -1,11 +1,14 @@
 ﻿/*
  * COPYRIGHT:   See COPYING in the top level directory
- * PROJECT:      ExtendedSystemObjects
- * FILE:         ImmutableLookupMap.cs
- * PURPOSE:      A high-performance, immutable lookup map that uses an array-based internal structure for fast key-value lookups.
- * This version is limited to unmanaged types and uses UnmanagedArray<T>.
+ * PROJECT:     ExtendedSystemObjects
+ * FILE:        ImmutableLookupMap.cs
+ * PURPOSE:     A high-performance, immutable lookup map that uses an array-based internal structure for fast key-value lookups.
+ *              This version is limited to unmanaged types and uses UnmanagedArray<T>.
  * PROGRAMMER:  Peter Geinitz (Wayfarer)
  */
+
+// ReSharper disable MemberCanBeInternal
+// ReSharper disable MemberCanBePrivate.Global
 
 using System;
 using System.Collections;
@@ -13,6 +16,7 @@ using System.Collections.Generic;
 using System.Numerics;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
+using Extended.Unmanaged;
 using ExtendedSystemObjects.Helper;
 
 namespace ExtendedSystemObjects
@@ -30,8 +34,8 @@ namespace ExtendedSystemObjects
         /// <summary>
         ///      Internal entry structure to ensure data locality (Cache-friendly).
         /// </summary>
-        [StructLayout(LayoutKind.Sequential, Pack = 1)]
-        private struct Entry
+        [StructLayout(LayoutKind.Sequential)]
+        internal struct Entry
         {
             public byte IsPresent;
             public TKey Key;
@@ -54,6 +58,11 @@ namespace ExtendedSystemObjects
         private readonly UnmanagedArray<Entry> _entries;
 
         /// <summary>
+        /// The disposed
+        /// </summary>
+        private bool _disposed;
+
+        /// <summary>
         ///      Initializes a new instance of the <see cref="ImmutableLookupMapUnmanaged{TKey, TValue}" /> class
         ///      with the specified key-value data.
         /// </summary>
@@ -72,20 +81,20 @@ namespace ExtendedSystemObjects
             _mask = _capacity - 1;
 
             _entries = new UnmanagedArray<Entry>(_capacity);
-            Entry* entriesPtr = _entries.Pointer;
+            var entriesPtr = _entries.Pointer;
 
             foreach (var kvp in data)
             {
-                TKey key = kvp.Key;
-                TValue value = kvp.Value;
-                int hash = GetHash(key) & _mask;
-                bool placed = false;
+                var key = kvp.Key;
+                var value = kvp.Value;
+                var hash = GetHash(key) & _mask;
+                var placed = false;
 
                 // 2. Linear Probing for cache line efficiency
                 for (var i = 0; i < _capacity; i++)
                 {
-                    int index = (int)((uint)(hash + i) & (uint)_mask);
-                    Entry* entry = entriesPtr + index;
+                    var index = (int)((uint)(hash + i) & (uint)_mask);
+                    var entry = entriesPtr + index;
 
                     if (entry->IsPresent == 0)
                     {
@@ -117,42 +126,10 @@ namespace ExtendedSystemObjects
         /// </summary>
         public void Dispose()
         {
+            if (_disposed) return;
+
             _entries.Dispose();
-        }
-
-        /// <inheritdoc />
-        /// <summary>
-        ///      Returns an enumerator for iterating over the key-value pairs in the map.
-        /// </summary>
-        /// <remarks>
-        ///      Note: We avoid pointers here because yield return cannot exist in an unsafe context
-        ///      that captures pointers. We use the array indexer instead.
-        /// </remarks>
-        public IEnumerator<KeyValuePair<TKey, TValue>> GetEnumerator()
-        {
-            for (var i = 0; i < _capacity; i++)
-            {
-                // We use the safe indexer of UnmanagedArray.
-                // This causes a value-copy of the Entry struct, but it's yield-compatible.
-                var entry = _entries[i];
-
-                if (entry.IsPresent != 0)
-                {
-                    yield return new KeyValuePair<TKey, TValue>(entry.Key, entry.Value);
-                }
-            }
-        }
-
-        /// <inheritdoc />
-        /// <summary>
-        ///      Returns an enumerator that iterates through a collection.
-        /// </summary>
-        /// <returns>
-        ///      An <see cref="T:System.Collections.IEnumerator" /> object that can be used to iterate through the collection.
-        /// </returns>
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
+            _disposed = true;
         }
 
         /// <summary>
@@ -163,13 +140,13 @@ namespace ExtendedSystemObjects
         /// <exception cref="KeyNotFoundException">Thrown if the key is not found in the map.</exception>
         public TValue Get(TKey key)
         {
-            int hash = GetHash(key) & _mask;
-            Entry* entriesPtr = _entries.Pointer;
+            var hash = GetHash(key) & _mask;
+            var entriesPtr = _entries.Pointer;
 
             for (var i = 0; i < _capacity; i++)
             {
-                int index = (hash + i) & _mask;
-                Entry* entry = entriesPtr + index;
+                var index = (hash + i) & _mask;
+                var entry = entriesPtr + index;
 
                 if (entry->IsPresent == 0) break;
 
@@ -193,13 +170,13 @@ namespace ExtendedSystemObjects
         /// <returns><c>true</c> if the key was found; otherwise, <c>false</c>.</returns>
         public bool TryGetValue(TKey key, out TValue value)
         {
-            int hash = GetHash(key) & _mask;
-            Entry* entriesPtr = _entries.Pointer;
+            var hash = GetHash(key) & _mask;
+            var entriesPtr = _entries.Pointer;
 
             for (var i = 0; i < _capacity; i++)
             {
-                int index = (hash + i) & _mask;
-                Entry* entry = entriesPtr + index;
+                var index = (hash + i) & _mask;
+                var entry = entriesPtr + index;
 
                 if (entry->IsPresent == 0) break;
 
@@ -223,6 +200,100 @@ namespace ExtendedSystemObjects
         private static int GetHash(TKey key)
         {
             return key.GetHashCode();
+        }
+
+        /// <summary>
+        /// Gets the enumerator.
+        /// </summary>
+        /// <returns>An enumerator for the lookup map.</returns>
+        public Enumerator GetEnumerator()
+        {
+            return new Enumerator(_entries.Pointer, _capacity);
+        }
+
+        /// <inheritdoc />
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
+
+        /// <inheritdoc />
+        IEnumerator<KeyValuePair<TKey, TValue>> IEnumerable<KeyValuePair<TKey, TValue>>.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
+
+        /// <inheritdoc />
+        /// <summary>
+        /// High performance enumerator for iterating over the entries in the lookup map. Uses unsafe code and pointer arithmetic for maximum speed.
+        /// </summary>
+        /// <seealso cref="T:System.IDisposable" />
+        /// <seealso cref="!:System.Collections.Generic.IEnumerable&lt;System.Collections.Generic.KeyValuePair&lt;TKey, TValue&gt;&gt;" />
+        public struct Enumerator : IEnumerator<KeyValuePair<TKey, TValue>>
+        {
+            private readonly Entry* _entries;
+            private readonly int _capacity;
+            private int _index;
+            private KeyValuePair<TKey, TValue> _current;
+
+            /// <summary>
+            /// Initializes a new instance of the <see cref="Enumerator"/> struct.
+            /// </summary>
+            /// <param name="entries">The entries.</param>
+            /// <param name="capacity">The capacity.</param>
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            internal Enumerator(Entry* entries, int capacity)
+            {
+                _entries = entries;
+                _capacity = capacity;
+                _index = -1;
+                _current = default;
+            }
+
+            /// <inheritdoc />
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public bool MoveNext()
+            {
+                while (++_index < _capacity)
+                {
+                    var entry = _entries + _index;
+                    if (entry->IsPresent != 0)
+                    {
+                        _current = new KeyValuePair<TKey, TValue>(entry->Key, entry->Value);
+                        return true;
+                    }
+                }
+
+                return false;
+            }
+
+            /// <inheritdoc />
+            public readonly KeyValuePair<TKey, TValue> Current
+            {
+                [MethodImpl(MethodImplOptions.AggressiveInlining)]
+                get => _current;
+            }
+
+            /// <inheritdoc />
+            readonly object IEnumerator.Current => Current;
+
+            /// <inheritdoc />
+            /// <summary>
+            /// Sets the enumerator to its initial position, which is before the first element in the collection.
+            /// </summary>
+            public void Reset()
+            {
+                _index = -1;
+                _current = default;
+            }
+
+            /// <inheritdoc />
+            /// <summary>
+            /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+            /// </summary>
+            public readonly void Dispose()
+            {
+            }
         }
     }
 }

@@ -3,14 +3,12 @@
  * PROJECT:     ExtendedSystemObjects
  * FILE:        ExtendedDouble.cs
  * PURPOSE:     Some Extensions for double
- * PROGRAMER:   Peter Geinitz (Wayfarer)
+ * PROGRAMMER:  Peter Geinitz (Wayfarer)
  */
 
 // ReSharper disable UnusedMember.Global
 
-using System;
-
-namespace ExtendedSystemObjects
+namespace Extended.Extensions
 {
     /// <summary>
     ///     double class extension

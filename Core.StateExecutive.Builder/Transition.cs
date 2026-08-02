@@ -8,7 +8,7 @@
  */
 
 using Core.StateExecutive.Interfaces;
-using ExtendedSystemObjects;
+using Extended.Extensions;
 
 namespace Core.StateExecutive.Builder
 {
@@ -16,7 +16,7 @@ namespace Core.StateExecutive.Builder
     /// ITransition implementation for the State Executive Engine. Represents a pathway from one state to another, with guards and effects.
     /// </summary>
     /// <seealso cref="Core.StateExecutive.Interfaces.ITransition" />
-    internal class Transition : ITransition
+    internal sealed class Transition : ITransition
     {
         /// <inheritdoc />
         public string TargetStateId { get; }
@@ -27,7 +27,7 @@ namespace Core.StateExecutive.Builder
         private readonly Func<IStateContext, bool> _condition;
 
         /// <summary>
-        /// The claims.
+        /// The claims
         /// </summary>
         private readonly List<(string key, int amount)> _claims;
 
@@ -69,11 +69,11 @@ namespace Core.StateExecutive.Builder
         public void Execute(IStateContext context)
         {
             // Atomic transaction: Consume resources then run effects
-            foreach (var (key, amount) in _claims)
+            foreach (var claim in _claims)
             {
-                if (!context.TryClaimResource(key, amount))
+                if (!context.TryClaimResource(claim.key, claim.amount))
                 {
-                    context.Log($"CRITICAL: Thread collision or resource lost for {key} during transition.");
+                    context.Log($"CRITICAL: Thread collision or resource lost for {claim.key} during transition.");
                     return; // Abort
                 }
             }

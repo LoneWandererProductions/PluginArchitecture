@@ -1,16 +1,15 @@
 ﻿/*
  * COPYRIGHT:   See COPYING in the top level directory
- * PROJECT:     ExtendedSystemObjects.Helper
+ * PROJECT:     Extended.Unmanaged.Helper
  * FILE:        ExtendedSystemObjects.Helper/Enumerator.cs
  * PURPOSE:     Since I use an older .net Version I need to use this helper for my arrays and lists. All unmanaged.
- * PROGRAMER:   Peter Geinitz (Wayfarer)
+ * PROGRAMMER:  Peter Geinitz (Wayfarer)
  */
 
 using System.Collections;
-using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 
-namespace ExtendedSystemObjects.Helper
+namespace Extended.Unmanaged.Helper
 {
     /// <inheritdoc />
     /// <summary>

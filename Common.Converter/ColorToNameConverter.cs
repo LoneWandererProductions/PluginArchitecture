@@ -45,7 +45,6 @@ namespace Common.Converter
             return string.Empty;
         }
 
-        /// <inheritdoc />
         /// <summary>
         /// Convert from string (Control) to Color (ViewModel)
         /// </summary>
@@ -58,16 +57,19 @@ namespace Common.Converter
         /// </returns>
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value is not string colorName || string.IsNullOrEmpty(colorName))
+            if (value is string colorName && !string.IsNullOrEmpty(colorName))
             {
-                return Colors.Transparent;
+                try
+                {
+                    return ColorConverter.ConvertFromString(colorName);
+                }
+                catch
+                {
+                    return Colors.Transparent;
+                }
             }
 
-            try
-            {
-                return ColorConverter.ConvertFromString(colorName) ?? Colors.Transparent;
-            }
-            catch { return Colors.Transparent; }
+            return Colors.Transparent;
         }
     }
 }

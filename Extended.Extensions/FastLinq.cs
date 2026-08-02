@@ -9,10 +9,9 @@
 // ReSharper disable UnusedMember.Global
 // ReSharper disable MemberCanBeInternal
 
-using System;
-using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 
-namespace ExtendedSystemObjects
+namespace Extended.Extensions
 {
     /// <summary>
     /// Provides allocation-free, high-performance LINQ-like extension methods for <see cref="Span{T}"/> and <see cref="ReadOnlySpan{T}"/>.
@@ -22,20 +21,23 @@ namespace ExtendedSystemObjects
     {
         /// <summary>
         /// Executes the specified action for each element in the given read-only span.
-        /// Zero allocations, fully inlineable.
+        /// Zero allocations, fully inline-able.
         /// </summary>
         /// <typeparam name="T">The element type of the span.</typeparam>
         /// <param name="span">The span to iterate over.</param>
         /// <param name="action">The action to execute on each element.</param>
         public static void ForEachFast<T>(this ReadOnlySpan<T> span, Action<T> action)
         {
-            foreach (var t in span)
-                action(t);
+            var len = span.Length;
+            for (var i = 0; i < len; i++)
+            {
+                action(span[i]);
+            }
         }
 
         /// <summary>
         /// Executes the specified action for each element in the given writable span, passing elements by value.
-        /// Zero allocations, fully inlineable.
+        /// Zero allocations, fully inline-able.
         /// </summary>
         /// <typeparam name="T">The element type of the span.</typeparam>
         /// <param name="span">The span to iterate over.</param>
@@ -60,11 +62,15 @@ namespace ExtendedSystemObjects
             Span<TResult> destination,
             Func<TSource, TResult> selector)
         {
-            if (destination.Length < span.Length)
+            var len = span.Length;
+            if (destination.Length < len)
                 throw new ArgumentException("Destination span is too small.");
 
-            for (int i = 0; i < span.Length; i++)
+            // For-loop allows the JIT to verify bounds once and then stay in registers
+            for (var i = 0; i < len; i++)
+            {
                 destination[i] = selector(span[i]);
+            }
         }
 
         /// <summary>
@@ -78,16 +84,18 @@ namespace ExtendedSystemObjects
         /// <returns>The number of elements written to the destination span.</returns>
         public static int WhereFast<T>(this ReadOnlySpan<T> span, Span<T> destination, Func<T, bool> predicate)
         {
-            int count = 0;
-            int destLength = destination.Length; // Cache length to help JIT
+            var count = 0;
+            var len = span.Length;
+            var destLen = destination.Length;
 
-            foreach (var t in span)
+            for (var i = 0; i < len; i++)
             {
-                if (predicate(t))
+                var item = span[i];
+                if (predicate(item))
                 {
-                    if ((uint)count < (uint)destLength) // Use uint cast for faster bounds check
+                    if ((uint)count < (uint)destLen)
                     {
-                        destination[count++] = t;
+                        destination[count++] = item;
                     }
                     else
                     {
@@ -127,9 +135,50 @@ namespace ExtendedSystemObjects
         /// <typeparam name="T">The element type of the collection.</typeparam>
         /// <param name="span">The source span to check.</param>
         /// <returns>True if the collection contains at least one element; otherwise false.</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool AnyFast<T>(this ReadOnlySpan<T> span)
         {
             return span.Length != 0;
+        }
+
+        /// <summary>
+        /// Returns true if the collection has at least one element.
+        /// Zero allocations and works on any collection type.
+        /// Span Version allows modifying the collection while checking, but still returns true if there is at least one element at the time of checking.
+        /// </summary>
+        /// <typeparam name="T">The element type of the collection.</typeparam>
+        /// <param name="span">The source span to check.</param>
+        /// <returns>True if the collection contains at least one element; otherwise false.</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool AnyFast<T>(this Span<T> span)
+        {
+            return span.Length != 0;
+        }
+
+        /// <summary>
+        /// High-performance 'Any' check for Lists.
+        /// Avoids the IEnumerable/IEnumerator allocation.
+        /// </summary>
+        /// <typeparam name="T">The element type of the collection.</typeparam>
+        /// <param name="list">The list.</param>
+        /// <returns>True if the collection contains at least one element; otherwise false.</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool AnyFast<T>(this List<T>? list)
+        {
+            return list != null && list.Count != 0;
+        }
+
+        /// <summary>
+        /// High-performance 'Any' check for Arrays.
+        /// Zero allocations, direct length check.
+        /// </summary>
+        /// <typeparam name="T">The element type of the collection.</typeparam>
+        /// <param name="array">The array.</param>
+        /// <returns>True if the collection contains at least one element; otherwise false.</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool AnyFast<T>(this T[]? array)
+        {
+            return array != null && array.Length != 0;
         }
 
         /// <summary>
@@ -142,9 +191,33 @@ namespace ExtendedSystemObjects
         /// <returns>True if all elements satisfy the predicate; otherwise false.</returns>
         public static bool AllFast<T>(this ReadOnlySpan<T> span, Func<T, bool> predicate)
         {
-            foreach (var t in span)
-                if (!predicate(t))
+            var len = span.Length;
+            for (var i = 0; i < len; i++)
+            {
+                if (!predicate(span[i]))
                     return false;
+            }
+
+            return true;
+        }
+
+        /// <summary>
+        /// Returns true if all elements in the collection satisfy the given predicate.
+        /// Zero allocations and works on any collection type.
+        /// Span version allows modifying the collection while checking, but still returns true only if all elements satisfy the predicate at the time of checking.
+        /// </summary>
+        /// <typeparam name="T">The element type of the collection.</typeparam>
+        /// <param name="span">The source span to check.</param>
+        /// <param name="predicate">A function to test each element.</param>
+        /// <returns>True if all elements satisfy the predicate; otherwise false.</returns>
+        public static bool AllFast<T>(this Span<T> span, Func<T, bool> predicate)
+        {
+            var len = span.Length;
+            for (var i = 0; i < len; i++)
+            {
+                if (!predicate(span[i]))
+                    return false;
+            }
 
             return true;
         }
@@ -158,12 +231,13 @@ namespace ExtendedSystemObjects
         /// <returns>True if all elements satisfy the predicate; otherwise false.</returns>
         public static bool AllFast<T>(this List<T> list, Func<T, bool> predicate)
         {
-            // Accessing by index or using the List's struct enumerator is 
-            // faster and cheaper than LINQ's version.
-            foreach (var item in list)
+            var count = list.Count;
+            for (var i = 0; i < count; i++)
             {
-                if (!predicate(item)) return false;
+                if (!predicate(list[i]))
+                    return false;
             }
+
             return true;
         }
 
@@ -174,7 +248,21 @@ namespace ExtendedSystemObjects
         /// <typeparam name="T">The element type of the collection.</typeparam>
         /// <param name="span">The source span to count.</param>
         /// <returns>The number of elements in the collection.</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int CountFast<T>(this ReadOnlySpan<T> span)
+        {
+            return span.Length;
+        }
+
+        /// <summary>
+        /// Returns the number of elements in the collection.
+        /// Zero allocations and works on any collection type.
+        /// Span version allows modifying the collection while counting, but still returns the count of elements at the time of counting.
+        /// </summary>
+        /// <typeparam name="T">The element type of the collection.</typeparam>
+        /// <param name="span">The source span to count.</param>
+        /// <returns>The number of elements in the collection.</returns>
+        public static int CountFast<T>(this Span<T> span)
         {
             return span.Length;
         }

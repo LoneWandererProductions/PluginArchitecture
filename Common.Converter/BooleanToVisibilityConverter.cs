@@ -6,6 +6,9 @@
  * PROGRAMMER:  Peter Geinitz (Wayfarer)
  */
 
+// ReSharper disable MemberCanBePrivate.Global
+// ReSharper disable UnusedType.Global
+
 using System;
 using System.Globalization;
 using System.Windows;
@@ -13,11 +16,12 @@ using System.Windows.Data;
 
 namespace Common.Converter
 {
+    /// <inheritdoc />
     /// <summary>
     /// Boolean to Visibility converter.
     /// </summary>
-    /// <seealso cref="IValueConverter" />
-    public class BooleanToVisibilityConverter : IValueConverter
+    /// <seealso cref="T:System.Windows.Data.IValueConverter" />
+    public sealed class BooleanToVisibilityConverter : IValueConverter
     {
         /// <summary>
         /// Gets or sets a value indicating whether this <see cref="BooleanToVisibilityConverter"/> is collapse.
@@ -27,6 +31,7 @@ namespace Common.Converter
         /// </value>
         public bool Collapse { get; set; } = false; // true → Collapsed, false → Hidden
 
+        /// <inheritdoc />
         /// <summary>
         /// Converts a value.
         /// </summary>
@@ -39,7 +44,7 @@ namespace Common.Converter
         /// </returns>
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            bool b = value is bool booleanValue && booleanValue;
+            var b = value is true;
 
             if (b)
             {
@@ -49,6 +54,7 @@ namespace Common.Converter
             return Collapse ? Visibility.Collapsed : Visibility.Hidden;
         }
 
+        /// <inheritdoc />
         /// <summary>
         /// Converts a value.
         /// </summary>

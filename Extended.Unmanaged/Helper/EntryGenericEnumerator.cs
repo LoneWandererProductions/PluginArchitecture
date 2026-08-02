@@ -1,15 +1,14 @@
 ﻿/*
  * COPYRIGHT:   See COPYING in the top level directory
- * PROJECT:     ExtendedSystemObjects.Helper
+ * PROJECT:     Extended.Unmanaged.Helper
  * FILE:        EntryGenericEnumerator.cs
- * PURPOSE:     Custom enumerator for my unsage ManagedMap
+ * PURPOSE:     Custom enumerator for my usage ManagedMap
  * PROGRAMMER:  Peter Geinitz (Wayfarer)
  */
 
 using System.Collections;
-using System.Collections.Generic;
 
-namespace ExtendedSystemObjects.Helper
+namespace Extended.Unmanaged.Helper
 {
     /// <inheritdoc />
     /// <summary>
@@ -75,12 +74,12 @@ namespace ExtendedSystemObjects.Helper
             while (++_index < _capacity)
             {
                 var entry = _entries[_index];
-                if (entry.Used != SharedResources.Occupied)
+                if (entry.used != SharedResources.Occupied)
                 {
                     continue;
                 }
 
-                Current = (entry.Key, entry.Value);
+                Current = (entry.key, entry.value);
                 return true;
             }
 
